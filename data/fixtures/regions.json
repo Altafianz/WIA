@@ -1,0 +1,42 @@
+[
+  {
+    "regionId": "ID-FIX-P01",
+    "slug": "provinsi-nusa-utara",
+    "name": "Provinsi Nusa Utara",
+    "level": "province",
+    "hasData": true,
+    "isFixture": true
+  },
+  {
+    "regionId": "ID-FIX-P02",
+    "slug": "provinsi-selat-timur",
+    "name": "Provinsi Selat Timur",
+    "level": "province",
+    "hasData": true,
+    "isFixture": true
+  },
+  {
+    "regionId": "ID-FIX-P03",
+    "slug": "provinsi-bukit-selatan",
+    "name": "Provinsi Bukit Selatan",
+    "level": "province",
+    "hasData": true,
+    "isFixture": true
+  },
+  {
+    "regionId": "ID-FIX-C01",
+    "slug": "kota-bahari",
+    "name": "Kota Bahari",
+    "level": "city",
+    "hasData": true,
+    "isFixture": true
+  },
+  {
+    "regionId": "ID-FIX-C02",
+    "slug": "kabupaten-rimba-hulu",
+    "name": "Kabupaten Rimba Hulu",
+    "level": "regency",
+    "hasData": false,
+    "isFixture": true
+  }
+]

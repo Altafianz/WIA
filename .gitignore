@@ -1,7 +1,35 @@
-   node_modules
-   dist
-   .env
-   .env.*
-   !.env.example
-   .DS_Store
-   *.log
+# dependencies
+node_modules
+
+# build output
+dist
+build
+*.tsbuildinfo
+.vite
+
+# env (jangan pernah ikut commit)
+.env
+.env.*
+!.env.example
+
+# logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# test & coverage
+coverage
+playwright-report
+test-results
+
+# OS & editor
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea
+
+# file lokal agent
+.claude
+.gemini
+.cursor

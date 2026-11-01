@@ -1,0 +1,82 @@
+[
+  {
+    "sectorId": "F01",
+    "name": "Pelayanan Umum",
+    "shortName": "Pelayanan",
+    "colorToken": "var(--color-sector-1)",
+    "sortOrder": 1,
+    "isFixture": true
+  },
+  {
+    "sectorId": "F02",
+    "name": "Pertahanan",
+    "shortName": "Pertahanan",
+    "colorToken": "var(--color-sector-2)",
+    "sortOrder": 2,
+    "isFixture": true
+  },
+  {
+    "sectorId": "F03",
+    "name": "Ketertiban dan Keamanan",
+    "shortName": "Keamanan",
+    "colorToken": "var(--color-sector-3)",
+    "sortOrder": 3,
+    "isFixture": true
+  },
+  {
+    "sectorId": "F04",
+    "name": "Ekonomi",
+    "shortName": "Ekonomi",
+    "colorToken": "var(--color-sector-4)",
+    "sortOrder": 4,
+    "isFixture": true
+  },
+  {
+    "sectorId": "F05",
+    "name": "Lingkungan Hidup",
+    "shortName": "Lingkungan",
+    "colorToken": "var(--color-sector-5)",
+    "sortOrder": 5,
+    "isFixture": true
+  },
+  {
+    "sectorId": "F06",
+    "name": "Perumahan dan Fasilitas Umum",
+    "shortName": "Infrastruktur",
+    "colorToken": "var(--color-sector-6)",
+    "sortOrder": 6,
+    "isFixture": true
+  },
+  {
+    "sectorId": "F07",
+    "name": "Kesehatan",
+    "shortName": "Kesehatan",
+    "colorToken": "var(--color-sector-7)",
+    "sortOrder": 7,
+    "isFixture": true
+  },
+  {
+    "sectorId": "F08",
+    "name": "Pariwisata dan Kebudayaan",
+    "shortName": "Pariwisata",
+    "colorToken": "var(--color-sector-8)",
+    "sortOrder": 8,
+    "isFixture": true
+  },
+  {
+    "sectorId": "F09",
+    "name": "Agama",
+    "shortName": "Agama",
+    "colorToken": "var(--color-sector-9)",
+    "sortOrder": 9,
+    "isFixture": true
+  },
+  {
+    "sectorId": "F10",
+    "name": "Pendidikan",
+    "shortName": "Pendidikan",
+    "colorToken": "var(--color-sector-10)",
+    "sortOrder": 10,
+    "isFixture": true
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "sourceId": "SRC-FIXTURE-01",
+  "sourceName": "Dataset contoh DanaTerbuka (bukan data resmi)",
+  "sourceUrl": "https://example.invalid/danaterbuka/fixture",
+  "retrievedAt": "2026-11-01T00:00:00.000Z",
+  "sourceUpdatedAt": null,
+  "license": "CC0-1.0 (data sintetis)",
+  "licenseUrl": null,
+  "attribution": "Dibuat otomatis oleh generator fixture DanaTerbuka; tidak merepresentasikan anggaran daerah nyata.",
+  "isFixture": true,
+  "snapshotVersion": "1.0.0",
+  "dataStatus": "ready",
+  "recordCount": 150
+}
