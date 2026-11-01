@@ -18,6 +18,12 @@ export default {
           600: "var(--color-brand-600)",
           700: "var(--color-brand-700)",
         },
+        footer: {
+          bg: "var(--color-footer-bg)",
+          text: "var(--color-footer-text)",
+          muted: "var(--color-footer-muted)",
+          subtle: "var(--color-footer-subtle)",
+        },
         danger: "var(--color-danger)",
         warning: "var(--color-warning)",
         success: "var(--color-success)",

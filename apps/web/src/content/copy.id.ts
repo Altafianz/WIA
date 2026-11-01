@@ -96,6 +96,20 @@ export const copy = {
     description: "Halaman yang Anda tuju tidak tersedia atau tautan telah berpindah.",
     backHome: "Kembali ke Beranda",
   },
+  footer: {
+    description:
+      "Platform keterbukaan data anggaran daerah yang menyajikan pagu dan realisasi belanja dalam bahasa yang mudah dipahami warga, lengkap dengan konteks dan batasan data.",
+    navigationTitle: "Navigation",
+    contactTitle: "Contact",
+    contactEmail: "DanaTerbuka@gmail.com",
+    contactPhone: "085175461408",
+    contactLocation: "Jakarta, Indonesia",
+    followUsTitle: "Follow Us",
+    socialInstagram: "Instagram",
+    socialX: "X",
+    socialFacebook: "Facebook",
+    copyright: "Copyright © 2026 DanaTerbuka. All Rights Reserved",
+  },
   a11y: {
     sectorChartLabel: "Grafik batang alokasi pagu belanja per sektor",
     trendChartLabel: "Grafik garis tren pagu dan realisasi anggaran tahunan",

@@ -1,7 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { copy } from "../content/copy.id.js";
-import { Button } from "../components/ui/Button.js";
 import { PageMeta } from "../lib/seo.js";
 
 interface PlaceholderPageProps {
@@ -10,25 +7,8 @@ interface PlaceholderPageProps {
 
 export function PlaceholderPage({ pageName }: PlaceholderPageProps) {
   return (
-    <div className="flex flex-col items-center justify-center py-20 text-center gap-4">
-      <PageMeta
-        title={`${pageName} — ${copy.placeholder.title}`}
-        description={copy.placeholder.description}
-      />
-      <div className="text-5xl" aria-hidden="true">
-        🚧
-      </div>
-      <h1 className="text-2xl font-bold text-text">
-        {pageName} — {copy.placeholder.title}
-      </h1>
-      <p className="text-text-muted max-w-md">
-        {copy.placeholder.description}
-      </p>
-      <Link to="/dashboard" className="mt-4">
-        <Button variant="secondary">
-          {copy.placeholder.backToDashboard}
-        </Button>
-      </Link>
+    <div className="py-12 min-h-[50vh]">
+      <PageMeta title={pageName} description="" />
     </div>
   );
 }

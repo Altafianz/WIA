@@ -16,3 +16,12 @@ body {
   outline: 2px solid var(--color-focus);
   outline-offset: 2px;
 }
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

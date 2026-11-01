@@ -23,7 +23,7 @@ export function AppHeader() {
           {copy.common.siteName}
         </Link>
 
-        <nav aria-label="Menu utama" className="overflow-x-auto">
+        <nav aria-label="Menu utama" className="flex items-center overflow-x-auto overflow-y-hidden no-scrollbar">
           <ul className="flex items-center gap-1 whitespace-nowrap">
             {[
               { to: "/", label: copy.nav.home, end: true },
