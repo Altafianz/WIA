@@ -5,6 +5,7 @@ export const SectorSchema = z.object({
   name: z.string(),
   shortName: z.string(),
   description: z.string().optional(),
+  iconKey: z.string().optional(),
   colorToken: z.string().optional(),
   sortOrder: z.number().int(),
   isFixture: z.boolean().default(true),

@@ -11,20 +11,20 @@ export class InsightService {
 
     const totalPagu = currentRecords.reduce((acc, r) => acc + r.pagu, 0);
 
-    const { items, globalDisclaimer } = generateInsights({
+    const { items, disclaimer } = generateInsights({
       currentRecords,
       previousRecords,
       sectors,
       totalPagu,
+      year: fiscalYear,
+      prevYear: fiscalYear - 1,
     });
 
     return {
       meta,
       data: {
-        regionSlug,
-        fiscalYear,
         items,
-        globalDisclaimer,
+        disclaimer,
       },
     };
   }

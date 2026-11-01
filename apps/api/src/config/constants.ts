@@ -1,4 +1,21 @@
 import path from "node:path";
+import fs from "node:fs";
 
-export const FIXTURES_DIR = path.resolve(process.cwd(), "data/fixtures");
-export const REFERENCE_DIR = path.resolve(process.cwd(), "data/reference");
+function findDataDir(subpath: string): string {
+  // 1. Try process.cwd()
+  const cwdPath = path.resolve(process.cwd(), subpath);
+  if (fs.existsSync(cwdPath)) return cwdPath;
+
+  // 2. Try one level up
+  const oneUp = path.resolve(process.cwd(), "..", subpath);
+  if (fs.existsSync(oneUp)) return oneUp;
+
+  // 3. Try two levels up (repo root from apps/api)
+  const repoPath = path.resolve(process.cwd(), "../..", subpath);
+  if (fs.existsSync(repoPath)) return repoPath;
+
+  return cwdPath;
+}
+
+export const FIXTURES_DIR = findDataDir("data/fixtures");
+export const REFERENCE_DIR = findDataDir("data/reference");

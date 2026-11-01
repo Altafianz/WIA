@@ -9,6 +9,7 @@ import {
   calculateRealizationRate,
   calculateRemainingBudget,
   calculateSectorShare,
+  calculateDenseRank,
   FISCAL_YEARS,
 } from "@danaterbuka/shared";
 import { getRepository } from "../repositories/index.js";
@@ -17,10 +18,6 @@ export class BudgetService {
   getSummary(regionSlug: string, fiscalYear: number): ApiResponse<BudgetSummaryData> {
     const repo = getRepository();
     const meta = repo.getMeta();
-    const regions = repo.listRegions();
-    const region = regions.find((r) => r.slug === regionSlug);
-
-    const regionName = region?.name ?? regionSlug;
     const records = repo.getRecords({ regionSlug, fiscalYear });
 
     if (records.length === 0) {
@@ -28,7 +25,6 @@ export class BudgetService {
         meta,
         data: {
           regionSlug,
-          regionName,
           fiscalYear,
           totalPagu: 0,
           totalRealisasi: null,
@@ -49,7 +45,6 @@ export class BudgetService {
       meta,
       data: {
         regionSlug,
-        regionName,
         fiscalYear,
         totalPagu: agg.totalPagu,
         totalRealisasi: agg.totalRealisasi,
@@ -76,39 +71,94 @@ export class BudgetService {
           regionSlug,
           fiscalYear,
           totalPagu: 0,
+          totalRealisasi: null,
+          realisasiComplete: false,
           slices: [],
         },
       };
     }
 
-    const totalPagu = records.reduce((acc, r) => acc + r.pagu, 0);
+    const agg = aggregateTotals(records);
+    const totalPagu = agg.totalPagu;
 
-    const slices: SectorSlice[] = records.map((r) => {
+    // Build raw slices
+    const rawSlices = records.map((r) => {
       const s = sectorMap.get(r.sectorId);
       const name = s?.name ?? r.sectorId;
+      const shortName = s?.shortName ?? name;
       const realizationRate = calculateRealizationRate(r.realisasi, r.pagu);
       const share = calculateSectorShare(r.pagu, totalPagu) ?? 0;
       return {
         sectorId: r.sectorId,
         name,
+        shortName,
         pagu: r.pagu,
         realisasi: r.realisasi,
         realizationRate,
         share,
+        isAggregate: false,
         colorToken: s?.colorToken,
       };
     });
 
-    // Urutkan bar menurun berdasarkan pagu
-    slices.sort((a, b) => b.pagu - a.pagu);
+    // Urutkan menurun berdasarkan pagu
+    rawSlices.sort((a, b) => b.pagu - a.pagu);
+
+    let finalSlices: SectorSlice[];
+
+    if (rawSlices.length > 10) {
+      // Top 10 + 1 agregat "Sektor lainnya"
+      const top10 = rawSlices.slice(0, 10);
+      const remaining = rawSlices.slice(10);
+
+      const otherPagu = remaining.reduce((acc, r) => acc + r.pagu, 0);
+      const hasAnyReal = remaining.some((r) => r.realisasi !== null);
+      const otherRealisasi = hasAnyReal
+        ? remaining.reduce((acc, r) => acc + (r.realisasi ?? 0), 0)
+        : null;
+      const otherRate = calculateRealizationRate(otherRealisasi, otherPagu);
+      const otherShare = calculateSectorShare(otherPagu, totalPagu) ?? 0;
+
+      const otherSlice: SectorSlice = {
+        sectorId: "other",
+        name: "Sektor lainnya",
+        shortName: "Lainnya",
+        pagu: otherPagu,
+        realisasi: otherRealisasi,
+        realizationRate: otherRate,
+        share: otherShare,
+        isAggregate: true,
+        colorToken: "sector-10",
+      };
+
+      finalSlices = [...top10, otherSlice];
+    } else {
+      finalSlices = rawSlices;
+    }
+
+    // Rank slices
+    const ranked = calculateDenseRank(
+      finalSlices.map((s) => ({
+        id: s.sectorId,
+        value: s.pagu,
+        data: s,
+      }))
+    );
+
+    const slicesWithRank: SectorSlice[] = ranked.map((r) => ({
+      ...r.data,
+      rank: r.rank,
+    }));
 
     return {
       meta,
       data: {
         regionSlug,
         fiscalYear,
-        totalPagu,
-        slices,
+        totalPagu: agg.totalPagu,
+        totalRealisasi: agg.totalRealisasi,
+        realisasiComplete: agg.realisasiComplete,
+        slices: slicesWithRank,
       },
     };
   }
@@ -123,12 +173,10 @@ export class BudgetService {
       const records = repo.getRecords({ regionSlug, fiscalYear: year });
       if (records.length > 0) {
         const agg = aggregateTotals(records);
-        const realizationRate = calculateRealizationRate(agg.totalRealisasi, agg.totalPagu);
         points.push({
           fiscalYear: year,
           pagu: agg.totalPagu,
           realisasi: agg.totalRealisasi,
-          realizationRate,
           periodStatus: agg.periodStatus,
         });
       }

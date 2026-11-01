@@ -1,11 +1,17 @@
 export const GLOBAL_DISCLAIMER =
-  "Data yang ditampilkan merupakan ringkasan anggaran dan realisasi berdasarkan laporan berkala. Angka realisasi mencerminkan penyerapan administratif dan tidak secara otomatis mengukur efektivitas program di lapangan.";
+  "Insight dihasilkan otomatis dari snapshot data. Insight tidak menunjukkan sebab, kualitas layanan, atau indikasi pelanggaran.";
 
 export const LIMITATIONS = {
-  INS_01: "Pangsa alokasi anggaran mencerminkan prioritas penganggaran daerah, bukan kebutuhan aktual riil di masyarakat.",
-  INS_02: "Realisasi yang rendah dapat disebabkan oleh efisiensi pengadaan, penundaan termin pekerjaan, atau kendala administratif lainnya.",
-  INS_03: "Perubahan anggaran tahunan dipengaruhi oleh penyesuaian regulasi, prioritas pembangunan daerah, atau perubahan alokasi transfer pemerintah pusat.",
-  INS_04: "Selisih anggaran belum tentu merupakan sisa kas daerah (SILPA) akhir tahun berjalan.",
-  INS_05: "Konsentrasi sektor umum terjadi pada urusan wajib pelayanan dasar seperti pendidikan dan kesehatan.",
-  INS_06: "Data berstatus berjalan atau penetapan belum merepresentasikan realisasi tahunan penuh.",
+  INS_01:
+    "Porsi besar tidak menunjukkan kualitas serapan atau hasil pembangunan.",
+  INS_02:
+    "Realisasi rendah dapat disebabkan jadwal pengadaan atau tahapan administrasi, bukan otomatis masalah.",
+  INS_03:
+    "Perubahan alokasi dapat berasal dari kebijakan, refocusing, atau perubahan klasifikasi.",
+  INS_04:
+    "Selisih mencerminkan sisa anggaran, bukan otomatis dana hilang atau tidak digunakan.",
+  INS_05:
+    "Konsentrasi tinggi belum tentu buruk; penilaian membutuhkan konteks kebutuhan daerah.",
+  INS_06:
+    "Angka sementara tidak dapat dibandingkan langsung dengan tahun final.",
 };
