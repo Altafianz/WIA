@@ -4,7 +4,7 @@ import { copy } from "../../content/copy.id.js";
 import { useSimpleMode } from "../../hooks/useSimpleMode.js";
 
 export function AppHeader() {
-  const { isSimple, toggle } = useSimpleMode();
+  const [isSimple, setSimple] = useSimpleMode();
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-bg shadow-sm">
@@ -57,7 +57,7 @@ export function AppHeader() {
           type="button"
           aria-pressed={isSimple}
           title={copy.nav.simpleModeDescription}
-          onClick={toggle}
+          onClick={() => setSimple(!isSimple)}
           className={[
             "shrink-0 px-3 py-1.5 rounded-md text-sm font-medium border transition-colors",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus",

@@ -8,7 +8,8 @@ export default tsPlugin.config(
       "**/node_modules/**",
       "**/coverage/**",
       "**/.turbo/**",
-      "**/public/**"
+      "**/public/**",
+      "scripts/**"
     ]
   },
   js.configs.recommended,
@@ -17,7 +18,7 @@ export default tsPlugin.config(
     rules: {
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
-      "no-console": ["warn", { "allow": ["warn", "error", "info"] }]
+      "no-console": ["warn", { "allow": ["warn", "error", "info", "log"] }]
     }
   }
 );

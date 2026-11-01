@@ -96,4 +96,8 @@ export const copy = {
     description: "Halaman yang Anda tuju tidak tersedia atau tautan telah berpindah.",
     backHome: "Kembali ke Beranda",
   },
+  a11y: {
+    sectorChartLabel: "Grafik batang alokasi pagu belanja per sektor",
+    trendChartLabel: "Grafik garis tren pagu dan realisasi anggaran tahunan",
+  },
 } as const;

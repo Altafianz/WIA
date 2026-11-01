@@ -60,3 +60,17 @@ export function CardSkeleton() {
     </div>
   );
 }
+
+export function ChartSkeleton() {
+  return (
+    <div
+      role="status"
+      aria-label="Memuat grafik..."
+      className="rounded-lg border border-border p-6 animate-pulse space-y-3"
+    >
+      <SkeletonBox className="h-5 w-1/3" />
+      <SkeletonBox className="h-[280px] w-full" />
+      <span className="sr-only">Memuat grafik...</span>
+    </div>
+  );
+}
