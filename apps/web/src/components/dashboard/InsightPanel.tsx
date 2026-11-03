@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Insight } from "@danaterbuka/shared";
 import { copy } from "../../content/copy.id.js";
 import { Card } from "../ui/Card.js";
@@ -9,9 +10,18 @@ interface InsightPanelProps {
 }
 
 const severityConfig = {
-  caution: { label: "Perlu Perhatian", className: "bg-warning text-text-inverse" },
-  attention: { label: "Catatan", className: "bg-info text-text-inverse" },
-  info: { label: "Info", className: "bg-success text-text-inverse" },
+  caution: {
+    label: copy.dashboard.insightSeverityCaution,
+    className: "bg-warning text-text-inverse",
+  },
+  attention: {
+    label: copy.dashboard.insightSeverityAttention,
+    className: "bg-info text-text-inverse",
+  },
+  info: {
+    label: copy.dashboard.insightSeverityInfo,
+    className: "bg-success text-text-inverse",
+  },
 };
 
 export function InsightPanel({ items, disclaimer }: InsightPanelProps) {
@@ -39,13 +49,13 @@ export function InsightPanel({ items, disclaimer }: InsightPanelProps) {
                 >
                   {cfg.label}
                 </span>
-                <a
-                  href={`/metodologi#${item.ruleId}`}
+                <Link
+                  to={`/metodologi#${item.ruleId}`}
                   className="text-xs text-brand-600 underline hover:text-brand-700"
-                  aria-label={`Detail metodologi ${item.ruleId}`}
+                  aria-label={`${copy.dashboard.insightMethodologyLink} ${item.ruleId}`}
                 >
                   {item.ruleId}
-                </a>
+                </Link>
               </div>
               <p className="text-sm text-text">{item.sentence}</p>
               <p className="text-xs text-text-muted italic">{item.limitation}</p>

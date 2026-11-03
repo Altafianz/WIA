@@ -52,6 +52,10 @@ export const copy = {
     trendChartDescription: "Perkembangan pagu dan realisasi belanja dari tahun ke tahun",
     insightPanelTitle: "Temuan & Catatan Data",
     insightPanelDisclaimer: "Temuan dihasilkan otomatis oleh aturan data tanpa menjustifikasi kualitas belanja.",
+    insightMethodologyLink: "Detail metodologi",
+    insightSeverityCaution: "Perlu Perhatian",
+    insightSeverityAttention: "Catatan",
+    insightSeverityInfo: "Info",
     sourceCardTitle: "Informasi Sumber & Integritas Data",
     sourceFieldSource: "Sumber Data",
     sourceFieldUrl: "Tautan Portal",
@@ -78,6 +82,7 @@ export const copy = {
     errorDescription: "Gagal memuat data dari server. Periksa koneksi atau coba kembali.",
     retryButton: "Coba Lagi",
     backToAvailableYear: "Kembali ke tahun tersedia",
+    filterCorrected: "Filter dikembalikan ke nilai default.",
   },
   table: {
     sectorHeader: "Sektor / Urusan",

@@ -1,32 +1,44 @@
 import { useSearchParams } from "react-router-dom";
-import { useCallback } from "react";
-import { DEFAULT_REGION_SLUG, DEFAULT_FISCAL_YEAR } from "@danaterbuka/shared";
+import { useCallback, useEffect, useState } from "react";
+import { DEFAULT_FISCAL_YEAR } from "@danaterbuka/shared";
+import { resolveFilters } from "../lib/filters.js";
+import { copy } from "../content/copy.id.js";
 
-export interface FiltersState {
-  region: string;
-  year: number;
-  sector: string;
-}
-
-export function useFilters(validYears?: number[], validRegionSlugs?: string[]) {
+export function useFilters(
+  validYears?: number[],
+  validRegionSlugs?: string[],
+  defaultYear: number = DEFAULT_FISCAL_YEAR
+) {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [correctionMessage, setCorrectionMessage] = useState<string | null>(null);
 
   const rawRegion = searchParams.get("region");
   const rawYear = searchParams.get("year");
-  const sector = searchParams.get("sector") || "all";
+  const rawSector = searchParams.get("sector");
 
-  let region = rawRegion || DEFAULT_REGION_SLUG;
-  if (validRegionSlugs && validRegionSlugs.length > 0 && !validRegionSlugs.includes(region)) {
-    region = DEFAULT_REGION_SLUG;
-  }
+  const { region, year, sector, regionCorrected, yearCorrected } = resolveFilters(
+    { region: rawRegion, year: rawYear, sector: rawSector },
+    { validYears, validRegionSlugs, defaultYear }
+  );
 
-  let year = DEFAULT_FISCAL_YEAR;
-  if (rawYear) {
-    const parsed = parseInt(rawYear, 10);
-    if (!isNaN(parsed) && (!validYears || validYears.includes(parsed))) {
-      year = parsed;
-    }
-  }
+  useEffect(() => {
+    if (!regionCorrected && !yearCorrected) return;
+
+    setCorrectionMessage(copy.states.filterCorrected);
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        next.set("region", region);
+        next.set("year", String(year));
+        return next;
+      },
+      { replace: true }
+    );
+  }, [regionCorrected, yearCorrected, region, year, setSearchParams]);
+
+  const dismissCorrection = useCallback(() => {
+    setCorrectionMessage(null);
+  }, []);
 
   const setRegion = useCallback(
     (newRegion: string) => {
@@ -81,5 +93,7 @@ export function useFilters(validYears?: number[], validRegionSlugs?: string[]) {
     setRegion,
     setYear,
     setSector,
+    correctionMessage,
+    dismissCorrection,
   };
 }

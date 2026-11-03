@@ -6,6 +6,9 @@ import { useSimpleMode } from "../../hooks/useSimpleMode.js";
 export function AppHeader() {
   const [isSimple, setSimple] = useSimpleMode();
 
+  const withSimpleParam = (path: string) =>
+    isSimple ? `${path}?simple=1` : path;
+
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-bg shadow-sm">
       <a
@@ -34,7 +37,7 @@ export function AppHeader() {
             ].map(({ to, label, end }) => (
               <li key={to}>
                 <NavLink
-                  to={to}
+                  to={withSimpleParam(to)}
                   end={end}
                   className={({ isActive }) =>
                     [
@@ -55,7 +58,8 @@ export function AppHeader() {
 
         <button
           type="button"
-          aria-pressed={isSimple}
+          role="switch"
+          aria-checked={isSimple}
           title={copy.nav.simpleModeDescription}
           onClick={() => setSimple(!isSimple)}
           className={[

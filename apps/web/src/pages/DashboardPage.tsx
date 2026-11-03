@@ -21,6 +21,7 @@ import { InsightPanel } from "../components/dashboard/InsightPanel.js";
 import { SourceInfoCard } from "../components/dashboard/SourceInfoCard.js";
 import { EmptyState } from "../components/states/EmptyState.js";
 import { ErrorState } from "../components/states/ErrorState.js";
+import { Toast } from "../components/ui/Toast.js";
 
 export function DashboardPage() {
   const { data: metaResp, isLoading: isMetaLoading } = useMeta();
@@ -30,9 +31,18 @@ export function DashboardPage() {
   const years = metaResp?.data.availableYears ?? [2021, 2022, 2023, 2024, 2025];
   const validRegionSlugs = regions.map((r) => r.slug);
 
-  const { region, year, sector, setRegion, setYear } = useFilters(
+  const {
+    region,
+    year,
+    sector,
+    setRegion,
+    setYear,
+    correctionMessage,
+    dismissCorrection,
+  } = useFilters(
     years,
-    validRegionSlugs
+    validRegionSlugs,
+    metaResp?.data.latestFinalYear
   );
 
   const {
@@ -74,6 +84,8 @@ export function DashboardPage() {
         title={`${copy.dashboard.title} — ${regionName}`}
         description={copy.dashboard.description}
       />
+
+      <Toast message={correctionMessage} onDismiss={dismissCorrection} />
 
       {/* Header & Filter Bar */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border pb-4">
