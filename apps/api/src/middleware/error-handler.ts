@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { ZodError } from "zod";
 import { ApiError, SourceMeta } from "@danaterbuka/shared";
 import { getRepository } from "../repositories/index.js";
+import { AppError } from "../lib/errors.js";
 
 function getRequestId(req: Request, res: Response): string {
   const headerId = res.getHeader("x-request-id") ?? req.headers["x-request-id"];
@@ -61,6 +62,11 @@ export function errorHandler(
         message: issue.message,
       }))
     );
+    return;
+  }
+
+  if (err instanceof AppError) {
+    sendError(req, res, err.status, err.code, err.message, err.details);
     return;
   }
 

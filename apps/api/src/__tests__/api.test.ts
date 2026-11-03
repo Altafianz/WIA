@@ -102,6 +102,85 @@ describe("API Endpoints", () => {
     expect(res.body.meta.isFixture).toBe(true);
   });
 
+  it("GET /api/budget/compare compares two regions with M-06 deltas", async () => {
+    const res = await request(app).get("/api/budget/compare").query({
+      mode: "region",
+      a: "provinsi-nusa-utara",
+      b: "provinsi-selat-timur",
+      year: 2024,
+    });
+
+    expect(res.status).toBe(200);
+    expect(res.body.data.mode).toBe("region");
+    expect(res.body.data.a.label).toBe("Provinsi Nusa Utara");
+    expect(res.body.data.b.label).toBe("Provinsi Selat Timur");
+
+    const paguRow = res.body.data.rows.find(
+      (row: { metric: string }) => row.metric === "totalPagu"
+    );
+    expect(paguRow.aValue).toBe(2_400_000_000_000);
+    expect(paguRow.bValue).toBe(2_000_000_000_000);
+    expect(paguRow.delta).toBe(400_000_000_000);
+    expect(paguRow.deltaPercent).toBe(20.0);
+    expect(res.body.data.rows).toHaveLength(3);
+  });
+
+  it("GET /api/budget/compare orders top sector deltas by absolute delta", async () => {
+    const res = await request(app).get("/api/budget/compare").query({
+      mode: "region",
+      a: "provinsi-nusa-utara",
+      b: "provinsi-selat-timur",
+      year: 2024,
+    });
+
+    const deltas = res.body.data.topSectorDeltas;
+    expect(deltas.length).toBeLessThanOrEqual(3);
+    for (let i = 1; i < deltas.length; i += 1) {
+      expect(Math.abs(deltas[i - 1].delta)).toBeGreaterThanOrEqual(
+        Math.abs(deltas[i].delta)
+      );
+    }
+  });
+
+  it("GET /api/budget/compare rejects identical regions with 400", async () => {
+    const res = await request(app).get("/api/budget/compare").query({
+      mode: "region",
+      a: "provinsi-nusa-utara",
+      b: "provinsi-nusa-utara",
+      year: 2024,
+    });
+
+    expect(res.status).toBe(400);
+    expect(res.body.error.code).toBe("VALIDATION_ERROR");
+  });
+
+  it("GET /api/budget/compare returns 404 DATA_NOT_FOUND when a region has no data", async () => {
+    const res = await request(app).get("/api/budget/compare").query({
+      mode: "region",
+      a: "kabupaten-rimba-hulu",
+      b: "provinsi-nusa-utara",
+      year: 2024,
+    });
+
+    expect(res.status).toBe(404);
+    expect(res.body.error.code).toBe("DATA_NOT_FOUND");
+    expect(res.body.meta.isFixture).toBe(true);
+  });
+
+  it("GET /api/budget/compare supports year mode", async () => {
+    const res = await request(app).get("/api/budget/compare").query({
+      mode: "year",
+      a: "provinsi-nusa-utara",
+      yearA: 2023,
+      yearB: 2024,
+    });
+
+    expect(res.status).toBe(200);
+    expect(res.body.data.mode).toBe("year");
+    expect(res.body.data.a.year).toBe(2023);
+    expect(res.body.data.b.year).toBe(2024);
+  });
+
   it("GET /api/budget/summary?year=abc returns 400 with uniform error format", async () => {
     const res = await request(app).get("/api/budget/summary").query({ year: "abc" });
 

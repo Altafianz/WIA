@@ -3,6 +3,7 @@ import {
   BudgetSummaryQuerySchema,
   BudgetSectorsQuerySchema,
   BudgetTrendQuerySchema,
+  CompareQuerySchema,
   DEFAULT_REGION_SLUG,
   DEFAULT_FISCAL_YEAR,
 } from "@danaterbuka/shared";
@@ -30,5 +31,11 @@ export function getBudgetTrend(req: Request, res: Response): void {
   const query = BudgetTrendQuerySchema.parse(req.query);
   const region = query.region ?? DEFAULT_REGION_SLUG;
   const result = budgetService.getTrend(region);
+  res.json(result);
+}
+
+export function getBudgetCompare(req: Request, res: Response): void {
+  const query = CompareQuerySchema.parse(req.query);
+  const result = budgetService.getCompare(query);
   res.json(result);
 }

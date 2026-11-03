@@ -3,6 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { App } from "./App.js";
 import { HomePage } from "../pages/HomePage.js";
 import { DashboardPage } from "../pages/DashboardPage.js";
+import { ComparePage } from "../pages/ComparePage.js";
 import { PlaceholderPage } from "../pages/PlaceholderPage.js";
 import { NotFoundPage } from "../pages/NotFoundPage.js";
 import { copy } from "../content/copy.id.js";
@@ -22,7 +23,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "bandingkan",
-        element: <PlaceholderPage pageName={copy.nav.compare} />,
+        element: <ComparePage />,
       },
       {
         path: "glosarium",

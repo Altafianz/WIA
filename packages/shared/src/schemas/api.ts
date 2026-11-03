@@ -95,6 +95,50 @@ export const InsightsResponseSchema = z.object({
 });
 export type InsightsResponse = z.infer<typeof InsightsResponseSchema>;
 
+export const CompareRowSchema = z.object({
+  metric: z.enum(["totalPagu", "totalRealisasi", "realizationRate"]),
+  label: z.string(),
+  aValue: z.number().nullable(),
+  bValue: z.number().nullable(),
+  delta: z.number().nullable(),
+  deltaPercent: z.number().nullable(),
+});
+export type CompareRow = z.infer<typeof CompareRowSchema>;
+
+export const SectorDeltaSchema = z.object({
+  sectorId: z.string(),
+  name: z.string(),
+  shortName: z.string(),
+  aPagu: z.number().int().nonnegative(),
+  bPagu: z.number().int().nonnegative(),
+  delta: z.number().int(),
+  deltaPercent: z.number().nullable(),
+});
+export type SectorDelta = z.infer<typeof SectorDeltaSchema>;
+
+export const CompareDataSchema = z.object({
+  mode: z.enum(["region", "year"]),
+  a: z.object({
+    label: z.string(),
+    slug: z.string(),
+    year: z.number().int(),
+  }),
+  b: z.object({
+    label: z.string(),
+    slug: z.string(),
+    year: z.number().int(),
+  }),
+  rows: z.array(CompareRowSchema).length(3),
+  topSectorDeltas: z.array(SectorDeltaSchema).max(3),
+});
+export type CompareData = z.infer<typeof CompareDataSchema>;
+
+export const CompareResponseSchema = z.object({
+  meta: SourceMetaSchema,
+  data: CompareDataSchema,
+});
+export type CompareResponse = z.infer<typeof CompareResponseSchema>;
+
 export const MetaDataSchema = z.object({
   availableYears: z.array(z.number().int()),
   latestFinalYear: z.number().int(),
