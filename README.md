@@ -28,8 +28,9 @@ Prasyarat: **Node.js 20 atau lebih baru** dan **pnpm 9**.
 npm install -g pnpm
 
 # 1. Clone
-git clone <url-repo-kamu>
-cd <nama-folder-repo>
+git clone https://github.com/Altafianz/WIA.git
+cd WIA
+code .
 
 # 2. Install dependensi
 pnpm install
