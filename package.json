@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "pnpm -r --parallel dev",
+    "postinstall": "pnpm --filter @danaterbuka/shared build",
+    "dev": "pnpm --filter @danaterbuka/shared build && pnpm -r --parallel dev",
     "build": "pnpm --filter @danaterbuka/shared build && pnpm --filter @danaterbuka/api build && pnpm --filter @danaterbuka/web build",
     "start": "node apps/api/dist/index.js",
     "lint": "eslint .",
