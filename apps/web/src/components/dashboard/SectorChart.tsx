@@ -8,11 +8,13 @@ import {
   Tooltip as RechartsTooltip,
   Cell,
 } from "recharts";
-import { SectorSlice } from "@danaterbuka/shared";
+import { SectorSlice, findGlossaryEntry } from "@danaterbuka/shared";
 import { copy } from "../../content/copy.id.js";
 import { formatRupiahCompact } from "../../lib/format.js";
+import { getSectorChartCopy } from "../../lib/simple-text.js";
 import { ChartWrapper } from "../ui/ChartWrapper.js";
 import { DataTable } from "../common/DataTable.js";
+import { TermTooltip } from "../ui/Tooltip.js";
 import { ChartSkeleton } from "../states/LoadingSkeleton.js";
 
 interface SectorChartProps {
@@ -26,6 +28,7 @@ interface SectorChartProps {
 export function SectorChart({
   slices = [],
   state,
+  simple = false,
   selectedSector,
 }: SectorChartProps) {
   if (state === "loading") {
@@ -36,6 +39,15 @@ export function SectorChart({
     return null;
   }
 
+  const chartCopy = getSectorChartCopy(simple);
+  const alokasiDef = findGlossaryEntry("Alokasi")?.simpleDefinition ?? "";
+
+  const chartTitle = simple ? (
+    <span>{chartCopy.title}</span>
+  ) : (
+    <TermTooltip term={chartCopy.title} definition={alokasiDef} />
+  );
+
   const chartData = slices.map((s) => ({
     sectorId: s.sectorId,
     name: s.name,
@@ -45,13 +57,17 @@ export function SectorChart({
   }));
 
   const tableContent = (
-    <DataTable slices={slices} caption={copy.dashboard.sectorChartTitle} />
+    <DataTable slices={slices} caption={chartCopy.title} simple={simple} />
   );
+
+  const tooltipPaguLabel = simple
+    ? copy.dashboard.summaryPaguSimple
+    : copy.dashboard.summaryPagu;
 
   return (
     <ChartWrapper
-      title={copy.dashboard.sectorChartTitle}
-      description={copy.dashboard.sectorChartDescription}
+      title={chartTitle}
+      description={chartCopy.description}
       ariaLabel={copy.a11y.sectorChartLabel}
       tableContent={tableContent}
       data-testid="sector-chart"
@@ -79,7 +95,7 @@ export function SectorChart({
               tickLine={false}
             />
             <RechartsTooltip
-              formatter={(val: number) => [formatRupiahCompact(val), copy.dashboard.summaryPagu]}
+              formatter={(val: number) => [formatRupiahCompact(val), tooltipPaguLabel]}
               labelFormatter={(label) => `${label}`}
               contentStyle={{
                 backgroundColor: "var(--color-bg)",

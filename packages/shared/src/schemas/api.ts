@@ -77,6 +77,7 @@ export const InsightSchema = z.object({
   ruleId: z.enum(["INS-01", "INS-02", "INS-03", "INS-04", "INS-05", "INS-06"]),
   severity: z.enum(["info", "attention", "caution"]),
   sentence: z.string().min(20).max(240),
+  simpleSentence: z.string().min(20).max(240).optional(),
   limitation: z.string().min(20).max(240),
   supportingValues: z.record(z.string(), z.union([z.number(), z.string()])),
 });

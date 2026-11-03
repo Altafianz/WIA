@@ -9,10 +9,12 @@ import {
   Legend,
   CartesianGrid,
 } from "recharts";
-import { TrendPoint } from "@danaterbuka/shared";
+import { TrendPoint, findGlossaryEntry } from "@danaterbuka/shared";
 import { copy } from "../../content/copy.id.js";
 import { formatRupiahCompact } from "../../lib/format.js";
+import { getTrendChartCopy, getDataTableCopy } from "../../lib/simple-text.js";
 import { ChartWrapper } from "../ui/ChartWrapper.js";
+import { TermTooltip } from "../ui/Tooltip.js";
 import { ChartSkeleton } from "../states/LoadingSkeleton.js";
 
 interface TrendChartProps {
@@ -21,7 +23,7 @@ interface TrendChartProps {
   state: "loading" | "empty" | "error" | "data";
 }
 
-export function TrendChart({ points = [], state }: TrendChartProps) {
+export function TrendChart({ points = [], state, simple = false }: TrendChartProps) {
   if (state === "loading") {
     return <ChartSkeleton />;
   }
@@ -29,6 +31,20 @@ export function TrendChart({ points = [], state }: TrendChartProps) {
   if (state === "empty" || state === "error" || points.length === 0) {
     return null;
   }
+
+  const trendCopy = getTrendChartCopy(simple);
+  const tableCopy = getDataTableCopy(simple);
+
+  const apbdDef = findGlossaryEntry("APBD")?.simpleDefinition ?? "";
+  const yearDef = findGlossaryEntry("Tahun fiskal")?.simpleDefinition ?? "";
+  const paguDef = findGlossaryEntry("Pagu")?.simpleDefinition ?? "";
+  const realisasiDef = findGlossaryEntry("Realisasi")?.simpleDefinition ?? "";
+
+  const chartTitle = simple ? (
+    <span>{trendCopy.title}</span>
+  ) : (
+    <TermTooltip term={trendCopy.title} definition={apbdDef} />
+  );
 
   const chartData = points.map((p) => ({
     year: p.fiscalYear.toString(),
@@ -40,21 +56,43 @@ export function TrendChart({ points = [], state }: TrendChartProps) {
   const tableContent = (
     <div className="overflow-x-auto">
       <table className="w-full text-sm text-left border-collapse">
-        <caption className="sr-only">{copy.dashboard.trendChartTitle}</caption>
+        <caption className="sr-only">{trendCopy.title}</caption>
         <thead>
           <tr className="border-b border-border">
-            <th scope="col" className="py-2 pr-4 font-semibold text-text-muted">Tahun</th>
-            <th scope="col" className="py-2 pr-4 font-semibold text-text-muted text-right">Pagu</th>
-            <th scope="col" className="py-2 font-semibold text-text-muted text-right">Realisasi</th>
+            <th scope="col" className="py-2 pr-4 font-semibold text-text-muted">
+              {simple ? (
+                tableCopy.yearHeader
+              ) : (
+                <TermTooltip term={tableCopy.yearHeader} definition={yearDef} />
+              )}
+            </th>
+            <th scope="col" className="py-2 pr-4 font-semibold text-text-muted text-right">
+              {simple ? (
+                tableCopy.paguHeader
+              ) : (
+                <TermTooltip term={tableCopy.paguHeader} definition={paguDef} />
+              )}
+            </th>
+            <th scope="col" className="py-2 font-semibold text-text-muted text-right">
+              {simple ? (
+                tableCopy.realisasiHeader
+              ) : (
+                <TermTooltip term={tableCopy.realisasiHeader} definition={realisasiDef} />
+              )}
+            </th>
           </tr>
         </thead>
         <tbody>
           {points.map((p) => (
             <tr key={p.fiscalYear} className="border-b border-border hover:bg-surface">
               <td className="py-2 pr-4 text-text font-medium">{p.fiscalYear}</td>
-              <td className="py-2 pr-4 text-right text-text tabular-nums">{formatRupiahCompact(p.pagu)}</td>
+              <td className="py-2 pr-4 text-right text-text tabular-nums">
+                {formatRupiahCompact(p.pagu)}
+              </td>
               <td className="py-2 text-right text-text tabular-nums">
-                {p.realisasi !== null ? formatRupiahCompact(p.realisasi) : copy.dashboard.realizationNotReleased}
+                {p.realisasi !== null
+                  ? formatRupiahCompact(p.realisasi)
+                  : copy.dashboard.realizationNotReleased}
               </td>
             </tr>
           ))}
@@ -65,8 +103,8 @@ export function TrendChart({ points = [], state }: TrendChartProps) {
 
   return (
     <ChartWrapper
-      title={copy.dashboard.trendChartTitle}
-      description={copy.dashboard.trendChartDescription}
+      title={chartTitle}
+      description={trendCopy.description}
       ariaLabel={copy.a11y.trendChartLabel}
       tableContent={tableContent}
       data-testid="trend-chart"
@@ -91,7 +129,9 @@ export function TrendChart({ points = [], state }: TrendChartProps) {
             />
             <RechartsTooltip
               formatter={(val: unknown, name: unknown) => {
-                if (val === null || val === undefined) return [copy.dashboard.realizationNotReleased, String(name)];
+                if (val === null || val === undefined) {
+                  return [copy.dashboard.realizationNotReleased, String(name)];
+                }
                 return [formatRupiahCompact(Number(val)), String(name)];
               }}
               contentStyle={{
@@ -101,11 +141,17 @@ export function TrendChart({ points = [], state }: TrendChartProps) {
                 boxShadow: "var(--shadow-md)",
               }}
             />
-            <Legend wrapperStyle={{ paddingTop: "10px" }} />
+            <Legend
+              wrapperStyle={{ paddingTop: 10 }}
+              formatter={(value: string) => {
+                if (value === "pagu") return tableCopy.paguHeader;
+                if (value === "realisasi") return tableCopy.realisasiHeader;
+                return value;
+              }}
+            />
             <Line
               type="monotone"
               dataKey="pagu"
-              name={copy.dashboard.summaryPagu}
               stroke="var(--color-brand-600)"
               strokeWidth={2}
               activeDot={{ r: 6 }}
@@ -113,9 +159,9 @@ export function TrendChart({ points = [], state }: TrendChartProps) {
             <Line
               type="monotone"
               dataKey="realisasi"
-              name={copy.dashboard.summaryRealisasi}
-              stroke="var(--color-info)"
+              stroke="var(--color-sector-2)"
               strokeWidth={2}
+              strokeDasharray="4 4"
               connectNulls={false}
               activeDot={{ r: 6 }}
             />

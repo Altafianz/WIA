@@ -288,4 +288,81 @@ describe("Insight 18 Mandatory Test Cases (UI_SPEC §8.1)", () => {
       expect(containsForbiddenWords(item.limitation)).toBe(false);
     }
   });
+  it("generates simpleSentence for INS-01 to INS-06 without forbidden words and under 240 chars", () => {
+    // INS-01
+    const r1 = ruleIns01(
+      [createRecord("F07", 720_000_000_000, 500_000_000_000)],
+      2_400_000_000_000,
+      sectorsMap,
+      2024
+    );
+    expect(r1?.simpleSentence).toBeTruthy();
+    expect(r1!.simpleSentence!.length).toBeGreaterThanOrEqual(20);
+    expect(r1!.simpleSentence!.length).toBeLessThanOrEqual(240);
+    expect(containsForbiddenWords(r1!.simpleSentence!)).toBe(false);
+    expect(r1!.simpleSentence).toContain("30,0%");
+    expect(r1!.simpleSentence).toContain("Kesehatan");
+
+    // INS-02
+    const r2 = ruleIns02(
+      [createRecord("F07", 100_000_000_000, 41_700_000_000)],
+      2_400_000_000_000,
+      sectorsMap
+    );
+    expect(r2?.simpleSentence).toBeTruthy();
+    expect(r2!.simpleSentence!.length).toBeGreaterThanOrEqual(20);
+    expect(r2!.simpleSentence!.length).toBeLessThanOrEqual(240);
+    expect(containsForbiddenWords(r2!.simpleSentence!)).toBe(false);
+    expect(r2!.simpleSentence).toContain("41,7%");
+
+    // INS-03
+    const r3 = ruleIns03(
+      [createRecord("F04", 288_000_000_000, 100_000_000_000, "final", 2024)],
+      [createRecord("F04", 240_000_000_000, 100_000_000_000, "final", 2023)],
+      sectorsMap,
+      2024,
+      2023
+    );
+    expect(r3?.simpleSentence).toBeTruthy();
+    expect(r3!.simpleSentence!.length).toBeGreaterThanOrEqual(20);
+    expect(r3!.simpleSentence!.length).toBeLessThanOrEqual(240);
+    expect(containsForbiddenWords(r3!.simpleSentence!)).toBe(false);
+    expect(r3!.simpleSentence).toContain("20,0%");
+
+    // INS-04
+    const r4 = ruleIns04(
+      [createRecord("F07", 720_000_000_000, 550_000_000_000)],
+      2_400_000_000_000,
+      sectorsMap
+    );
+    expect(r4?.simpleSentence).toBeTruthy();
+    expect(r4!.simpleSentence!.length).toBeGreaterThanOrEqual(20);
+    expect(r4!.simpleSentence!.length).toBeLessThanOrEqual(240);
+    expect(containsForbiddenWords(r4!.simpleSentence!)).toBe(false);
+
+    // INS-05
+    const r5 = ruleIns05(
+      [
+        createRecord("F07", 720_000_000_000, null),
+        createRecord("F10", 600_000_000_000, null),
+        createRecord("F06", 336_000_000_000, null),
+      ],
+      2_400_000_000_000,
+      sectorsMap
+    );
+    expect(r5?.simpleSentence).toBeTruthy();
+    expect(r5!.simpleSentence!.length).toBeGreaterThanOrEqual(20);
+    expect(r5!.simpleSentence!.length).toBeLessThanOrEqual(240);
+    expect(containsForbiddenWords(r5!.simpleSentence!)).toBe(false);
+
+    // INS-06
+    const r6 = ruleIns06(
+      [createRecord("F07", 720_000_000_000, null, "approved", 2025)],
+      2025
+    );
+    expect(r6?.simpleSentence).toBeTruthy();
+    expect(r6!.simpleSentence!.length).toBeGreaterThanOrEqual(20);
+    expect(r6!.simpleSentence!.length).toBeLessThanOrEqual(240);
+    expect(containsForbiddenWords(r6!.simpleSentence!)).toBe(false);
+  });
 });

@@ -14,6 +14,7 @@ import { YearSelect } from "../components/filters/YearSelect.js";
 import { CopyLinkButton } from "../components/common/CopyLinkButton.js";
 import { FixtureBadge } from "../components/dashboard/FixtureBadge.js";
 import { PeriodNotice } from "../components/dashboard/PeriodNotice.js";
+import { SimpleModeHelp } from "../components/dashboard/SimpleModeHelp.js";
 import { SummaryCards } from "../components/dashboard/SummaryCards.js";
 import { SectorChart } from "../components/dashboard/SectorChart.js";
 import { TrendChart } from "../components/dashboard/TrendChart.js";
@@ -121,7 +122,10 @@ export function DashboardPage() {
       <div className="flex flex-wrap items-center gap-3">
         <FixtureBadge visible={summaryResp?.meta.isFixture ?? metaResp?.meta.isFixture ?? true} />
         {summaryResp?.data.periodStatus && (
-          <PeriodNotice periodStatus={summaryResp.data.periodStatus} />
+          <PeriodNotice
+            periodStatus={summaryResp.data.periodStatus}
+            simple={isSimple}
+          />
         )}
       </div>
 
@@ -133,6 +137,9 @@ export function DashboardPage() {
       {state === "error" && (
         <ErrorState onRetry={() => refetchSummary()} />
       )}
+
+      {/* Cara Membaca Halaman Ini (Mode Sederhana) */}
+      {isSimple && <SimpleModeHelp />}
 
       {/* 4 Summary Cards */}
       <SummaryCards
@@ -157,6 +164,7 @@ export function DashboardPage() {
             <InsightPanel
               items={insightsResp.data.items}
               disclaimer={insightsResp.data.disclaimer}
+              simple={isSimple}
             />
           )}
         </div>

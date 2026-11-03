@@ -2,11 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Insight } from "@danaterbuka/shared";
 import { copy } from "../../content/copy.id.js";
+import { getInsightPanelCopy } from "../../lib/simple-text.js";
 import { Card } from "../ui/Card.js";
 
 interface InsightPanelProps {
   items: Insight[];
   disclaimer: string;
+  simple?: boolean;
 }
 
 const severityConfig = {
@@ -24,17 +26,23 @@ const severityConfig = {
   },
 };
 
-export function InsightPanel({ items, disclaimer }: InsightPanelProps) {
+export function InsightPanel({ items, disclaimer, simple = false }: InsightPanelProps) {
   if (items.length === 0) return null;
+
+  const panelCopy = getInsightPanelCopy(simple);
 
   return (
     <Card>
       <h2 className="text-base font-semibold text-text mb-4">
-        {copy.dashboard.insightPanelTitle}
+        {panelCopy.title}
       </h2>
-      <ul className="space-y-4" aria-label={copy.dashboard.insightPanelTitle}>
+      <ul className="space-y-4" aria-label={panelCopy.title}>
         {items.map((item) => {
           const cfg = severityConfig[item.severity];
+          const displaySentence = simple
+            ? item.simpleSentence || item.sentence
+            : item.sentence;
+
           return (
             <li
               key={item.ruleId}
@@ -57,7 +65,7 @@ export function InsightPanel({ items, disclaimer }: InsightPanelProps) {
                   {item.ruleId}
                 </Link>
               </div>
-              <p className="text-sm text-text">{item.sentence}</p>
+              <p className="text-sm text-text">{displaySentence}</p>
               <p className="text-xs text-text-muted italic">{item.limitation}</p>
             </li>
           );

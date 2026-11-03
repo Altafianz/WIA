@@ -1,4 +1,5 @@
 import { round1 } from "@danaterbuka/shared";
+import { copy } from "../content/copy.id.js";
 
 /**
  * VZ-07: formatRupiahCompact
@@ -44,4 +45,18 @@ export function formatDateId(isoString: string | null | undefined): string {
   } catch {
     return isoString;
   }
+}
+
+/**
+ * Kalimat "per Rp 100" untuk mode penjelasan sederhana
+ */
+export function formatPerHundred(rate: number | null | undefined): string {
+  if (rate === null || rate === undefined) {
+    return copy.dashboard.perHundredNull;
+  }
+  if (rate > 100) {
+    return copy.dashboard.perHundredExceeds;
+  }
+  const x = Math.round(rate);
+  return copy.dashboard.perHundredPattern.replace("{x}", String(x));
 }

@@ -1,14 +1,23 @@
 import React from "react";
-import { SectorSlice } from "@danaterbuka/shared";
-import { copy } from "../../content/copy.id.js";
+import { SectorSlice, findGlossaryEntry } from "@danaterbuka/shared";
 import { formatRupiahCompact, formatPercent } from "../../lib/format.js";
+import { getDataTableCopy } from "../../lib/simple-text.js";
+import { TermTooltip } from "../ui/Tooltip.js";
 
 interface DataTableProps {
   slices: SectorSlice[];
   caption: string;
+  simple?: boolean;
 }
 
-export function DataTable({ slices, caption }: DataTableProps) {
+export function DataTable({ slices, caption, simple = false }: DataTableProps) {
+  const tableCopy = getDataTableCopy(simple);
+
+  const sectorDef = findGlossaryEntry("Fungsi/Sektor")?.simpleDefinition ?? "";
+  const paguDef = findGlossaryEntry("Pagu")?.simpleDefinition ?? "";
+  const realisasiDef = findGlossaryEntry("Realisasi")?.simpleDefinition ?? "";
+  const rateDef = findGlossaryEntry("Persentase realisasi")?.simpleDefinition ?? "";
+
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm text-left border-collapse">
@@ -16,16 +25,32 @@ export function DataTable({ slices, caption }: DataTableProps) {
         <thead>
           <tr className="border-b border-border">
             <th scope="col" className="py-2 pr-4 font-semibold text-text-muted">
-              {copy.table.sectorHeader}
+              {simple ? (
+                tableCopy.sectorHeader
+              ) : (
+                <TermTooltip term={tableCopy.sectorHeader} definition={sectorDef} />
+              )}
             </th>
             <th scope="col" className="py-2 pr-4 font-semibold text-text-muted text-right">
-              {copy.table.paguHeader}
+              {simple ? (
+                tableCopy.paguHeader
+              ) : (
+                <TermTooltip term={tableCopy.paguHeader} definition={paguDef} />
+              )}
             </th>
             <th scope="col" className="py-2 pr-4 font-semibold text-text-muted text-right">
-              {copy.table.realisasiHeader}
+              {simple ? (
+                tableCopy.realisasiHeader
+              ) : (
+                <TermTooltip term={tableCopy.realisasiHeader} definition={realisasiDef} />
+              )}
             </th>
             <th scope="col" className="py-2 font-semibold text-text-muted text-right">
-              {copy.table.rateHeader}
+              {simple ? (
+                tableCopy.rateHeader
+              ) : (
+                <TermTooltip term={tableCopy.rateHeader} definition={rateDef} />
+              )}
             </th>
           </tr>
         </thead>

@@ -30,7 +30,11 @@ function formatRupiahCompact(value: number): string {
 function validateInsight(insight: Insight | null): Insight | null {
   if (!insight) return null;
   if (insight.sentence.length > 240 || insight.limitation.length > 240) return null;
+  if (insight.simpleSentence && (insight.simpleSentence.length < 20 || insight.simpleSentence.length > 240)) return null;
   if (containsForbiddenWords(insight.sentence) || containsForbiddenWords(insight.limitation)) {
+    return null;
+  }
+  if (insight.simpleSentence && containsForbiddenWords(insight.simpleSentence)) {
     return null;
   }
   return insight;
@@ -54,11 +58,13 @@ export function ruleIns01(
 
   const sectorName = sectorsMap.get(top.sectorId)?.name ?? top.sectorId;
   const sentence = `Sektor ${sectorName} menerima ${formatPercent(share)} dari total pagu ${year}, porsi terbesar di wilayah ini.`;
+  const simpleSentence = `Dari seluruh rencana anggaran ${year}, ${formatPercent(share)} dialokasikan untuk ${sectorName}, bagian terbesar.`;
 
   return validateInsight({
     ruleId: "INS-01",
     severity: "info",
     sentence,
+    simpleSentence,
     limitation: LIMITATIONS.INS_01,
     supportingValues: {
       sectorId: top.sectorId,
@@ -99,11 +105,13 @@ export function ruleIns02(
   const chosen = candidates[0];
   const sectorName = sectorsMap.get(chosen.record.sectorId)?.name ?? chosen.record.sectorId;
   const sentence = `Sektor ${sectorName} baru terealisasi ${formatPercent(chosen.rate)}, terendah di wilayah ini; selisih pagu-realisasi mencapai ${formatRupiahCompact(chosen.gap)}.`;
+  const simpleSentence = `Belanja ${sectorName} baru terpakai ${formatPercent(chosen.rate)}, paling sedikit di wilayah ini, dengan sisa anggaran ${formatRupiahCompact(chosen.gap)}.`;
 
   return validateInsight({
     ruleId: "INS-02",
     severity: "attention",
     sentence,
+    simpleSentence,
     limitation: LIMITATIONS.INS_02,
     supportingValues: {
       sectorId: chosen.record.sectorId,
@@ -149,11 +157,13 @@ export function ruleIns03(
   const sectorName = sectorsMap.get(chosen.record.sectorId)?.name ?? chosen.record.sectorId;
   const direction = chosen.yoy >= 0 ? "naik" : "turun";
   const sentence = `Pagu sektor ${sectorName} ${direction} ${formatPercent(chosen.absYoy)} pada ${year} dibanding ${prevYear}.`;
+  const simpleSentence = `Rencana anggaran ${sectorName} ${direction} ${formatPercent(chosen.absYoy)} pada ${year} dibandingkan tahun ${prevYear}.`;
 
   return validateInsight({
     ruleId: "INS-03",
     severity: "info",
     sentence,
+    simpleSentence,
     limitation: LIMITATIONS.INS_03,
     supportingValues: {
       sectorId: chosen.record.sectorId,
@@ -196,11 +206,13 @@ export function ruleIns04(
   const chosen = candidates[0];
   const sectorName = sectorsMap.get(chosen.record.sectorId)?.name ?? chosen.record.sectorId;
   const sentence = `Sektor ${sectorName} memiliki selisih pagu-realisasi terbesar: ${formatRupiahCompact(chosen.gap)}, setara ${formatPercent(chosen.gapShare)} dari total pagu.`;
+  const simpleSentence = `Sektor ${sectorName} memiliki sisa anggaran belum terpakai terbesar: ${formatRupiahCompact(chosen.gap)}, atau ${formatPercent(chosen.gapShare)} dari total rencana.`;
 
   return validateInsight({
     ruleId: "INS-04",
     severity: "attention",
     sentence,
+    simpleSentence,
     limitation: LIMITATIONS.INS_04,
     supportingValues: {
       sectorId: chosen.record.sectorId,
@@ -233,11 +245,13 @@ export function ruleIns05(
   ].join(", ");
 
   const sentence = `Tiga sektor teratas menyerap ${formatPercent(top3Share)} dari total pagu: ${sectorNames}.`;
+  const simpleSentence = `Sebanyak ${formatPercent(top3Share)} dari seluruh rencana anggaran diarahkan untuk tiga urusan utama: ${sectorNames}.`;
 
   return validateInsight({
     ruleId: "INS-05",
     severity: "info",
     sentence,
+    simpleSentence,
     limitation: LIMITATIONS.INS_05,
     supportingValues: {
       top3Share,
@@ -261,11 +275,13 @@ export function ruleIns06(
 
   const statusText = hasApproved ? "belum final" : "sementara";
   const sentence = `Data ${year} berstatus ${statusText}; angka realisasi dapat berubah setelah pembaruan.`;
+  const simpleSentence = `Angka belanja tahun ${year} masih berstatus ${statusText} dan masih dapat berubah.`;
 
   return validateInsight({
     ruleId: "INS-06",
     severity: "caution",
     sentence,
+    simpleSentence,
     limitation: LIMITATIONS.INS_06,
     supportingValues: {
       year,

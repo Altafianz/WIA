@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { copy } from "../../content/copy.id.js";
 
 interface ChartWrapperProps {
-  title: string;
+  title: React.ReactNode;
   description?: string;
   ariaLabel: string;
   children: React.ReactNode;
@@ -50,9 +50,7 @@ export function ChartWrapper({
             {tableContent}
           </div>
         ) : (
-          <div role="img" aria-label={ariaLabel}>
-            {children}
-          </div>
+          children
         )}
       </div>
     </section>

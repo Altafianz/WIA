@@ -1,17 +1,15 @@
 import React from "react";
-import { copy } from "../../content/copy.id.js";
+import { getPeriodNoticeCopy } from "../../lib/simple-text.js";
 
 interface PeriodNoticeProps {
   periodStatus: "approved" | "partial" | "final";
+  simple?: boolean;
 }
 
-export function PeriodNotice({ periodStatus }: PeriodNoticeProps) {
+export function PeriodNotice({ periodStatus, simple = false }: PeriodNoticeProps) {
   if (periodStatus === "final") return null;
 
-  const message =
-    periodStatus === "approved"
-      ? copy.dashboard.realizationNotReleased
-      : copy.dashboard.partialRealizationNotice;
+  const message = getPeriodNoticeCopy(simple, periodStatus);
 
   return (
     <div
