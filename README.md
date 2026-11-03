@@ -24,6 +24,9 @@ Frontend dan backend dipisah: web berjalan di `localhost:5173` dan memanggil API
 Prasyarat: **Node.js 20 atau lebih baru** dan **pnpm 9**.
 
 ```bash
+# 0. Install npm jika belum
+npm install -g pnpm
+
 # 1. Clone
 git clone <url-repo-kamu>
 cd <nama-folder-repo>
