@@ -4,9 +4,9 @@ import { App } from "./App.js";
 import { HomePage } from "../pages/HomePage.js";
 import { DashboardPage } from "../pages/DashboardPage.js";
 import { ComparePage } from "../pages/ComparePage.js";
-import { PlaceholderPage } from "../pages/PlaceholderPage.js";
+import { GlossaryPage } from "../pages/GlossaryPage.js";
+import { MethodologyPage } from "../pages/MethodologyPage.js";
 import { NotFoundPage } from "../pages/NotFoundPage.js";
-import { copy } from "../content/copy.id.js";
 
 export const router = createBrowserRouter([
   {
@@ -27,11 +27,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "glosarium",
-        element: <PlaceholderPage pageName={copy.nav.glossary} />,
+        element: <GlossaryPage />,
       },
       {
         path: "metodologi",
-        element: <PlaceholderPage pageName={copy.nav.methodology} />,
+        element: <MethodologyPage />,
       },
       {
         path: "*",
