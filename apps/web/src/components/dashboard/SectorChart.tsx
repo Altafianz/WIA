@@ -95,6 +95,7 @@ export function SectorChart({
               tickLine={false}
             />
             <RechartsTooltip
+              cursor={false}
               formatter={(val: number) => [formatRupiahCompact(val), tooltipPaguLabel]}
               labelFormatter={(label) => `${label}`}
               contentStyle={{
@@ -104,7 +105,15 @@ export function SectorChart({
                 boxShadow: "var(--shadow-md)",
               }}
             />
-            <Bar dataKey="pagu" radius={[0, 4, 4, 0]}>
+            <Bar
+              dataKey="pagu"
+              radius={[0, 4, 4, 0]}
+              // Keep positive sectors visible when one sector dominates the
+              // linear scale; exact values stay available in the tooltip/table.
+              minPointSize={(value) =>
+                typeof value === "number" && value > 0 ? 3 : 0
+              }
+            >
               {chartData.map((entry) => (
                 <Cell
                   key={`cell-${entry.sectorId}`}

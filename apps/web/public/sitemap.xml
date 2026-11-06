@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Ganti domain placeholder https://danaterbuka.example dengan domain produksi setelah deploy. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://danaterbuka.example/</loc>
+  </url>
+  <url>
+    <loc>https://danaterbuka.example/dashboard</loc>
+  </url>
+  <url>
+    <loc>https://danaterbuka.example/bandingkan</loc>
+  </url>
+  <url>
+    <loc>https://danaterbuka.example/glosarium</loc>
+  </url>
+  <url>
+    <loc>https://danaterbuka.example/metodologi</loc>
+  </url>
+</urlset>

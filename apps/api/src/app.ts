@@ -9,7 +9,23 @@ import { apiRateLimiter } from "./middleware/rate-limit.js";
 import { errorHandler, notFoundHandler } from "./middleware/error-handler.js";
 import { apiRouter } from "./routes/index.js";
 
-export function createApp(): Express {
+export interface CreateAppOptions {
+  webDist?: string;
+}
+
+const SEO_ROOT_FILES = new Set([
+  "/robots.txt",
+  "/sitemap.xml",
+  "/favicon.svg",
+]);
+
+export function isSpaFallbackPath(pathname: string): boolean {
+  const cleanPath = pathname.split("?")[0] || pathname;
+  if (cleanPath === "/api" || cleanPath.startsWith("/api/")) return false;
+  return !SEO_ROOT_FILES.has(cleanPath);
+}
+
+export function createApp(options: CreateAppOptions = {}): Express {
   const app = express();
 
   app.use(requestIdMiddleware);
@@ -42,10 +58,26 @@ export function createApp(): Express {
   app.use("/api", apiRateLimiter, apiRouter);
 
   // Serve static assets in production if apps/web/dist exists
-  const webDist = path.resolve(process.cwd(), "apps/web/dist");
+  const webDist =
+    options.webDist ?? path.resolve(process.cwd(), "apps/web/dist");
   if (fs.existsSync(webDist)) {
-    app.use(express.static(webDist, { maxAge: "1y", immutable: true }));
-    app.get(/^\/(?!api).*/, (_req, res) => {
+    app.use(
+      express.static(webDist, {
+        maxAge: "1y",
+        immutable: true,
+        setHeaders: (res, filePath) => {
+          if (SEO_ROOT_FILES.has(`/${path.basename(filePath)}`)) {
+            res.setHeader("Cache-Control", "public, max-age=0, must-revalidate");
+          }
+        },
+      })
+    );
+    app.get(/.*/, (req, res, next) => {
+      // SEO files are served by express.static; never replace them with the SPA shell.
+      if (!isSpaFallbackPath(req.path)) {
+        next();
+        return;
+      }
       res.sendFile(path.join(webDist, "index.html"));
     });
   }

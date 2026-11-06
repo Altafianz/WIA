@@ -12,10 +12,21 @@ export const PageMeta: React.FC<PageMetaProps> = ({
   title,
   description,
   canonical,
-  path = "",
+  path,
 }) => {
-  const siteUrl = import.meta.env.VITE_SITE_URL || window.location.origin;
-  const canonicalUrl = canonical || `${siteUrl}${path}`;
+  const configuredSiteUrl = import.meta.env.VITE_SITE_URL as string | undefined;
+  const siteUrl = (
+    configuredSiteUrl ||
+    (typeof window !== "undefined" ? window.location.origin : "")
+  ).replace(/\/+$/, "");
+  const currentPath =
+    path ||
+    (typeof window !== "undefined" ? window.location.pathname : "/") ||
+    "/";
+  const cleanPath = currentPath.split(/[?#]/)[0] || "/";
+  const canonicalUrl = canonical
+    ? canonical.split(/[?#]/)[0]
+    : `${siteUrl}${cleanPath.startsWith("/") ? cleanPath : `/${cleanPath}`}`;
 
   return (
     <Helmet>

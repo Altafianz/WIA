@@ -12,6 +12,7 @@ import { useInsights } from "../hooks/useInsights.js";
 import { RegionSelect } from "../components/filters/RegionSelect.js";
 import { YearSelect } from "../components/filters/YearSelect.js";
 import { CopyLinkButton } from "../components/common/CopyLinkButton.js";
+import { ExportCsvButton } from "../components/common/ExportCsvButton.js";
 import { FixtureBadge } from "../components/dashboard/FixtureBadge.js";
 import { PeriodNotice } from "../components/dashboard/PeriodNotice.js";
 import { SimpleModeHelp } from "../components/dashboard/SimpleModeHelp.js";
@@ -23,6 +24,11 @@ import { SourceInfoCard } from "../components/dashboard/SourceInfoCard.js";
 import { EmptyState } from "../components/states/EmptyState.js";
 import { ErrorState } from "../components/states/ErrorState.js";
 import { Toast } from "../components/ui/Toast.js";
+import {
+  buildCsvFilename,
+  buildSectorCsv,
+  downloadCsv,
+} from "../lib/export-csv.js";
 
 export function DashboardPage() {
   const { data: metaResp, isLoading: isMetaLoading } = useMeta();
@@ -78,6 +84,28 @@ export function DashboardPage() {
 
   const selectedRegion = regions.find((r) => r.slug === region);
   const regionName = selectedRegion ? selectedRegion.name : region;
+
+  const exportDisabled =
+    state !== "data" ||
+    isSectorsLoading ||
+    !sectorsResp?.data ||
+    !summaryResp?.data;
+
+  const handleExportCsv = () => {
+    if (!sectorsResp?.data || !summaryResp?.data) return;
+
+    const sourceMeta = summaryResp.meta ?? metaResp?.meta;
+    const csv = buildSectorCsv(
+      sectorsResp.data.slices,
+      {
+        isFixture: sourceMeta?.isFixture ?? true,
+        totalPagu: summaryResp.data.totalPagu,
+        totalRealisasi: summaryResp.data.totalRealisasi,
+      },
+      isSimple,
+    );
+    downloadCsv(buildCsvFilename(region, year), csv);
+  };
 
   return (
     <div className="flex flex-col gap-6 py-4">
@@ -150,7 +178,13 @@ export function DashboardPage() {
 
       {/* Sector Chart + Insight Panel Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div className="lg:col-span-7">
+        <div className="lg:col-span-7 flex flex-col gap-3">
+          <div className="flex justify-end">
+            <ExportCsvButton
+              onClick={handleExportCsv}
+              disabled={exportDisabled}
+            />
+          </div>
           <SectorChart
             slices={sectorsResp?.data.slices}
             totalPagu={summaryResp?.data.totalPagu}

@@ -87,6 +87,17 @@ export const copy = {
     partialRealizationNoticeSimple: "Data belanja tahun ini masih berjalan dan belum angka akhir",
     noDataPrompt: "Tidak ada data belanja yang tercatat untuk kombinasi wilayah dan tahun ini.",
   },
+  exportCsv: {
+    button: "Unduh CSV",
+    downloaded: "Berkas CSV diunduh",
+    colSector: "Sektor",
+    colPagu: "Pagu (Rp)",
+    colRealisasi: "Realisasi (Rp)",
+    colRate: "% Realisasi",
+    colStatus: "Status data",
+    total: "Total",
+    statusOfficial: "Resmi",
+  },
   compare: {
     title: "Bandingkan Anggaran",
     titleSimple: "Bandingkan Penggunaan Anggaran",
