@@ -12,22 +12,33 @@ const rawDir = path.resolve(import.meta.dirname, "..", "..", "data", "raw");
 const hasRaw = fs.existsSync(rawDir);
 
 describe.skipIf(!hasRaw)("build-snapshot dengan berkas DJPK", () => {
-  it("menghasilkan snapshot 28 wilayah dan nilai acuan Jawa Barat 2024", async () => {
+  it("menghasilkan snapshot lima provinsi dan nilai acuan Jawa Barat 2024", async () => {
     const result = await buildSnapshot({ rawDir });
 
-    expect(result.snapshot.regions).toHaveLength(28);
+    expect(result.snapshot.regions).toHaveLength(113);
     expect(result.snapshot.sectors).toHaveLength(9);
-    expect(result.snapshot.records).toHaveLength(1507);
+    expect(result.snapshot.records).toHaveLength(6092);
     expect(result.snapshot.records.filter((record) => record.realisasi !== null)).toHaveLength(
-      1003,
+      4059,
     );
-    expect(result.quality.received).toBe(1507);
-    expect(result.quality.accepted).toBe(1507);
+    expect(result.quality.received).toBe(6092);
+    expect(result.quality.accepted).toBe(6092);
     expect(result.quality.rejected).toBe(0);
-    expect(result.quality.warnings).toBe(17);
+    expect(result.quality.warnings).toBe(87);
     expect(result.quality.reasons).toContainEqual(
-      expect.objectContaining({ code: "ASSUMED_ZERO", count: 17 }),
+      expect.objectContaining({ code: "ASSUMED_ZERO", count: 87 }),
     );
+
+    expect(new Set(result.snapshot.regions.map((region) => region.slug)).size).toBe(113);
+    for (const region of result.snapshot.regions) {
+      expect(region.level).toBeTruthy();
+      if (region.level === "province") {
+        expect(region.parentRegionId).toBeNull();
+      } else {
+        const parentCode = region.regionId.slice("ID-PEM-".length, "ID-PEM-".length + 2);
+        expect(region.parentRegionId).toBe(`ID-PEM-${parentCode}00`);
+      }
+    }
 
     const westJava = result.snapshot.regions.find(
       (region) => region.name === "Provinsi Jawa Barat",
@@ -59,7 +70,7 @@ describe.skipIf(!hasRaw)("build-snapshot dengan berkas DJPK", () => {
     const count2021 = result.snapshot.records.filter(
       (record) => record.fiscalYear === 2021,
     ).length;
-    expect(count2021).toBe(247);
+    expect(count2021).toBe(1008);
   });
 
   it("menulis snapshot atomik dan memeriksa hash tanpa menulis ulang", async () => {
@@ -70,7 +81,7 @@ describe.skipIf(!hasRaw)("build-snapshot dengan berkas DJPK", () => {
       writeBuildResult(result, outDir);
       expect(checkBuildResult(result, outDir)).toBe(true);
       expect(fs.statSync(path.join(outDir, "snapshot.v1.json")).size).toBeLessThanOrEqual(
-        2 * 1024 * 1024,
+        4 * 1024 * 1024,
       );
     } finally {
       fs.rmSync(outDir, { recursive: true, force: true });

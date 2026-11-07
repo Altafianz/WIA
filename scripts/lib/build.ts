@@ -58,9 +58,9 @@ export interface BuildResult {
   files: RawFile[];
 }
 
-const MAX_SNAPSHOT_BYTES = 2 * 1024 * 1024;
+const MAX_SNAPSHOT_BYTES = 4 * 1024 * 1024;
 const SOURCE_ID = "SRC-DJPK-APBD";
-const DEFAULT_PREFIX = "10";
+const DEFAULT_PREFIX = "09,10,11,13,28";
 const DEFAULT_FROM_YEAR = 2021;
 
 function repoPath(...parts: string[]): string {
@@ -281,7 +281,7 @@ export function writeBuildResult(result: BuildResult, outDir?: string): void {
 
   if (Buffer.byteLength(snapshotContent, "utf-8") > MAX_SNAPSHOT_BYTES) {
     throw new Error(
-      `Snapshot melebihi batas 2 MB (${Buffer.byteLength(snapshotContent, "utf-8")} byte)`,
+      `Snapshot melebihi batas 4 MB (${Buffer.byteLength(snapshotContent, "utf-8")} byte)`,
     );
   }
 

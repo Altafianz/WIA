@@ -27,7 +27,7 @@ function parseArgs(argv: string[]): CliOptions {
   }
 
   if (options.prefix === undefined || options.prefix.length === 0) {
-    options.prefix = "10";
+    options.prefix = "09,10,11,13,28";
   }
   if (options.fromYear === undefined || Number.isNaN(options.fromYear)) {
     options.fromYear = 2021;

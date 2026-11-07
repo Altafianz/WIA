@@ -1,3 +1,6 @@
+const DATA_COVERAGE =
+  "Data DJPK yang diolah mencakup lima provinsi (DKI Jakarta, Jawa Barat, Jawa Tengah, Jawa Timur, Banten) dan tahun 2021-2026, memuat pemerintah provinsi dan kabupaten/kota di dalamnya; khusus DKI Jakarta hanya pemerintah provinsi, sesuai berkas DJPK.";
+
 export const copy = {
   common: {
     siteName: "DanaTerbuka",
@@ -37,8 +40,7 @@ export const copy = {
     dataNoticeTitle: "Transparansi Sumber",
     dataNoticeBodyFixture:
       "Saat ini sistem menampilkan data contoh (simulasi fiktif terverifikasi) untuk mendemonstrasikan kapabilitas keterbukaan informasi.",
-    dataNoticeBodyOfficial:
-      "Sistem menampilkan data anggaran daerah dari berkas publik DJPK Kementerian Keuangan RI. Data disajikan sebagai snapshot berkala, bukan laporan real-time.",
+    dataNoticeBodyOfficial: `Sistem menampilkan data anggaran daerah dari berkas publik DJPK Kementerian Keuangan RI. Data disajikan sebagai snapshot berkala, bukan laporan real-time. ${DATA_COVERAGE}`,
   },
   dashboard: {
     title: "Dashboard Anggaran Daerah",
@@ -82,6 +84,8 @@ export const copy = {
     sourceFieldUpdated: "Pembaruan Terakhir",
     sourceFieldLicense: "Lisensi",
     sourceFieldStatus: "Status Data",
+    sourceFieldCoverage: "Cakupan Wilayah",
+    dataCoverage: DATA_COVERAGE,
     fixtureBadge: "Data contoh",
     fixtureNotice: "Data contoh, bukan data resmi. Gunakan untuk melihat cara kerja produk.",
     sourceStatusOfficial: "Data DJPK",
@@ -257,7 +261,7 @@ export const copy = {
     ],
     limitationsOfficial: [
       "Data disajikan sebagai snapshot berkala, bukan informasi real-time.",
-      "Data DJPK yang diolah mencakup pemerintah daerah dengan kode wilayah 10 (Jawa Barat) dan tahun 2021-2026.",
+      DATA_COVERAGE,
       "Klasifikasi mengikuti fungsi belanja pada berkas sumber; fungsi yang tidak tersedia tidak ditampilkan.",
       "Realisasi 2025-2026 belum tersedia dan ditampilkan sebagai belum dirilis, bukan nol.",
       "Angka dibulatkan ke rupiah penuh dari berkas Excel sehingga selisih pembulatan kecil dapat terjadi.",

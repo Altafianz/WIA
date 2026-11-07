@@ -33,6 +33,10 @@ export function SourceInfoCard({ meta }: SourceInfoCardProps) {
       <dl>
         <Row label={copy.dashboard.sourceFieldSource} value={meta.sourceName} />
         <Row
+          label={copy.dashboard.sourceFieldCoverage}
+          value={copy.dashboard.dataCoverage}
+        />
+        <Row
           label={copy.dashboard.sourceFieldUrl}
           value={
             meta.sourceUrl ? (

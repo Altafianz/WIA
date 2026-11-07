@@ -1,15 +1,15 @@
 {
   "schemaVersion": "1.0.0",
-  "generatedAt": "2026-11-06T13:46:53.609Z",
+  "generatedAt": "2026-11-07T02:01:43.320Z",
   "source": "DJPK Kementerian Keuangan RI",
-  "received": 1507,
-  "accepted": 1507,
+  "received": 6092,
+  "accepted": 6092,
   "rejected": 0,
-  "warnings": 17,
+  "warnings": 87,
   "reasons": [
     {
       "code": "ASSUMED_ZERO",
-      "count": 17,
+      "count": 87,
       "samples": [
         "2021/10.04/F05/realisasi",
         "2021/10.06/F06/pagu",
@@ -19,9 +19,9 @@
       ]
     }
   ],
-  "durationMs": 9587,
+  "durationMs": 5834,
   "inputChecksum": "34ef181ca32684736d6076e102252fc15af3813341b267ac6c1462babfb324ca",
-  "snapshotHash": "947863c9975f50084e51ccf7bd95776349adea96d065ef0220302ae5a93614ad",
+  "snapshotHash": "0c44c9f9b466957add5928274844bcdb6d68f298ae99b9baa8872f9bd5d2c52f",
   "files": [
     {
       "fileName": "Anggaran_Belanja_Fungsi_2021.xlsx",

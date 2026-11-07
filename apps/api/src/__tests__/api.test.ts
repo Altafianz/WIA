@@ -20,6 +20,16 @@ describe("API Endpoints", () => {
     expect(res.body.data.availableYears).toContain(2024);
     expect(res.body.data.defaultRegionSlug).toBe("provinsi-nusa-utara");
     expect(res.body.data.regions.length).toBeGreaterThan(0);
+    for (const region of res.body.data.regions) {
+      expect(region.level).toBeTruthy();
+      expect(region).toHaveProperty("parentRegionId");
+      if (region.level === "province") {
+        expect(region.parentRegionId).toBeNull();
+      } else {
+        expect(typeof region.parentRegionId).toBe("string");
+        expect(region.parentRegionId.length).toBeGreaterThan(0);
+      }
+    }
     expect(res.body.data.sectors.length).toBe(10);
   });
 

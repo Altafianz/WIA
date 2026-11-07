@@ -347,15 +347,21 @@ export function buildRegions(
 
   if (names.size === 0) return [];
 
-  const usedSlugs = new Map<string, number>();
+  const usedSlugs = new Set<string>();
   return [...names.entries()]
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([code, rawName]) => {
       const name = normalizeRegionName(rawName);
-      const baseSlug = slugify(name) || `pemda-${code.replace(".", "")}`;
-      const count = usedSlugs.get(baseSlug) ?? 0;
-      usedSlugs.set(baseSlug, count + 1);
-      const slug = count === 0 ? baseSlug : `${baseSlug}-${code.replace(".", "")}`;
+      const codeSuffix = code.replace(".", "");
+      const baseSlug = slugify(name) || `pemda-${codeSuffix}`;
+      let slug = baseSlug;
+      if (usedSlugs.has(slug)) slug = `${baseSlug}-${codeSuffix}`;
+      let attempt = 2;
+      while (usedSlugs.has(slug)) {
+        slug = `${baseSlug}-${codeSuffix}-${attempt}`;
+        attempt += 1;
+      }
+      usedSlugs.add(slug);
       const isProvince = code.endsWith(".00");
       const level = isProvince ? "province" : /^kota\s/i.test(name) ? "city" : "regency";
 

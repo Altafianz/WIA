@@ -4,6 +4,7 @@
     "slug": "provinsi-nusa-utara",
     "name": "Provinsi Nusa Utara",
     "level": "province",
+    "parentRegionId": null,
     "hasData": true,
     "isFixture": true
   },
@@ -12,6 +13,7 @@
     "slug": "provinsi-selat-timur",
     "name": "Provinsi Selat Timur",
     "level": "province",
+    "parentRegionId": null,
     "hasData": true,
     "isFixture": true
   },
@@ -20,6 +22,7 @@
     "slug": "provinsi-bukit-selatan",
     "name": "Provinsi Bukit Selatan",
     "level": "province",
+    "parentRegionId": null,
     "hasData": true,
     "isFixture": true
   },
@@ -28,6 +31,7 @@
     "slug": "kota-bahari",
     "name": "Kota Bahari",
     "level": "city",
+    "parentRegionId": "ID-FIX-P01",
     "hasData": true,
     "isFixture": true
   },
@@ -36,6 +40,7 @@
     "slug": "kabupaten-rimba-hulu",
     "name": "Kabupaten Rimba Hulu",
     "level": "regency",
+    "parentRegionId": "ID-FIX-P01",
     "hasData": false,
     "isFixture": true
   }

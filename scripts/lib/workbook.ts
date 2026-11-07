@@ -165,10 +165,15 @@ function findColumns(header: ExcelJS.Row, columnCount: number) {
   return indexes;
 }
 
+function hasPrefix(regionCode: string, prefixes: string[]): boolean {
+  return prefixes.some((prefix) => regionCode.startsWith(`${prefix}.`));
+}
+
 function readLongSheet(
   sheet: ExcelJS.Worksheet,
   prefix: string,
 ): { rows: RawFunctionRow[]; unknownSectorRows: number } {
+  const prefixes = prefix.split(",").map((value) => value.trim()).filter(Boolean);
   const indexes = findColumns(sheet.getRow(1), sheet.columnCount);
   const rows: RawFunctionRow[] = [];
   let unknownSectorRows = 0;
@@ -176,7 +181,7 @@ function readLongSheet(
   for (let rowNumber = 2; rowNumber <= sheet.rowCount; rowNumber += 1) {
     const row = sheet.getRow(rowNumber);
     const regionCode = normalizeRegionCode(row.getCell(indexes.regionCode).value);
-    if (!regionCode || !regionCode.startsWith(`${prefix}.`)) continue;
+    if (!regionCode || !hasPrefix(regionCode, prefixes)) continue;
 
     const sectorId = parseSectorId(cellText(row.getCell(indexes.sector).value));
     if (!sectorId) {
@@ -202,6 +207,7 @@ function readWideSheet(
   sheet: ExcelJS.Worksheet,
   prefix: string,
 ): { rows: RawFunctionRow[]; unknownSectorRows: number } {
+  const prefixes = prefix.split(",").map((value) => value.trim()).filter(Boolean);
   const groups: Array<{ column: number; sectorId: string }> = [];
   let currentSector: string | null = null;
 
@@ -219,7 +225,7 @@ function readWideSheet(
   for (let rowNumber = 7; rowNumber <= sheet.rowCount; rowNumber += 1) {
     const row = sheet.getRow(rowNumber);
     const regionCode = normalizeRegionCode(row.getCell(1).value);
-    if (!regionCode || !regionCode.startsWith(`${prefix}.`)) continue;
+    if (!regionCode || !hasPrefix(regionCode, prefixes)) continue;
 
     const regionName = normalizeRegionName(cellText(row.getCell(2).value));
     for (const group of groups) {
