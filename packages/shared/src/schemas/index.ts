@@ -5,3 +5,4 @@ export * from "./budget-record.js";
 export * from "./query.js";
 export * from "./api.js";
 export * from "./snapshot.js";
+export * from "./feedback.js";

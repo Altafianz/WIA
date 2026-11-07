@@ -7,10 +7,28 @@ import { Button } from "../components/ui/Button.js";
 import { PageMeta } from "../lib/seo.js";
 import { FixtureBadge } from "../components/dashboard/FixtureBadge.js";
 import { useMeta } from "../hooks/useMeta.js";
+import { useHashScroll } from "../hooks/useHashScroll.js";
+import { useSimpleMode } from "../hooks/useSimpleMode.js";
+import { useSubmitFeedback } from "../hooks/useSubmitFeedback.js";
+import { FeedbackSection } from "../components/home/FeedbackSection.js";
 
 export function HomePage() {
+  useHashScroll();
   const { data } = useMeta();
+  const [isSimple] = useSimpleMode();
   const isFixture = data?.meta.isFixture ?? false;
+
+  const {
+    formData,
+    fieldErrors,
+    errorMessage,
+    isSubmitting,
+    isSuccess,
+    successRef,
+    onChangeField,
+    onSubmit,
+    onResetSuccess,
+  } = useSubmitFeedback();
 
   return (
     <div className="flex flex-col gap-12 py-8">
@@ -32,7 +50,10 @@ export function HomePage() {
         </p>
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
           <Link to="/dashboard" className="w-full sm:w-auto">
-            <Button size="lg" className="w-full flex items-center justify-center gap-2">
+            <Button
+              size="lg"
+              className="w-full flex items-center justify-center gap-2"
+            >
               {copy.home.ctaDashboard}
               <ArrowRight className="w-4 h-4" />
             </Button>
@@ -122,6 +143,20 @@ export function HomePage() {
           </p>
         </div>
       </section>
+
+      {/* Kirim Saran Section */}
+      <FeedbackSection
+        formData={formData}
+        fieldErrors={fieldErrors}
+        errorMessage={errorMessage}
+        isSubmitting={isSubmitting}
+        isSuccess={isSuccess}
+        successRef={successRef}
+        onChangeField={onChangeField}
+        onSubmit={onSubmit}
+        onResetSuccess={onResetSuccess}
+        simple={isSimple}
+      />
     </div>
   );
 }

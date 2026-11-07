@@ -19,6 +19,7 @@ pnpm-debug.log*
 
 # raw source workbooks (not distributed)
 data/raw/
+data/feedback/
 
 # test & coverage
 coverage

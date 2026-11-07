@@ -228,7 +228,46 @@ export const copy = {
     socialInstagram: "Instagram",
     socialX: "X",
     socialFacebook: "Facebook",
+    feedbackLink: "Kirim Saran",
     copyright: "Copyright © 2026 DanaTerbuka. All Rights Reserved",
+  },
+  feedback: {
+    sectionTitle: "Kirim Saran untuk DanaTerbuka",
+    sectionIntro:
+      "Punya masukan atau ide untuk pengembangan platform ini? Kirimkan saran Anda kepada kami.",
+    privacyNotice:
+      "Saran dikirim ke tim DanaTerbuka untuk memperbaiki situs ini. Jangan menulis data pribadi orang lain. Bagian ini bukan kanal laporan ke pemerintah daerah.",
+    privacyNoticeSimple:
+      "Pesan ini untuk tim pembuat situs ini, bukan untuk lapor ke kantor pemerintah. Jangan tulis rahasia atau data pribadi orang lain ya.",
+    categoryLabel: "Jenis Saran",
+    categoryFitur: "Fitur Baru",
+    categoryData: "Data & Angka",
+    categoryTampilan: "Tampilan & Kenyamanan",
+    categoryLainnya: "Lainnya",
+    messageLabel: "Isi Saran",
+    messagePlaceholder:
+      "Tuliskan saran, masukan, atau perbaikan yang Anda harapkan (minimal 10 karakter)...",
+    messageCharCount: "{count}/1000 karakter",
+    messageHelp: "Minimal 10 karakter dan maksimal 1000 karakter.",
+    contactLabel: "Kontak (Opsional)",
+    contactHelp: "Isi hanya bila kamu ingin dihubungi balik",
+    contactPlaceholder: "Email atau nomor telepon (opsional)",
+    honeypotLabel: "Jangan isi kolom ini",
+    submitButton: "Kirim Saran",
+    submittingButton: "Mengirim...",
+    successTitle: "Terima Kasih atas Saran Anda!",
+    successMessage:
+      "Saran Anda telah berhasil dikirim dan akan kami pelajari untuk perbaikan DanaTerbuka.",
+    sendAnotherButton: "Kirim Saran Lain",
+    errors: {
+      categoryRequired: "Pilih jenis saran.",
+      messageTooShort: "Isi saran minimal 10 karakter.",
+      messageTooLong: "Isi saran maksimal 1000 karakter.",
+      contactTooLong: "Kontak maksimal 100 karakter.",
+      rateLimited: "Terlalu sering mengirim saran. Silakan coba lagi nanti.",
+      genericError:
+        "Tidak dapat mengirim saran karena kendala jaringan atau server. Silakan coba lagi.",
+    },
   },
   a11y: {
     sectorChartLabel: "Grafik batang alokasi pagu belanja per sektor",

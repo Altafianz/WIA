@@ -8,6 +8,7 @@ import { requestIdMiddleware } from "./middleware/request-id.js";
 import { apiRateLimiter } from "./middleware/rate-limit.js";
 import { errorHandler, notFoundHandler } from "./middleware/error-handler.js";
 import { apiRouter } from "./routes/index.js";
+import { env } from "./env.js";
 
 export interface CreateAppOptions {
   webDist?: string;
@@ -27,6 +28,17 @@ export function isSpaFallbackPath(pathname: string): boolean {
 
 export function createApp(options: CreateAppOptions = {}): Express {
   const app = express();
+
+  const trustProxyEnv = process.env.TRUST_PROXY || env.TRUST_PROXY;
+  if (trustProxyEnv) {
+    if (trustProxyEnv === "true" || trustProxyEnv === "1") {
+      app.set("trust proxy", true);
+    } else if (trustProxyEnv === "false" || trustProxyEnv === "0") {
+      app.set("trust proxy", false);
+    } else {
+      app.set("trust proxy", trustProxyEnv);
+    }
+  }
 
   app.use(requestIdMiddleware);
 

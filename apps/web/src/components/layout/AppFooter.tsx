@@ -73,6 +73,11 @@ export function AppFooter() {
                   {copy.nav.methodology}
                 </Link>
               </li>
+              <li>
+                <Link to="/#saran" className="hover:text-footer-text transition-colors">
+                  {copy.footer.feedbackLink}
+                </Link>
+              </li>
             </ul>
           </div>
 
