@@ -23,6 +23,9 @@ export const copy = {
     methodology: "Metodologi",
     simpleModeLabel: "Penjelasan Sederhana",
     simpleModeDescription: "Ganti istilah teknis keuangan dengan bahasa sehari-hari",
+    openMenu: "Buka menu",
+    closeMenu: "Tutup menu",
+    mainMenu: "Menu utama",
   },
   home: {
     heroHeadline: "Memahami Anggaran Daerah, Mengawasi Pembangunan Bersama",
