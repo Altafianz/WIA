@@ -2,11 +2,30 @@
 
 **Memahami Anggaran, Mengawasi Pembangunan.**
 
-DanaTerbuka adalah aplikasi web yang mengubah data anggaran daerah (APBD) menjadi jawaban sederhana: berapa yang direncanakan dan terealisasi, sektor mana yang terbesar, dan apa yang tidak bisa disimpulkan dari angka tersebut. Dilengkapi insight otomatis, perbandingan antarwilayah, dan mode penjelasan dalam bahasa sehari-hari.
+DanaTerbuka adalah aplikasi web yang mengubah data anggaran daerah (APBD) menjadi jawaban sederhana: berapa yang direncanakan dan terealisasi, sektor mana yang terbesar, dan apa yang tidak bisa disimpulkan dari angka tersebut. Dilengkapi insight otomatis, perbandingan antarwilayah, ekspor CSV, dan mode penjelasan dalam bahasa sehari-hari.
 
 Dibuat untuk lomba **WIA MIA 2026**, tema *Designing Digital Futures – Powering Public Transparency*, subtema *Open Government Data*.
 
-> **Catatan data:** seluruh angka yang tampil saat ini adalah **data contoh**, bukan data resmi pemerintah. Wilayah dan nilainya dibuat oleh generator fixture dan diberi label "Data contoh" di setiap halaman. Aplikasi disiapkan agar sumber data bisa diganti lewat adapter tanpa mengubah tampilan.
+> **Catatan data:** angka yang tampil berasal dari data resmi **DJPK Kementerian Keuangan** (Belanja Daerah menurut Fungsi) untuk lima provinsi. Data diproses menjadi snapshot yang disertakan di repositori, sehingga aplikasi berjalan tanpa mengunduh apa pun. Detail sumber, cakupan, dan keterbatasan ada di halaman **Metodologi** di dalam aplikasi.
+
+## Data
+
+- **Sumber:** DJPK Kemenkeu, *Belanja Daerah menurut Fungsi* (https://djpk.kemenkeu.go.id/?p=5412). Hak cipta data ada pada DJPK Kemenkeu; DanaTerbuka hanya mengolah dan menampilkannya dengan mencantumkan sumber.
+- **Cakupan:** 5 provinsi (DKI Jakarta, Jawa Barat, Jawa Tengah, Jawa Timur, Banten), memuat pemerintah provinsi dan kabupaten/kota di dalamnya: 113 wilayah. Untuk DKI Jakarta, berkas DJPK hanya memuat pemerintah provinsi.
+- **Periode:** 2021 sampai 2026. Pagu tersedia untuk semua tahun; realisasi tersedia untuk 2021 sampai 2024.
+- **Sektor:** 9 fungsi yang tersedia di data DJPK (Pelayanan Umum, Ketertiban dan Keamanan, Ekonomi, Perlindungan Lingkungan Hidup, Perumahan dan Fasilitas Umum, Kesehatan, Pariwisata, Pendidikan, Perlindungan Sosial).
+- **Keterbatasan penting:**
+  - Angka 2021-2022 kurang tepat untuk dibandingkan. Pagu dicatat pada pertengahan tahun, sedangkan realisasi berasal dari laporan terpisah yang disusun belakangan, sehingga persentase realisasi per sektor bisa tampak terlalu tinggi atau terlalu rendah.
+  - Anggaran "Provinsi X" adalah anggaran pemerintah provinsi itu sendiri, bukan jumlah kabupaten/kota di dalamnya, sehingga tidak sebanding langsung dengan kabupaten/kota.
+
+### Membangun ulang data (opsional)
+
+Snapshot sudah tersedia di `data/processed/snapshot.v1.json`. Untuk membangun ulang dari berkas asli, unduh berkas Belanja per Fungsi dari DJPK ke `data/raw/` (folder ini tidak ikut repositori), lalu:
+
+```bash
+pnpm data:build   # olah data/raw menjadi snapshot + laporan kualitas
+pnpm data:check   # validasi snapshot terhadap skema
+```
 
 ## Tech Stack
 
@@ -14,23 +33,22 @@ Dibuat untuk lomba **WIA MIA 2026**, tema *Designing Digital Futures – Powerin
 |---|---|
 | Frontend (`apps/web`) | React 18, TypeScript, Vite, Tailwind CSS, React Router, TanStack Query, Recharts |
 | Backend (`apps/api`) | Node.js, Express, TypeScript, Zod, Helmet |
-| Kode bersama (`packages/shared`) | Skema Zod, rumus metrik, mesin insight (fungsi murni) |
+| Kode bersama (`packages/shared`) | Skema Zod, rumus metrik, mesin insight, glosarium (fungsi murni) |
 | Tooling | pnpm workspace (monorepo), Vitest, Supertest, ESLint |
 
-Frontend dan backend dipisah: web berjalan di `localhost:5173` dan memanggil API di `localhost:3001` lewat proxy `/api`.
+Frontend dan backend dipisah: web berjalan di `localhost:5173` dan memanggil API di `localhost:3001` lewat proxy `/api`. API membaca snapshot lewat adapter (`DATA_ADAPTER=snapshot`, bawaan); adapter fixture tersedia sebagai cadangan.
 
 ## Cara Menjalankan
 
 Prasyarat: **Node.js 20 atau lebih baru** dan **pnpm 9**.
 
 ```bash
-# 0. Install npm jika belum
+# 0. Install pnpm jika belum
 npm install -g pnpm
 
 # 1. Clone
 git clone https://github.com/Altafianz/WIA.git
 cd WIA
-code .
 
 # 2. Install dependensi
 pnpm install
@@ -56,39 +74,41 @@ pnpm start       # jalankan API produksi (setelah build)
 ```
 apps/
   api/            REST API read-only (Express)
-  web/            Aplikasi React (landing page, dashboard)
+  web/            Aplikasi React
 packages/
-  shared/         Skema, tipe, rumus metrik, mesin insight
+  shared/         Skema, tipe, rumus metrik, mesin insight, glosarium
 data/
-  fixtures/       Data contoh (150 record, 5 wilayah fiktif)
+  processed/      Snapshot data DJPK + laporan kualitas
+  fixtures/       Data contoh (cadangan dan untuk tes)
   reference/      Referensi wilayah dan sektor
-scripts/          Generator fixture
+scripts/          Pembangun snapshot dan generator fixture
 docs/             PRD, DATA_SPEC, ARCHITECTURE, UI_SPEC, TASKS
 ```
 
-## Progress Saat Ini
+## Fitur
 
-Draft ini berfokus pada satu alur lengkap: **landing page + dashboard** dengan data contoh.
+- **Beranda:** pengantar dan jalan pintas ke Dashboard.
+- **Dashboard:** kartu ringkasan pagu, realisasi, persentase realisasi, dan sisa anggaran; grafik alokasi per sektor dan tren tahunan, masing-masing dengan tabel alternatif.
+- **Filter Provinsi dan Sub-wilayah** serta tahun, tersimpan di URL sehingga tautannya bisa dibagikan.
+- **Insight otomatis** dengan batas kesimpulan di setiap kalimat.
+- **Mode Penjelasan Sederhana** yang mengganti istilah teknis dengan bahasa sehari-hari.
+- **Bandingkan:** dua wilayah atau dua tahun, dengan catatan bila levelnya berbeda.
+- **Ekspor CSV** dari data yang sedang ditampilkan.
+- **Glosarium** dan **Metodologi** (sumber, aturan pengolahan, keterbatasan).
+- Label sumber dan catatan kualitas data di setiap halaman.
+
+## Progress
 
 - [x] Struktur monorepo pnpm (web, api, shared)
-- [x] Data contoh: 150 record, 5 wilayah fiktif, berlabel "Data contoh"
-- [x] Rumus metrik dan mesin insight dengan unit test (27 tes lulus)
-- [x] API: health, meta, regions, sectors, ringkasan anggaran, sektor, tren, insight (6 tes lulus)
-- [x] Komponen web: layout, kartu ringkasan, kartu sumber data, panel insight, badge "Data contoh", state loading/empty/error, tombol salin tautan
-- [ ] Router dan halaman Beranda (landing page)
-- [ ] Halaman Dashboard (filter wilayah dan tahun, grafik sektor, grafik tren)
-- [ ] Halaman placeholder "Segera hadir" dan halaman 404
-- [ ] Halaman Bandingkan, Glosarium, dan Metodologi (tahap berikutnya)
-
-## Fitur yang Direncanakan
-
-- Kartu ringkasan pagu, realisasi, persentase realisasi, dan sisa anggaran
-- Grafik alokasi per sektor dan tren tahunan, masing-masing dengan tabel alternatif
-- Filter wilayah dan tahun yang tersimpan di URL sehingga tautannya bisa dibagikan
-- Insight otomatis dengan batas kesimpulan di setiap kalimat
-- Mode "Penjelasan Sederhana" yang mengganti istilah teknis dengan bahasa sehari-hari
-- Perbandingan dua wilayah atau dua tahun, glosarium, dan halaman metodologi
+- [x] Rumus metrik dan mesin insight dengan unit test
+- [x] API read-only: health, meta, regions, sectors, ringkasan, sektor, tren, insight, bandingkan, ekspor
+- [x] Halaman Beranda, Dashboard, Bandingkan, Glosarium, Metodologi, dan 404
+- [x] Mode Penjelasan Sederhana
+- [x] Ekspor CSV, metadata SEO
+- [x] Data resmi DJPK (snapshot) menggantikan data contoh
+- [x] Cakupan 5 provinsi dengan filter Provinsi dan Sub-wilayah terpisah
+- [ ] Deploy (satu layanan Express yang melayani web dan API)
 
 ## Lisensi Data
 
-Data contoh dibuat otomatis oleh generator fixture dan tidak merepresentasikan anggaran daerah yang sebenarnya.
+Data anggaran bersumber dari DJPK Kementerian Keuangan RI dan hak ciptanya tetap pada DJPK. Repositori ini menyertakan hasil olahan untuk keperluan lomba dan demonstrasi, dengan sumber dicantumkan. Data contoh (fixture) dibuat otomatis dan tidak merepresentasikan anggaran daerah yang sebenarnya.
