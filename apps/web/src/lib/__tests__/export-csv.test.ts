@@ -78,7 +78,7 @@ describe("buildSectorCsv (FR-060)", () => {
     expect(lines[5].startsWith("'@Lainnya,")).toBe(true);
   });
 
-  it("uses Resmi when the source is not a fixture", () => {
+  it("uses Data DJPK when the source is not a fixture", () => {
     const official = buildSectorCsv([], {
       isFixture: false,
       totalPagu: 1000,
@@ -86,7 +86,7 @@ describe("buildSectorCsv (FR-060)", () => {
     });
 
     expect(official).toContain("Total,1000,,,");
-    expect(official).toContain(",Resmi\r\n");
+    expect(official).toContain(",Data DJPK\r\n");
   });
 
   it("builds the download filename from region slug and year", () => {

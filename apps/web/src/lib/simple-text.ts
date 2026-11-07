@@ -53,6 +53,12 @@ export function getPeriodNoticeCopy(
     : copy.dashboard.partialRealizationNotice;
 }
 
+export function getLegacyDataNoticeCopy(isSimple: boolean): string {
+  return isSimple
+    ? copy.dashboard.legacyDataNoticeSimple
+    : copy.dashboard.legacyDataNotice;
+}
+
 export function getCompareCopy(isSimple: boolean) {
   return {
     title: isSimple ? copy.compare.titleSimple : copy.compare.title,

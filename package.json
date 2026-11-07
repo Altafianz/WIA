@@ -10,7 +10,9 @@
     "start": "node apps/api/dist/index.js",
     "lint": "eslint .",
     "typecheck": "pnpm -r typecheck",
-    "test": "pnpm -r test"
+    "test": "pnpm -r test",
+    "data:build": "pnpm --filter @danaterbuka/data-scripts build-snapshot",
+    "data:check": "pnpm --filter @danaterbuka/data-scripts build-snapshot -- --check"
   },
   "devDependencies": {
     "@eslint/js": "^9.20.0",

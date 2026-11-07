@@ -5,6 +5,10 @@ export const copy = {
     skipToContent: "Lewati ke konten utama",
     dataSample: "Data contoh",
     unitRupiah: "Rupiah",
+    sourceAttributionFixture:
+      "Data contoh - bukan data resmi pemerintah. Digunakan untuk simulasi transparansi anggaran publik.",
+    sourceAttributionOfficial:
+      "Sumber data: DJPK Kementerian Keuangan RI. Angka diolah menjadi snapshot berkala, bukan laporan real-time.",
     sourceAttribution: "Data contoh — bukan data resmi pemerintah. Digunakan untuk simulasi transparansi anggaran publik.",
     allRightsReserved: "WIA MIA 2026 — Tim DanaTerbuka",
   },
@@ -31,7 +35,10 @@ export const copy = {
     question3Title: "Apa yang tidak bisa disimpulkan dari data ini?",
     question3Body: "Hindari salah tafsir: serapan rendah belum tentu tanda pelanggaran, melainkan bisa karena kendala administrasi.",
     dataNoticeTitle: "Transparansi Sumber",
-    dataNoticeBody: "Saat ini sistem menampilkan data contoh (simulasi fiktif terverifikasi) untuk mendemonstrasikan kapabilitas keterbukaan informasi.",
+    dataNoticeBodyFixture:
+      "Saat ini sistem menampilkan data contoh (simulasi fiktif terverifikasi) untuk mendemonstrasikan kapabilitas keterbukaan informasi.",
+    dataNoticeBodyOfficial:
+      "Sistem menampilkan data anggaran daerah dari berkas publik DJPK Kementerian Keuangan RI. Data disajikan sebagai snapshot berkala, bukan laporan real-time.",
   },
   dashboard: {
     title: "Dashboard Anggaran Daerah",
@@ -54,8 +61,9 @@ export const copy = {
     perHundredPattern: "Dari setiap Rp 100 yang direncanakan, sekitar Rp {x} sudah terpakai.",
     sectorChartTitle: "Alokasi Belanja per Sektor",
     sectorChartTitleSimple: "Pembagian Uang per Kelompok Belanja",
-    sectorChartDescription: "Pagu vs Realisasi belanja berdasarkan fungsi urusan daerah",
-    sectorChartDescriptionSimple: "Perbandingan rencana anggaran dan uang yang sudah terpakai untuk setiap bidang",
+    sectorChartDescription: "Pagu vs Realisasi belanja berdasarkan fungsi belanja (urusan daerah)",
+    sectorChartDescriptionSimple:
+      "Perbandingan rencana anggaran dan uang yang sudah terpakai untuk setiap fungsi belanja",
     trendChartTitle: "Tren Anggaran Tahunan",
     trendChartTitleSimple: "Perkembangan Anggaran dari Tahun ke Tahun",
     trendChartDescription: "Perkembangan pagu dan realisasi belanja dari tahun ke tahun",
@@ -76,6 +84,7 @@ export const copy = {
     sourceFieldStatus: "Status Data",
     fixtureBadge: "Data contoh",
     fixtureNotice: "Data contoh, bukan data resmi. Gunakan untuk melihat cara kerja produk.",
+    sourceStatusOfficial: "Data DJPK",
     viewAsTable: "Lihat sebagai tabel",
     viewAsChart: "Lihat sebagai grafik",
     copyLink: "Salin tautan",
@@ -85,6 +94,10 @@ export const copy = {
     realizationExceedsPagu: "Realisasi melampaui pagu",
     partialRealizationNotice: "Realisasi berjalan (belum final)",
     partialRealizationNoticeSimple: "Data belanja tahun ini masih berjalan dan belum angka akhir",
+    legacyDataNotice:
+      "Angka 2021-2022 kurang tepat untuk dibandingkan. Pagu diambil dari anggaran yang dicatat di pertengahan tahun dan belum tentu memuat perubahan berikutnya, sedangkan realisasi berasal dari laporan terpisah yang disusun belakangan. Akibatnya persentase realisasi per sektor bisa tampak terlalu tinggi atau terlalu rendah. Selengkapnya di Metodologi.",
+    legacyDataNoticeSimple:
+      "Angka 2021-2022 sebaiknya jangan dibandingkan dulu. Rencana anggaran dicatat di tengah tahun, sedangkan uang yang terpakai dicatat belakangan di laporan lain. Jadi persentasenya bisa meleset jauh, misalnya sampai lebih dari 100%. Selengkapnya di Metodologi.",
     noDataPrompt: "Tidak ada data belanja yang tercatat untuk kombinasi wilayah dan tahun ini.",
   },
   exportCsv: {
@@ -96,7 +109,7 @@ export const copy = {
     colRate: "% Realisasi",
     colStatus: "Status data",
     total: "Total",
-    statusOfficial: "Resmi",
+    statusOfficial: "Data DJPK",
   },
   compare: {
     title: "Bandingkan Anggaran",
@@ -217,12 +230,16 @@ export const copy = {
     summaryHeading: "Ringkasan",
     summaryBody:
       "DanaTerbuka mengolah data anggaran daerah menjadi ringkasan yang mudah dipahami publik. Seluruh angka berasal dari snapshot berkala data publik, bukan laporan real-time. Saat ini seluruh angka adalah data contoh (fiktif terverifikasi) untuk demonstrasi platform.",
+    summaryBodyOfficial:
+      "DanaTerbuka mengolah berkas publik DJPK Kementerian Keuangan RI menjadi ringkasan yang mudah dipahami publik. Seluruh angka berasal dari snapshot berkala, bukan laporan real-time.",
     sourceHeading: "Sumber Data & Lisensi",
     sourceNotAvailable: "Sumber tidak dapat dimuat.",
     sourceLoading: "Memuat sumber data…",
     sourceTableCaption: "Sumber data, lisensi, dan status pembaruan",
     sourceFixtureNote:
       "Seluruh angka saat ini adalah data contoh (fiktif terverifikasi). Portal sumber resmi (SIKD Kemenkeu, Satu Data Indonesia) belum diverifikasi ketersediaan datanya.",
+    sourceOfficialNote:
+      "Angka diolah dari berkas publik DJPK Kementerian Keuangan RI. Nama berkas dan tanggal berkas yang tersedia ditampilkan pada tabel di bawah.",
     metricsHeading: "Rumus Metrik",
     metricsDescription:
       "Semua metrik dihitung oleh fungsi murni di paket packages/shared/src/metrics.",
@@ -235,6 +252,15 @@ export const copy = {
       "Data disajikan sebagai snapshot berkala, bukan informasi real-time.",
       "Saat ini seluruh angka merupakan data contoh (simulasi fiktif) untuk demonstrasi.",
       "Realisasi berstatus sementara (approved/partial) dapat berubah setelah pembaruan resmi.",
+      "Selisih pagu dan realisasi bukan indikasi dana hilang, melainkan sisa anggaran.",
+      "Data tidak dapat digunakan untuk klaim hukum atau audit resmi.",
+    ],
+    limitationsOfficial: [
+      "Data disajikan sebagai snapshot berkala, bukan informasi real-time.",
+      "Data DJPK yang diolah mencakup pemerintah daerah dengan kode wilayah 10 (Jawa Barat) dan tahun 2021-2026.",
+      "Klasifikasi mengikuti fungsi belanja pada berkas sumber; fungsi yang tidak tersedia tidak ditampilkan.",
+      "Realisasi 2025-2026 belum tersedia dan ditampilkan sebagai belum dirilis, bukan nol.",
+      "Angka dibulatkan ke rupiah penuh dari berkas Excel sehingga selisih pembulatan kecil dapat terjadi.",
       "Selisih pagu dan realisasi bukan indikasi dana hilang, melainkan sisa anggaran.",
       "Data tidak dapat digunakan untuk klaim hukum atau audit resmi.",
     ],
@@ -252,6 +278,13 @@ export const copy = {
     colUpdated: "Pembaruan",
     colLicense: "Lisensi",
     colStatus: "Status",
+    fileTableHeading: "Berkas Sumber DJPK",
+    fileTableCaption: "Daftar berkas sumber dan tanggal berkas yang diolah",
+    colFile: "Berkas",
+    colSheet: "Sheet",
+    colPeriod: "Periode",
+    colFileDate: "Tanggal berkas",
+    fileDateUnknown: "Tidak tercantum",
     anchorSummary: "Ringkasan",
     anchorSource: "Sumber Data",
     anchorMetrics: "Rumus Metrik",

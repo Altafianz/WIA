@@ -17,6 +17,9 @@ build
 npm-debug.log*
 pnpm-debug.log*
 
+# raw source workbooks (not distributed)
+data/raw/
+
 # test & coverage
 coverage
 playwright-report

@@ -19,3 +19,5 @@ function findDataDir(subpath: string): string {
 
 export const FIXTURES_DIR = findDataDir("data/fixtures");
 export const REFERENCE_DIR = findDataDir("data/reference");
+export const PROCESSED_DIR = findDataDir("data/processed");
+export const SNAPSHOT_PATH = path.join(PROCESSED_DIR, "snapshot.v1.json");

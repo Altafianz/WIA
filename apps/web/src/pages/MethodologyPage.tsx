@@ -14,6 +14,7 @@ import { MethodologyToc } from "../components/methodology/MethodologyToc.js";
 import { MetricFormulaTable } from "../components/methodology/MetricFormulaTable.js";
 import { InsightRuleList } from "../components/methodology/InsightRuleList.js";
 import { SourceAttributionTable } from "../components/methodology/SourceAttributionTable.js";
+import { SourceFileTable } from "../components/methodology/SourceFileTable.js";
 import { LimitationList } from "../components/methodology/LimitationList.js";
 
 const c = copy.methodology;
@@ -23,6 +24,7 @@ export function MethodologyPage() {
   useHashScroll();
 
   const source = data?.meta;
+  const isFixture = source?.isFixture ?? false;
   const updatedAt = source?.sourceUpdatedAt ?? source?.retrievedAt;
   const lastUpdated = updatedAt ? formatDateId(updatedAt) : c.notAvailable;
 
@@ -48,7 +50,7 @@ export function MethodologyPage() {
               id={c.anchorSummary}
               title={c.summaryHeading}
             >
-              <p>{c.summaryBody}</p>
+              <p>{isFixture ? c.summaryBody : c.summaryBodyOfficial}</p>
             </MethodologySection>
 
             <MethodologySection id={c.anchorSource} title={c.sourceHeading}>
@@ -57,6 +59,7 @@ export function MethodologyPage() {
                 isLoading={isLoading}
                 isError={isError}
               />
+              <SourceFileTable source={source} />
             </MethodologySection>
 
             <MethodologySection
@@ -83,7 +86,9 @@ export function MethodologyPage() {
               <h3 className="pt-2 text-base font-semibold text-text">
                 {c.limitationsHeading}
               </h3>
-              <LimitationList items={c.limitations} />
+              <LimitationList
+                items={isFixture ? c.limitations : c.limitationsOfficial}
+              />
             </MethodologySection>
 
             <MethodologySection id={c.anchorUpdate} title={c.anchorUpdate}>

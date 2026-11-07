@@ -67,7 +67,9 @@ export function SourceInfoCard({ meta }: SourceInfoCardProps) {
                 meta.isFixture ? "text-warning" : "text-success",
               ].join(" ")}
             >
-              {meta.isFixture ? copy.dashboard.fixtureBadge : "Resmi"}
+              {meta.isFixture
+                ? copy.dashboard.fixtureBadge
+                : copy.dashboard.sourceStatusOfficial}
             </span>
           }
         />

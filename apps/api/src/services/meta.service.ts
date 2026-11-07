@@ -1,10 +1,10 @@
-import {
-  MetaData,
-  ApiResponse,
-  DEFAULT_REGION_SLUG,
-  DEFAULT_FISCAL_YEAR,
-} from "@danaterbuka/shared";
+import { MetaData, ApiResponse } from "@danaterbuka/shared";
 import { getRepository } from "../repositories/index.js";
+import {
+  getAvailableYears,
+  getDefaultRegionSlug,
+  getLatestFinalYear,
+} from "../lib/data-meta.js";
 
 export class MetaService {
   getMetaInfo(): ApiResponse<MetaData> {
@@ -13,15 +13,12 @@ export class MetaService {
     const regions = repo.listRegions();
     const sectors = repo.listSectors();
 
-    const availableYears = [2021, 2022, 2023, 2024, 2025];
-    const latestFinalYear = DEFAULT_FISCAL_YEAR;
-
     return {
       meta,
       data: {
-        availableYears,
-        latestFinalYear,
-        defaultRegionSlug: DEFAULT_REGION_SLUG,
+        availableYears: getAvailableYears(repo),
+        latestFinalYear: getLatestFinalYear(repo),
+        defaultRegionSlug: getDefaultRegionSlug(repo),
         regions,
         sectors,
       },

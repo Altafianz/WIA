@@ -6,8 +6,12 @@ import { Card } from "../components/ui/Card.js";
 import { Button } from "../components/ui/Button.js";
 import { PageMeta } from "../lib/seo.js";
 import { FixtureBadge } from "../components/dashboard/FixtureBadge.js";
+import { useMeta } from "../hooks/useMeta.js";
 
 export function HomePage() {
+  const { data } = useMeta();
+  const isFixture = data?.meta.isFixture ?? false;
+
   return (
     <div className="flex flex-col gap-12 py-8">
       <PageMeta
@@ -18,7 +22,7 @@ export function HomePage() {
       {/* Hero Section */}
       <section className="text-center max-w-3xl mx-auto px-4 flex flex-col items-center gap-6">
         <div>
-          <FixtureBadge visible={true} />
+          <FixtureBadge visible={isFixture} />
         </div>
         <h1 className="text-3xl md:text-5xl font-extrabold text-text tracking-tight leading-tight">
           {copy.home.heroHeadline}
@@ -112,7 +116,9 @@ export function HomePage() {
             {copy.home.dataNoticeTitle}
           </h4>
           <p className="text-sm text-text-muted">
-            {copy.home.dataNoticeBody}
+            {isFixture
+              ? copy.home.dataNoticeBodyFixture
+              : copy.home.dataNoticeBodyOfficial}
           </p>
         </div>
       </section>

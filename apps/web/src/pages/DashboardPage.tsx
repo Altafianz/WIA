@@ -35,7 +35,7 @@ export function DashboardPage() {
   const [isSimple] = useSimpleMode();
 
   const regions = metaResp?.data.regions ?? [];
-  const years = metaResp?.data.availableYears ?? [2021, 2022, 2023, 2024, 2025];
+  const years = metaResp?.data.availableYears ?? [];
   const validRegionSlugs = regions.map((r) => r.slug);
 
   const {
@@ -98,7 +98,7 @@ export function DashboardPage() {
     const csv = buildSectorCsv(
       sectorsResp.data.slices,
       {
-        isFixture: sourceMeta?.isFixture ?? true,
+        isFixture: sourceMeta?.isFixture ?? false,
         totalPagu: summaryResp.data.totalPagu,
         totalRealisasi: summaryResp.data.totalRealisasi,
       },
@@ -148,10 +148,11 @@ export function DashboardPage() {
 
       {/* Status Badges & Period Notice */}
       <div className="flex flex-wrap items-center gap-3">
-        <FixtureBadge visible={summaryResp?.meta.isFixture ?? metaResp?.meta.isFixture ?? true} />
+        <FixtureBadge visible={summaryResp?.meta.isFixture ?? metaResp?.meta.isFixture ?? false} />
         {summaryResp?.data.periodStatus && (
           <PeriodNotice
             periodStatus={summaryResp.data.periodStatus}
+            fiscalYear={summaryResp.data.fiscalYear}
             simple={isSimple}
           />
         )}

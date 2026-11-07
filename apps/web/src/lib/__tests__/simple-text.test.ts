@@ -6,6 +6,7 @@ import {
   getDataTableCopy,
   getInsightPanelCopy,
   getPeriodNoticeCopy,
+  getLegacyDataNoticeCopy,
   getCompareCopy,
 } from "../simple-text.js";
 import { copy } from "../../content/copy.id.js";
@@ -58,6 +59,19 @@ describe("simple-text helpers", () => {
     expect(getPeriodNoticeCopy(true, "partial")).toBe(
       copy.dashboard.partialRealizationNoticeSimple
     );
+  });
+
+  it("getLegacyDataNoticeCopy returns the 2021-2022 comparison warning", () => {
+    expect(getLegacyDataNoticeCopy(false)).toBe(copy.dashboard.legacyDataNotice);
+    expect(getLegacyDataNoticeCopy(true)).toBe(copy.dashboard.legacyDataNoticeSimple);
+    expect(getLegacyDataNoticeCopy(false)).toContain(
+      "Angka 2021-2022 kurang tepat untuk dibandingkan."
+    );
+    expect(getLegacyDataNoticeCopy(true)).toContain(
+      "Angka 2021-2022 sebaiknya jangan dibandingkan dulu."
+    );
+    expect(getLegacyDataNoticeCopy(false)).toContain("Selengkapnya di Metodologi.");
+    expect(getLegacyDataNoticeCopy(true)).toContain("Selengkapnya di Metodologi.");
   });
 
   it("getCompareCopy returns comparison labels", () => {

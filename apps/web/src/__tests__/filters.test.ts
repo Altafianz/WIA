@@ -3,6 +3,7 @@ import { resolveFilters } from "../lib/filters.js";
 
 const validYears = [2021, 2022, 2023, 2024, 2025];
 const validRegionSlugs = [
+  "provinsi-jawa-barat",
   "provinsi-nusa-utara",
   "provinsi-selat-timur",
   "kota-bahari",
@@ -16,7 +17,7 @@ describe("resolveFilters (FR-022)", () => {
     );
 
     expect(result).toEqual({
-      region: "provinsi-nusa-utara",
+      region: "provinsi-jawa-barat",
       year: 2024,
       sector: "all",
       regionCorrected: false,
@@ -43,7 +44,7 @@ describe("resolveFilters (FR-022)", () => {
       { validYears, validRegionSlugs }
     );
 
-    expect(result.region).toBe("provinsi-nusa-utara");
+    expect(result.region).toBe("provinsi-jawa-barat");
     expect(result.regionCorrected).toBe(true);
     expect(result.yearCorrected).toBe(false);
   });

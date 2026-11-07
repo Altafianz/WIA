@@ -5,7 +5,7 @@ export const RegionSlugSchema = z
   .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
   .max(60);
 
-export const YearSchema = z.coerce.number().int().min(2021).max(2025);
+export const YearSchema = z.coerce.number().int().min(2000).max(2100);
 
 export const SectorParamSchema = z.union([
   z.literal("all"),

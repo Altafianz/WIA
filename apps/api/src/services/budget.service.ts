@@ -15,11 +15,10 @@ import {
   calculateRemainingBudget,
   calculateSectorShare,
   calculateDenseRank,
-  DEFAULT_FISCAL_YEAR,
-  FISCAL_YEARS,
 } from "@danaterbuka/shared";
 import { getRepository } from "../repositories/index.js";
 import { AppError } from "../lib/errors.js";
+import { getAvailableYears, getLatestFinalYear } from "../lib/data-meta.js";
 
 export class BudgetService {
   getSummary(regionSlug: string, fiscalYear: number): ApiResponse<BudgetSummaryData> {
@@ -175,17 +174,22 @@ export class BudgetService {
     const meta = repo.getMeta();
 
     const points: TrendPoint[] = [];
+    const availableYears = getAvailableYears(repo);
+    const firstYear = availableYears[0];
+    const lastYear = availableYears.at(-1);
 
-    for (const year of FISCAL_YEARS) {
-      const records = repo.getRecords({ regionSlug, fiscalYear: year });
-      if (records.length > 0) {
-        const agg = aggregateTotals(records);
-        points.push({
-          fiscalYear: year,
-          pagu: agg.totalPagu,
-          realisasi: agg.totalRealisasi,
-          periodStatus: agg.periodStatus,
-        });
+    if (firstYear !== undefined && lastYear !== undefined) {
+      for (let year = firstYear; year <= lastYear; year += 1) {
+        const records = repo.getRecords({ regionSlug, fiscalYear: year });
+        if (records.length > 0) {
+          const agg = aggregateTotals(records);
+          points.push({
+            fiscalYear: year,
+            pagu: agg.totalPagu,
+            realisasi: agg.totalRealisasi,
+            periodStatus: agg.periodStatus,
+          });
+        }
       }
     }
 
@@ -206,7 +210,7 @@ export class BudgetService {
     const sectorMap = new Map(sectors.map((s) => [s.sectorId, s]));
 
     if (query.mode === "region") {
-      const year = query.year ?? DEFAULT_FISCAL_YEAR;
+      const year = query.year ?? getLatestFinalYear(repo);
       const regionA = regions.find((r) => r.slug === query.a);
       const regionB = query.b ? regions.find((r) => r.slug === query.b) : undefined;
 

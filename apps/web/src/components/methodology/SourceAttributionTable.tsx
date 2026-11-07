@@ -121,7 +121,9 @@ export function SourceAttributionTable({
           </tbody>
         </table>
       </div>
-      <p className="text-sm text-text-muted">{c.sourceFixtureNote}</p>
+      <p className="text-sm text-text-muted">
+        {source.isFixture ? c.sourceFixtureNote : c.sourceOfficialNote}
+      </p>
     </div>
   );
 }

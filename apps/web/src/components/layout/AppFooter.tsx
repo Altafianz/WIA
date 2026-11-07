@@ -1,8 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { copy } from "../../content/copy.id.js";
+import { useMeta } from "../../hooks/useMeta.js";
 
 export function AppFooter() {
+  const { data } = useMeta();
+  const isFixture = data?.meta.isFixture ?? false;
+
   return (
     <footer className="bg-footer-bg text-footer-text mt-auto">
       <div className="mx-auto max-w-container px-4 py-12">
@@ -30,6 +34,11 @@ export function AppFooter() {
             </div>
             <p className="text-sm text-footer-muted leading-relaxed">
               {copy.footer.description}
+            </p>
+            <p className="text-xs text-footer-subtle leading-relaxed">
+              {isFixture
+                ? copy.common.sourceAttributionFixture
+                : copy.common.sourceAttributionOfficial}
             </p>
           </div>
 
