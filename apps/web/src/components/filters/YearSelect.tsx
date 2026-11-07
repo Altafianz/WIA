@@ -7,6 +7,7 @@ interface YearSelectProps {
   value: number;
   onChange: (year: number) => void;
   disabled?: boolean;
+  className?: string;
 }
 
 export function YearSelect({
@@ -14,6 +15,7 @@ export function YearSelect({
   value,
   onChange,
   disabled = false,
+  className,
 }: YearSelectProps) {
   return (
     <Select
@@ -22,6 +24,7 @@ export function YearSelect({
       value={value.toString()}
       onChange={(e) => onChange(Number(e.target.value))}
       disabled={disabled}
+      className={className}
       data-testid="year-select"
     >
       {years.map((year) => (

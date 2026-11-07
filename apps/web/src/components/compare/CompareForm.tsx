@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Region } from "@danaterbuka/shared";
 import { copy } from "../../content/copy.id.js";
 import { CompareMode } from "../../lib/compare-params.js";
 import { Select } from "../ui/Select.js";
+import { ProvinceSelect } from "../filters/ProvinceSelect.js";
+import { SubRegionSelect } from "../filters/SubRegionSelect.js";
+import {
+  groupRegions,
+  getProvinceOf,
+  getSubRegions,
+} from "../../lib/region-grouping.js";
 
 export interface CompareFormValues {
   mode: CompareMode;
@@ -21,12 +28,6 @@ interface CompareFormProps {
   disabled?: boolean;
 }
 
-function regionLabel(region: Region): string {
-  return region.hasData
-    ? region.name
-    : `${region.name} ${copy.compare.noDataRegion}`;
-}
-
 export function CompareForm({
   values,
   regions,
@@ -36,13 +37,35 @@ export function CompareForm({
 }: CompareFormProps) {
   const { mode, a, b, year, yearA, yearB } = values;
 
+  const provinceGroups = useMemo(() => groupRegions(regions), [regions]);
+  const provinces = useMemo(
+    () => provinceGroups.map((g) => g.province),
+    [provinceGroups]
+  );
+
+  const provA = useMemo(() => getProvinceOf(a, regions), [a, regions]);
+  const provASlug = provA?.slug ?? provinces[0]?.slug ?? "";
+  const subRegionsA = useMemo(
+    () => getSubRegions(provASlug, regions),
+    [provASlug, regions]
+  );
+
+  const provB = useMemo(() => getProvinceOf(b, regions), [b, regions]);
+  const provBSlug = provB?.slug ?? provinces[0]?.slug ?? "";
+  const subRegionsB = useMemo(
+    () => getSubRegions(provBSlug, regions),
+    [provBSlug, regions]
+  );
+
   return (
-    <div className="grid grid-cols-1 gap-4 rounded-lg border border-border bg-surface p-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 rounded-lg border border-border bg-surface p-4 sm:grid-cols-2 lg:grid-cols-3">
       <Select
         id="compare-mode"
         label={copy.compare.modeLabel}
         value={mode}
-        onChange={(event) => onChange({ mode: event.target.value as CompareMode })}
+        onChange={(event) =>
+          onChange({ mode: event.target.value as CompareMode })
+        }
         disabled={disabled}
         data-testid="compare-mode"
       >
@@ -50,38 +73,8 @@ export function CompareForm({
         <option value="year">{copy.compare.modeYear}</option>
       </Select>
 
-      <Select
-        id="compare-region-a"
-        label={copy.compare.regionALabel}
-        value={a}
-        onChange={(event) => onChange({ a: event.target.value })}
-        disabled={disabled}
-        data-testid="compare-region-a"
-      >
-        {regions.map((region) => (
-          <option key={region.slug} value={region.slug}>
-            {regionLabel(region)}
-          </option>
-        ))}
-      </Select>
-
       {mode === "region" ? (
         <>
-          <Select
-            id="compare-region-b"
-            label={copy.compare.regionBLabel}
-            value={b}
-            onChange={(event) => onChange({ b: event.target.value })}
-            disabled={disabled}
-            data-testid="compare-region-b"
-          >
-            {regions.map((region) => (
-              <option key={region.slug} value={region.slug}>
-                {regionLabel(region)}
-              </option>
-            ))}
-          </Select>
-
           <Select
             id="compare-year"
             label={copy.compare.yearLabel}
@@ -96,14 +89,76 @@ export function CompareForm({
               </option>
             ))}
           </Select>
+
+          <ProvinceSelect
+            id="compare-province-a"
+            label={copy.compare.provinceALabel}
+            provinces={provinces}
+            value={provASlug}
+            onChange={(slug) => onChange({ a: slug })}
+            disabled={disabled}
+            data-testid="compare-province-a"
+          />
+
+          <SubRegionSelect
+            id="compare-subregion-a"
+            label={copy.compare.subRegionALabel}
+            subRegions={subRegionsA}
+            value={a}
+            onChange={(slug) => onChange({ a: slug })}
+            disabled={disabled}
+            data-testid="compare-subregion-a"
+          />
+
+          <ProvinceSelect
+            id="compare-province-b"
+            label={copy.compare.provinceBLabel}
+            provinces={provinces}
+            value={provBSlug}
+            onChange={(slug) => onChange({ b: slug })}
+            disabled={disabled}
+            data-testid="compare-province-b"
+          />
+
+          <SubRegionSelect
+            id="compare-subregion-b"
+            label={copy.compare.subRegionBLabel}
+            subRegions={subRegionsB}
+            value={b}
+            onChange={(slug) => onChange({ b: slug })}
+            disabled={disabled}
+            data-testid="compare-subregion-b"
+          />
         </>
       ) : (
         <>
+          <ProvinceSelect
+            id="compare-province-a"
+            label={copy.compare.provinceLabel}
+            provinces={provinces}
+            value={provASlug}
+            onChange={(slug) => onChange({ a: slug })}
+            disabled={disabled}
+            data-testid="compare-province-a"
+          />
+
+          <SubRegionSelect
+            id="compare-subregion-a"
+            label={copy.compare.subRegionLabel}
+            subRegions={subRegionsA}
+            value={a}
+            onChange={(slug) => onChange({ a: slug })}
+            disabled={disabled}
+            data-testid="compare-subregion-a"
+          />
+
           <Select
             id="compare-year-a"
             label={copy.compare.yearALabel}
             value={String(yearA)}
-            onChange={(event) => onChange({ yearA: Number(event.target.value) })}
+            onChange={(event) =>
+              onChange({ yearA: Number(event.target.value) })
+            }
             disabled={disabled}
             data-testid="compare-year-a"
           >
@@ -118,7 +173,9 @@ export function CompareForm({
             id="compare-year-b"
             label={copy.compare.yearBLabel}
             value={String(yearB)}
-            onChange={(event) => onChange({ yearB: Number(event.target.value) })}
+            onChange={(event) =>
+              onChange({ yearB: Number(event.target.value) })
+            }
             disabled={disabled}
             data-testid="compare-year-b"
           >

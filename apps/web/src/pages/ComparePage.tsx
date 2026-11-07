@@ -109,6 +109,17 @@ export function ComparePage() {
   const isEmpty = !isLoading && isNotFound;
   const isErrorState = !isLoading && isError && !isNotFound;
 
+  const regionA = regions.find((r) => r.slug === resolved.a);
+  const regionB = regions.find((r) => r.slug === resolved.b);
+  const isDifferentLevel =
+    resolved.mode === "region" &&
+    Boolean(
+      regionA &&
+      regionB &&
+      ((regionA.level === "province" && regionB.level !== "province") ||
+        (regionA.level !== "province" && regionB.level === "province"))
+    );
+
   return (
     <div className="flex flex-col gap-6 py-4">
       <PageMeta
@@ -142,6 +153,20 @@ export function ComparePage() {
         onChange={handleChange}
         disabled={isLoading}
       />
+
+      {isDifferentLevel && (
+        <div
+          role="note"
+          data-testid="level-difference-notice"
+          className="rounded-lg border border-border bg-surface p-4 text-sm text-text-muted"
+        >
+          <p>
+            {isSimple
+              ? copy.compare.levelDifferenceNoticeSimple
+              : copy.compare.levelDifferenceNotice}
+          </p>
+        </div>
+      )}
 
       {isLoading && (
         <div className="space-y-4">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import { copy } from "../content/copy.id.js";
 import { PageMeta } from "../lib/seo.js";
 import { useMeta } from "../hooks/useMeta.js";
@@ -9,8 +9,15 @@ import { useSectorBreakdown } from "../hooks/useSectorBreakdown.js";
 import { useTrend } from "../hooks/useTrend.js";
 import { useInsights } from "../hooks/useInsights.js";
 
-import { RegionSelect } from "../components/filters/RegionSelect.js";
+import { ProvinceSelect } from "../components/filters/ProvinceSelect.js";
+import { SubRegionSelect } from "../components/filters/SubRegionSelect.js";
 import { YearSelect } from "../components/filters/YearSelect.js";
+import {
+  groupRegions,
+  getProvinceOf,
+  getSubRegions,
+  formatRegionAnnouncement,
+} from "../lib/region-grouping.js";
 import { CopyLinkButton } from "../components/common/CopyLinkButton.js";
 import { ExportCsvButton } from "../components/common/ExportCsvButton.js";
 import { FixtureBadge } from "../components/dashboard/FixtureBadge.js";
@@ -83,7 +90,47 @@ export function DashboardPage() {
   else if (isEmpty) state = "empty";
 
   const selectedRegion = regions.find((r) => r.slug === region);
-  const regionName = selectedRegion ? selectedRegion.name : region;
+  const currentProvince = useMemo(
+    () => getProvinceOf(region, regions),
+    [region, regions]
+  );
+
+  const provinceGroups = useMemo(() => groupRegions(regions), [regions]);
+  const provinces = useMemo(
+    () => provinceGroups.map((g) => g.province),
+    [provinceGroups]
+  );
+  const currentProvinceSlug = currentProvince?.slug ?? provinces[0]?.slug ?? "";
+
+  const subRegions = useMemo(
+    () => getSubRegions(currentProvinceSlug, regions),
+    [currentProvinceSlug, regions]
+  );
+
+  const handleProvinceChange = useCallback(
+    (newProvinceSlug: string) => {
+      setRegion(newProvinceSlug);
+    },
+    [setRegion]
+  );
+
+  const handleSubRegionChange = useCallback(
+    (newSubRegionSlug: string) => {
+      setRegion(newSubRegionSlug);
+    },
+    [setRegion]
+  );
+
+  const regionAnnouncement = useMemo(
+    () => formatRegionAnnouncement(selectedRegion, currentProvince, year),
+    [selectedRegion, currentProvince, year]
+  );
+
+  const regionDisplayName = selectedRegion
+    ? selectedRegion.level === "province"
+      ? selectedRegion.name
+      : `${selectedRegion.name}, ${currentProvince?.name ?? ""}`
+    : region;
 
   const exportDisabled =
     state !== "data" ||
@@ -110,40 +157,67 @@ export function DashboardPage() {
   return (
     <div className="flex flex-col gap-6 py-4">
       <PageMeta
-        title={`${copy.dashboard.title} — ${regionName}`}
+        title={`${copy.dashboard.title} — ${regionDisplayName}`}
         description={copy.dashboard.description}
       />
 
       <Toast message={correctionMessage} onDismiss={dismissCorrection} />
 
       {/* Header & Filter Bar */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border pb-4">
-        <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-text">
-            {copy.dashboard.title}
-          </h1>
-          <p className="text-sm text-text-muted mt-1">
-            {copy.dashboard.description}
-          </p>
-        </div>
+      <div className="flex flex-col gap-4 border-b border-border pb-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-2xl md:text-3xl font-bold text-text">
+              {copy.dashboard.title}
+            </h1>
+            <p className="text-sm text-text-muted mt-1">
+              {copy.dashboard.description}
+            </p>
+          </div>
 
-        <div className="flex flex-wrap items-center gap-3">
-          <RegionSelect
-            regions={regions}
-            value={region}
-            onChange={setRegion}
-            disabled={isLoading}
-          />
-          <YearSelect
-            years={years}
-            value={year}
-            onChange={setYear}
-            disabled={isLoading}
-          />
-          <div className="pt-6">
-            <CopyLinkButton />
+          <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-end gap-3 w-full sm:w-auto">
+            <div className="w-full sm:w-auto">
+              <ProvinceSelect
+                provinces={provinces}
+                value={currentProvinceSlug}
+                onChange={handleProvinceChange}
+                disabled={isLoading}
+                className="w-full sm:w-48"
+              />
+            </div>
+            <div className="w-full sm:w-auto">
+              <SubRegionSelect
+                subRegions={subRegions}
+                value={region}
+                onChange={handleSubRegionChange}
+                disabled={isLoading}
+                className="w-full sm:w-64"
+              />
+            </div>
+            <div className="w-full sm:w-auto">
+              <YearSelect
+                years={years}
+                value={year}
+                onChange={setYear}
+                disabled={isLoading}
+                className="w-full sm:w-28"
+              />
+            </div>
+            <div className="w-full sm:w-auto pt-2 sm:pt-0">
+              <CopyLinkButton />
+            </div>
           </div>
         </div>
+
+        {regionAnnouncement && (
+          <p
+            aria-live="polite"
+            className="text-sm font-medium text-text-muted"
+            data-testid="region-announcement"
+          >
+            {regionAnnouncement}
+          </p>
+        )}
       </div>
 
       {/* Status Badges & Period Notice */}
