@@ -6,8 +6,6 @@ import {
   XAxis,
   YAxis,
   Tooltip as RechartsTooltip,
-  CartesianGrid,
-  Legend,
   Cell,
 } from "recharts";
 import { SectorSlice, findGlossaryEntry } from "@danaterbuka/shared";
@@ -66,12 +64,6 @@ export function SectorChart({
     ? copy.dashboard.summaryPaguSimple
     : copy.dashboard.summaryPagu;
 
-  const axisTick = {
-    fontSize: 14,
-    fill: "var(--color-text-muted)",
-    fontFamily: "var(--font-sans)",
-  };
-
   return (
     <ChartWrapper
       title={chartTitle}
@@ -85,50 +77,37 @@ export function SectorChart({
           <BarChart
             data={chartData}
             layout="vertical"
-            margin={{ top: 5, right: 16, left: 10, bottom: 5 }}
+            margin={{ top: 5, right: 30, left: 10, bottom: 5 }}
           >
-            <CartesianGrid
-              horizontal
-              vertical={false}
-              stroke="var(--color-chart-grid)"
-            />
             <XAxis
               type="number"
               domain={[0, "auto"]}
               tickFormatter={(v) => formatRupiahCompact(v)}
-              tick={axisTick}
-              tickLine={false}
-              axisLine={{ stroke: "var(--color-chart-grid)" }}
+              stroke="var(--color-text-muted)"
+              fontSize={12}
             />
             <YAxis
               type="category"
               dataKey="name"
-              width={132}
-              tick={axisTick}
+              width={120}
+              stroke="var(--color-text-muted)"
+              fontSize={12}
               tickLine={false}
-              axisLine={false}
             />
             <RechartsTooltip
-              cursor={{ fill: "var(--color-surface)" }}
+              cursor={false}
               formatter={(val: number) => [formatRupiahCompact(val), tooltipPaguLabel]}
               labelFormatter={(label) => `${label}`}
               contentStyle={{
-                backgroundColor: "var(--color-card)",
+                backgroundColor: "var(--color-bg)",
                 borderColor: "var(--color-border)",
-                borderRadius: "var(--radius-xl)",
+                borderRadius: "var(--radius-md)",
                 boxShadow: "var(--shadow-md)",
-                fontSize: 14,
               }}
-            />
-            <Legend
-              wrapperStyle={{ paddingTop: 12, fontSize: 14 }}
-              formatter={() => tooltipPaguLabel}
             />
             <Bar
               dataKey="pagu"
-              name={tooltipPaguLabel}
-              fill="var(--color-sector-2)"
-              radius={[0, 6, 6, 0]}
+              radius={[0, 4, 4, 0]}
               // Keep positive sectors visible when one sector dominates the
               // linear scale; exact values stay available in the tooltip/table.
               minPointSize={(value) =>
@@ -140,8 +119,8 @@ export function SectorChart({
                   key={`cell-${entry.sectorId}`}
                   fill={
                     selectedSector && selectedSector === entry.sectorId
-                      ? "var(--color-sector-1)"
-                      : "var(--color-sector-2)"
+                      ? "var(--color-brand-700)"
+                      : "var(--color-brand-600)"
                   }
                 />
               ))}

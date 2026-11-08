@@ -1,10 +1,9 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
-import { Menu, Sparkles, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { copy } from "../../content/copy.id.js";
 import { useSimpleMode } from "../../hooks/useSimpleMode.js";
 import { useMobileNav } from "../../hooks/useMobileNav.js";
-import { BrandMark } from "./BrandMark.js";
 import { MobileNavDrawer, NavItem } from "./MobileNavDrawer.js";
 
 export const NAV_ITEMS: NavItem[] = [
@@ -23,26 +22,26 @@ export function AppHeader() {
     isSimple ? `${path}?simple=1` : path;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-header shadow-header backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-border bg-bg shadow-sm">
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 rounded-full bg-brand-600 px-4 py-2 text-sm font-semibold text-text-inverse"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-brand-600 text-text-inverse px-3 py-1 rounded-md text-sm"
       >
         {copy.common.skipToContent}
       </a>
-      <div className="page-gutter flex h-16 items-center justify-between gap-4 md:h-header">
+      <div className="mx-auto max-w-container px-4 flex items-center justify-between h-14 gap-4">
         <Link
           to="/"
-          className="shrink-0 rounded-xl transition-opacity duration-150 hover:opacity-90"
+          className="font-bold text-lg text-brand-600 tracking-tight shrink-0"
           aria-label={copy.common.siteName}
         >
-          <BrandMark />
+          {copy.common.siteName}
         </Link>
 
         {/* Desktop nav (>= 768px) */}
         <nav
           aria-label={copy.nav.mainMenu}
-          className="hidden md:flex md:items-center md:overflow-x-auto md:overflow-y-hidden md:no-scrollbar"
+          className="hidden md:flex items-center overflow-x-auto overflow-y-hidden no-scrollbar"
         >
           <ul className="flex items-center gap-1 whitespace-nowrap">
             {NAV_ITEMS.map(({ to, label, end }) => (
@@ -52,10 +51,11 @@ export function AppHeader() {
                   end={end}
                   className={({ isActive }) =>
                     [
-                      "inline-flex items-center rounded-full px-4 py-2 text-sm font-semibold transition-colors duration-150",
+                      "px-3 py-1.5 rounded-md text-sm font-medium transition-colors",
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus",
                       isActive
-                        ? "bg-brand-50 text-brand-800"
-                        : "text-text-muted hover:bg-surface hover:text-text",
+                        ? "bg-brand-50 text-brand-600"
+                        : "text-text-muted hover:text-text hover:bg-surface",
                     ].join(" ")
                   }
                 >
@@ -74,21 +74,14 @@ export function AppHeader() {
           title={copy.nav.simpleModeDescription}
           onClick={() => setSimple(!isSimple)}
           className={[
-            "hidden shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors duration-150 md:inline-flex",
+            "hidden md:block shrink-0 px-3 py-1.5 rounded-md text-sm font-medium border transition-colors",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus",
             isSimple
-              ? "border-brand-600 bg-brand-50 text-brand-800"
-              : "border-border bg-card text-text-muted hover:border-border-strong hover:text-text",
+              ? "border-brand-600 bg-brand-50 text-brand-600"
+              : "border-border bg-surface text-text-muted hover:text-text",
           ].join(" ")}
         >
-          <Sparkles className="h-4 w-4" aria-hidden="true" />
-          <span>{copy.nav.simpleModeLabel}</span>
-          <span
-            aria-hidden="true"
-            className={[
-              "h-2 w-2 rounded-full transition-colors duration-150",
-              isSimple ? "bg-brand-600" : "bg-border-strong",
-            ].join(" ")}
-          />
+          {copy.nav.simpleModeLabel}
         </button>
 
         {/* Mobile burger button (< 768px) */}
@@ -99,10 +92,10 @@ export function AppHeader() {
           aria-label={isOpen ? copy.nav.closeMenu : copy.nav.openMenu}
           aria-expanded={isOpen}
           aria-controls="mobile-nav-drawer"
-          className="flex min-h-[48px] min-w-[48px] shrink-0 items-center justify-center rounded-xl text-text transition-colors duration-150 hover:bg-surface md:hidden"
+          className="md:hidden p-2 rounded-md text-text hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus min-h-[44px] min-w-[44px] flex items-center justify-center shrink-0"
           data-testid="mobile-burger-button"
         >
-          {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
       </div>
 

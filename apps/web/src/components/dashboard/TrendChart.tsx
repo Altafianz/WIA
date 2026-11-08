@@ -55,25 +55,25 @@ export function TrendChart({ points = [], state, simple = false }: TrendChartPro
 
   const tableContent = (
     <div className="overflow-x-auto">
-      <table className="w-full border-collapse text-left text-sm">
+      <table className="w-full text-sm text-left border-collapse">
         <caption className="sr-only">{trendCopy.title}</caption>
         <thead>
           <tr className="border-b border-border">
-            <th scope="col" className="py-2.5 pr-4 font-semibold text-text-muted">
+            <th scope="col" className="py-2 pr-4 font-semibold text-text-muted">
               {simple ? (
                 tableCopy.yearHeader
               ) : (
                 <TermTooltip term={tableCopy.yearHeader} definition={yearDef} />
               )}
             </th>
-            <th scope="col" className="py-2.5 pr-4 text-right font-semibold text-text-muted">
+            <th scope="col" className="py-2 pr-4 font-semibold text-text-muted text-right">
               {simple ? (
                 tableCopy.paguHeader
               ) : (
                 <TermTooltip term={tableCopy.paguHeader} definition={paguDef} />
               )}
             </th>
-            <th scope="col" className="py-2.5 text-right font-semibold text-text-muted">
+            <th scope="col" className="py-2 font-semibold text-text-muted text-right">
               {simple ? (
                 tableCopy.realisasiHeader
               ) : (
@@ -84,12 +84,12 @@ export function TrendChart({ points = [], state, simple = false }: TrendChartPro
         </thead>
         <tbody>
           {points.map((p) => (
-            <tr key={p.fiscalYear} className="border-b border-border last:border-0 hover:bg-surface">
-              <td className="py-2.5 pr-4 font-medium tabular-nums text-text">{p.fiscalYear}</td>
-              <td className="py-2.5 pr-4 text-right tabular-nums text-text">
+            <tr key={p.fiscalYear} className="border-b border-border hover:bg-surface">
+              <td className="py-2 pr-4 text-text font-medium">{p.fiscalYear}</td>
+              <td className="py-2 pr-4 text-right text-text tabular-nums">
                 {formatRupiahCompact(p.pagu)}
               </td>
-              <td className="py-2.5 text-right tabular-nums text-text">
+              <td className="py-2 text-right text-text tabular-nums">
                 {p.realisasi !== null
                   ? formatRupiahCompact(p.realisasi)
                   : copy.dashboard.realizationNotReleased}
@@ -100,12 +100,6 @@ export function TrendChart({ points = [], state, simple = false }: TrendChartPro
       </table>
     </div>
   );
-
-  const axisTick = {
-    fontSize: 14,
-    fill: "var(--color-text-muted)",
-    fontFamily: "var(--font-sans)",
-  };
 
   return (
     <ChartWrapper
@@ -121,22 +115,17 @@ export function TrendChart({ points = [], state, simple = false }: TrendChartPro
             data={chartData}
             margin={{ top: 10, right: 30, left: 10, bottom: 5 }}
           >
-            <CartesianGrid
-              vertical={false}
-              stroke="var(--color-chart-grid)"
-            />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" />
             <XAxis
               dataKey="year"
-              tick={axisTick}
-              tickLine={false}
-              axisLine={{ stroke: "var(--color-chart-grid)" }}
+              stroke="var(--color-text-muted)"
+              fontSize={12}
             />
             <YAxis
               domain={[0, "auto"]}
               tickFormatter={(v) => formatRupiahCompact(v)}
-              tick={axisTick}
-              tickLine={false}
-              axisLine={false}
+              stroke="var(--color-text-muted)"
+              fontSize={12}
             />
             <RechartsTooltip
               formatter={(val: unknown, name: unknown) => {
@@ -146,15 +135,14 @@ export function TrendChart({ points = [], state, simple = false }: TrendChartPro
                 return [formatRupiahCompact(Number(val)), String(name)];
               }}
               contentStyle={{
-                backgroundColor: "var(--color-card)",
+                backgroundColor: "var(--color-bg)",
                 borderColor: "var(--color-border)",
-                borderRadius: "var(--radius-xl)",
+                borderRadius: "var(--radius-md)",
                 boxShadow: "var(--shadow-md)",
-                fontSize: 14,
               }}
             />
             <Legend
-              wrapperStyle={{ paddingTop: 12, fontSize: 14 }}
+              wrapperStyle={{ paddingTop: 10 }}
               formatter={(value: string) => {
                 if (value === "pagu") return tableCopy.paguHeader;
                 if (value === "realisasi") return tableCopy.realisasiHeader;
@@ -164,18 +152,16 @@ export function TrendChart({ points = [], state, simple = false }: TrendChartPro
             <Line
               type="monotone"
               dataKey="pagu"
-              name={tableCopy.paguHeader}
-              stroke="var(--color-sector-2)"
-              strokeWidth={2.5}
+              stroke="var(--color-brand-600)"
+              strokeWidth={2}
               activeDot={{ r: 6 }}
             />
             <Line
               type="monotone"
               dataKey="realisasi"
-              name={tableCopy.realisasiHeader}
-              stroke="var(--color-sector-6)"
-              strokeWidth={2.5}
-              strokeDasharray="6 4"
+              stroke="var(--color-sector-2)"
+              strokeWidth={2}
+              strokeDasharray="4 4"
               connectNulls={false}
               activeDot={{ r: 6 }}
             />

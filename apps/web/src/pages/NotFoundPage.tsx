@@ -14,10 +14,10 @@ export function NotFoundPage() {
       <div className="text-5xl" aria-hidden="true">
         404
       </div>
-      <h1 className="type-display">
+      <h1 className="text-2xl font-bold text-text">
         {copy.notFound.title}
       </h1>
-      <p className="prose-readable text-base text-text-muted">
+      <p className="text-text-muted max-w-md">
         {copy.notFound.description}
       </p>
       <div className="flex gap-3 mt-4">

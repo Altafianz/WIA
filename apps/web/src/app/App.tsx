@@ -9,7 +9,7 @@ export function App() {
     <SimpleModeProvider>
       <div className="min-h-screen flex flex-col bg-bg text-text">
         <AppHeader />
-        <main id="main-content" className="page-gutter w-full flex-1">
+        <main id="main-content" className="flex-1 mx-auto max-w-container px-4 w-full">
           <Outlet />
         </main>
         <AppFooter />

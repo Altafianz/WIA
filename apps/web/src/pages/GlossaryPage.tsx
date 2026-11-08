@@ -42,9 +42,9 @@ export function GlossaryPage() {
         path="/glosarium"
       />
 
-      <div className="w-full py-8">
-        <h1 className="type-display mb-3">{c.title}</h1>
-        <p className="prose-readable mb-6 text-base text-text-muted">{c.description}</p>
+      <div className="mx-auto max-w-4xl py-8">
+        <h1 className="mb-2 text-2xl font-bold text-text">{c.title}</h1>
+        <p className="mb-4 text-text-muted">{c.description}</p>
 
         <GlossarySearch
           value={q}

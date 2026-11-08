@@ -11,17 +11,17 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClass: Record<Variant, string> = {
   primary:
-    "bg-brand-600 text-text-inverse shadow-sm hover:bg-brand-700 active:bg-brand-800",
+    "bg-brand-600 text-text-inverse hover:bg-brand-700 focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2",
   secondary:
-    "border border-brand-600 bg-card text-brand-700 hover:bg-brand-50 active:bg-brand-100",
+    "bg-surface border border-border text-text hover:bg-brand-50 focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2",
   ghost:
-    "bg-transparent text-brand-700 hover:bg-brand-50 active:bg-brand-100",
+    "bg-transparent text-brand-600 hover:bg-brand-50 focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2",
 };
 
 const sizeClass: Record<Size, string> = {
-  sm: "h-10 px-4 text-base",
-  md: "h-11 px-5 text-base",
-  lg: "h-12 px-7 text-base",
+  sm: "px-3 py-1.5 text-sm rounded-sm",
+  md: "px-4 py-2 text-base rounded-md",
+  lg: "px-6 py-3 text-lg rounded-md",
 };
 
 export function Button({
@@ -37,11 +37,10 @@ export function Button({
       {...props}
       disabled={disabled}
       className={[
-        "inline-flex select-none items-center justify-center gap-2 rounded-full font-semibold",
-        "transition-colors duration-150 disabled:pointer-events-none disabled:opacity-50",
+        "inline-flex items-center justify-center gap-2 font-medium transition-colors outline-none",
         variantClass[variant],
         sizeClass[size],
-        disabled ? "cursor-not-allowed" : "cursor-pointer",
+        disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
         className,
       ]
         .filter(Boolean)

@@ -9,18 +9,18 @@ interface SimpleModeHelpProps {
 export function SimpleModeHelp({ className = "" }: SimpleModeHelpProps) {
   return (
     <Card
-      className={["flex flex-col gap-2 border-brand-200 bg-brand-50", className]
+      className={["border-brand-600 bg-brand-50 flex flex-col gap-1", className]
         .filter(Boolean)
         .join(" ")}
       padding="sm"
     >
       <div className="flex items-center gap-2">
         <span aria-hidden="true">💡</span>
-        <h2 className="text-base font-semibold text-brand-800">
+        <h2 className="text-sm font-semibold text-brand-700">
           {copy.dashboard.simpleModeHelpTitle}
         </h2>
       </div>
-      <p className="text-base leading-relaxed text-text-muted">
+      <p className="text-xs text-text-muted leading-relaxed">
         {copy.dashboard.simpleModeHelpBody}
       </p>
     </Card>

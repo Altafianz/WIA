@@ -25,8 +25,8 @@ export function GlossaryList({
         className="flex flex-col items-center justify-center gap-3 py-16 text-center"
         data-testid="glossary-empty"
       >
-        <h2 className="type-h3">{c.emptyTitle}</h2>
-        <p className="prose-readable text-base text-text-muted">
+        <h2 className="text-lg font-semibold text-text">{c.emptyTitle}</h2>
+        <p className="max-w-content text-sm text-text-muted">
           {c.emptyDescription}
         </p>
         <Button variant="primary" size="sm" onClick={onClear}>
@@ -44,23 +44,23 @@ export function GlossaryList({
       {terms.map((entry) => (
         <div
           key={entry.term}
-          className="rounded-2xl border border-border bg-card p-5 shadow-sm transition-shadow duration-150 hover:shadow-md"
+          className="rounded-lg border border-border bg-surface p-4"
         >
-          <dt className="mb-1.5 text-lg font-semibold text-text">
+          <dt className="mb-1 text-base font-semibold text-text">
             {entry.term}
           </dt>
-          <dd className="mb-2 text-base leading-relaxed text-text-muted">
+          <dd className="mb-2 text-sm text-text-muted">
             {entry.simpleDefinition}
           </dd>
           {entry.example && (
-            <dd className="mb-2 text-base leading-relaxed text-text-muted">
-              <span className="font-semibold">{c.exampleLabel}</span>{" "}
+            <dd className="mb-2 text-sm text-text-muted">
+              <span className="font-medium">{c.exampleLabel}</span>{" "}
               {entry.example}
             </dd>
           )}
           {entry.relatedTerms.length > 0 && (
-            <dd className="mt-3 flex flex-wrap items-center gap-2">
-              <span className="self-center text-sm text-text-muted">
+            <dd className="mt-2 flex flex-wrap gap-2">
+              <span className="self-center text-xs text-text-muted">
                 {c.relatedLabel}
               </span>
               {entry.relatedTerms.map((related) => (
@@ -68,7 +68,7 @@ export function GlossaryList({
                   key={related}
                   type="button"
                   onClick={() => onSelectTerm(related)}
-                  className="rounded-full border border-border bg-surface px-3 py-1 text-sm text-text transition-colors duration-150 hover:border-brand-600 hover:text-brand-700"
+                  className="rounded-full border border-border bg-surface px-2 py-0.5 text-xs text-text transition-colors hover:border-brand-600 hover:text-brand-600"
                 >
                   {related}
                 </button>

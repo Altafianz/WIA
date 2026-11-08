@@ -20,32 +20,32 @@ export function DataTable({ slices, caption, simple = false }: DataTableProps) {
 
   return (
     <div className="overflow-x-auto">
-      <table className="w-full border-collapse text-left text-sm">
+      <table className="w-full text-sm text-left border-collapse">
         <caption className="sr-only">{caption}</caption>
         <thead>
           <tr className="border-b border-border">
-            <th scope="col" className="py-2.5 pr-4 font-semibold text-text-muted">
+            <th scope="col" className="py-2 pr-4 font-semibold text-text-muted">
               {simple ? (
                 tableCopy.sectorHeader
               ) : (
                 <TermTooltip term={tableCopy.sectorHeader} definition={sectorDef} />
               )}
             </th>
-            <th scope="col" className="py-2.5 pr-4 text-right font-semibold text-text-muted">
+            <th scope="col" className="py-2 pr-4 font-semibold text-text-muted text-right">
               {simple ? (
                 tableCopy.paguHeader
               ) : (
                 <TermTooltip term={tableCopy.paguHeader} definition={paguDef} />
               )}
             </th>
-            <th scope="col" className="py-2.5 pr-4 text-right font-semibold text-text-muted">
+            <th scope="col" className="py-2 pr-4 font-semibold text-text-muted text-right">
               {simple ? (
                 tableCopy.realisasiHeader
               ) : (
                 <TermTooltip term={tableCopy.realisasiHeader} definition={realisasiDef} />
               )}
             </th>
-            <th scope="col" className="py-2.5 text-right font-semibold text-text-muted">
+            <th scope="col" className="py-2 font-semibold text-text-muted text-right">
               {simple ? (
                 tableCopy.rateHeader
               ) : (
@@ -58,24 +58,24 @@ export function DataTable({ slices, caption, simple = false }: DataTableProps) {
           {slices.map((slice) => (
             <tr
               key={slice.sectorId}
-              className="border-b border-border last:border-0 hover:bg-surface"
+              className="border-b border-border hover:bg-surface last:border-0"
             >
-              <td className="py-2.5 pr-4 text-text">
+              <td className="py-2 pr-4 text-text">
                 {slice.isAggregate ? (
                   <em>{slice.name}</em>
                 ) : (
                   slice.name
                 )}
               </td>
-              <td className="py-2.5 pr-4 text-right tabular-nums text-text">
+              <td className="py-2 pr-4 text-right text-text tabular-nums">
                 {formatRupiahCompact(slice.pagu)}
               </td>
-              <td className="py-2.5 pr-4 text-right tabular-nums text-text">
+              <td className="py-2 pr-4 text-right text-text tabular-nums">
                 {slice.realisasi !== null
                   ? formatRupiahCompact(slice.realisasi)
                   : "—"}
               </td>
-              <td className="py-2.5 text-right tabular-nums text-text">
+              <td className="py-2 text-right text-text tabular-nums">
                 {slice.realizationRate !== null
                   ? formatPercent(slice.realizationRate)
                   : "—"}

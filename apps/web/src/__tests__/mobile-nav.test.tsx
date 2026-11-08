@@ -27,9 +27,8 @@ describe("Mobile Nav Drawer and AppHeader (Mobile Navigation)", () => {
     expect(html).toContain('aria-expanded="false"');
     expect(html).toContain('aria-controls="mobile-nav-drawer"');
 
-    // Burger button is present and wired; desktop nav visibility is handled by CSS
-    expect(html).toContain('data-testid="mobile-burger-button"');
-    expect(html).toContain(`aria-label="${copy.common.siteName}"`);
+    // Desktop nav is hidden on mobile via md:flex
+    expect(html).toContain("hidden md:flex");
   });
 
   it("renders drawer with navigation items, close button, and min 44px touch targets", () => {
@@ -60,9 +59,8 @@ describe("Mobile Nav Drawer and AppHeader (Mobile Navigation)", () => {
       expect(html).toContain(item.label);
     }
 
-    // Touch targets are at least 44px tall; verify the drawer exposes a close control
-    expect(html).toContain(`aria-label="${copy.nav.closeMenu}"`);
-    expect(html).toContain('data-testid="mobile-nav-drawer"');
+    // Touch target minimum 44px
+    expect(html).toContain("min-h-[44px]");
 
     // Simple mode toggle
     expect(html).toContain(copy.nav.simpleModeLabel);

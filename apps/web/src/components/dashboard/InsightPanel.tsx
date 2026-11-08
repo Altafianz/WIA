@@ -32,8 +32,8 @@ export function InsightPanel({ items, disclaimer, simple = false }: InsightPanel
   const panelCopy = getInsightPanelCopy(simple);
 
   return (
-    <Card className="flex h-full flex-col">
-      <h2 className="type-h3 mb-4">
+    <Card>
+      <h2 className="text-base font-semibold text-text mb-4">
         {panelCopy.title}
       </h2>
       <ul className="space-y-4" aria-label={panelCopy.title}>
@@ -46,12 +46,12 @@ export function InsightPanel({ items, disclaimer, simple = false }: InsightPanel
           return (
             <li
               key={item.ruleId}
-              className="space-y-2 rounded-xl border border-border bg-surface p-4"
+              className="rounded-md border border-border p-4 space-y-1"
             >
-              <div className="mb-2 flex items-center gap-2">
+              <div className="flex items-center gap-2 mb-2">
                 <span
                   className={[
-                    "rounded-full px-3 py-1 text-sm font-semibold",
+                    "text-xs font-semibold px-2 py-0.5 rounded-full",
                     cfg.className,
                   ].join(" ")}
                 >
@@ -59,22 +59,22 @@ export function InsightPanel({ items, disclaimer, simple = false }: InsightPanel
                 </span>
                 <Link
                   to={`/metodologi#${item.ruleId}`}
-                  className="text-sm text-brand-700 underline underline-offset-4 hover:text-brand-800"
+                  className="text-xs text-brand-600 underline hover:text-brand-700"
                   aria-label={`${copy.dashboard.insightMethodologyLink} ${item.ruleId}`}
                 >
                   {item.ruleId}
                 </Link>
               </div>
-              <p className="text-base leading-relaxed text-text">{displaySentence}</p>
-              <p className="text-sm italic leading-relaxed text-text-muted">{item.limitation}</p>
+              <p className="text-sm text-text">{displaySentence}</p>
+              <p className="text-xs text-text-muted italic">{item.limitation}</p>
             </li>
           );
         })}
       </ul>
-      <p className="mt-auto border-t border-border pt-3 text-sm text-text-muted">
+      <p className="text-xs text-text-muted mt-4 border-t border-border pt-3">
         {copy.dashboard.insightPanelDisclaimer}
       </p>
-      <p className="mt-1 text-sm italic text-text-muted">{disclaimer}</p>
+      <p className="text-xs text-text-muted mt-1 italic">{disclaimer}</p>
     </Card>
   );
 }
