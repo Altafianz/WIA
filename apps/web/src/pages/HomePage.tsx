@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, HelpCircle, PieChart, ShieldAlert } from "lucide-react";
+import { ArrowRight, HelpCircle, Info, PieChart, ShieldAlert } from "lucide-react";
 import { copy } from "../content/copy.id.js";
 import { Card } from "../components/ui/Card.js";
 import { Button } from "../components/ui/Button.js";
@@ -11,6 +11,24 @@ import { useHashScroll } from "../hooks/useHashScroll.js";
 import { useSimpleMode } from "../hooks/useSimpleMode.js";
 import { useSubmitFeedback } from "../hooks/useSubmitFeedback.js";
 import { FeedbackSection } from "../components/home/FeedbackSection.js";
+
+const QUESTIONS = [
+  {
+    icon: PieChart,
+    title: copy.home.question1Title,
+    body: copy.home.question1Body,
+  },
+  {
+    icon: HelpCircle,
+    title: copy.home.question2Title,
+    body: copy.home.question2Body,
+  },
+  {
+    icon: ShieldAlert,
+    title: copy.home.question3Title,
+    body: copy.home.question3Body,
+  },
+];
 
 export function HomePage() {
   useHashScroll();
@@ -31,31 +49,29 @@ export function HomePage() {
   } = useSubmitFeedback();
 
   return (
-    <div className="flex flex-col gap-12 py-8">
+    <div className="flex flex-col gap-14 py-10">
       <PageMeta
         title={`${copy.common.siteName} — ${copy.common.tagline}`}
         description={copy.home.heroSubheadline}
       />
 
       {/* Hero Section */}
-      <section className="text-center max-w-3xl mx-auto px-4 flex flex-col items-center gap-6">
+      <section className="mx-auto flex max-w-3xl flex-col items-center gap-6 text-center">
         <div>
           <FixtureBadge visible={isFixture} />
         </div>
-        <h1 className="text-3xl md:text-5xl font-extrabold text-text tracking-tight leading-tight">
-          {copy.home.heroHeadline}
-        </h1>
-        <p className="text-base md:text-lg text-text-muted leading-relaxed">
+        <h1 className="type-display">{copy.home.heroHeadline}</h1>
+        <p className="prose-readable text-lg leading-relaxed text-text-muted">
           {copy.home.heroSubheadline}
         </p>
-        <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+        <div className="flex w-full flex-col items-center gap-4 sm:w-auto sm:flex-row">
           <Link to="/dashboard" className="w-full sm:w-auto">
             <Button
               size="lg"
-              className="w-full flex items-center justify-center gap-2"
+              className="flex w-full items-center justify-center gap-2"
             >
               {copy.home.ctaDashboard}
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Button>
           </Link>
           <Link to="/metodologi" className="w-full sm:w-auto">
@@ -67,80 +83,64 @@ export function HomePage() {
       </section>
 
       {/* 3 Questions Answered */}
-      <section className="max-w-container mx-auto px-4 w-full">
-        <h2 className="text-xl md:text-2xl font-bold text-text text-center mb-8">
+      <section className="w-full">
+        <h2 className="type-h2 mb-8 text-center">
           {copy.home.questionsHeading}
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="flex flex-col gap-3 p-6">
-            <div className="w-10 h-10 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center font-bold">
-              <PieChart className="w-5 h-5" />
-            </div>
-            <h3 className="font-semibold text-lg text-text">
-              {copy.home.question1Title}
-            </h3>
-            <p className="text-sm text-text-muted leading-relaxed">
-              {copy.home.question1Body}
-            </p>
-          </Card>
-
-          <Card className="flex flex-col gap-3 p-6">
-            <div className="w-10 h-10 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center font-bold">
-              <HelpCircle className="w-5 h-5" />
-            </div>
-            <h3 className="font-semibold text-lg text-text">
-              {copy.home.question2Title}
-            </h3>
-            <p className="text-sm text-text-muted leading-relaxed">
-              {copy.home.question2Body}
-            </p>
-          </Card>
-
-          <Card className="flex flex-col gap-3 p-6">
-            <div className="w-10 h-10 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center font-bold">
-              <ShieldAlert className="w-5 h-5" />
-            </div>
-            <h3 className="font-semibold text-lg text-text">
-              {copy.home.question3Title}
-            </h3>
-            <p className="text-sm text-text-muted leading-relaxed">
-              {copy.home.question3Body}
-            </p>
-          </Card>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          {QUESTIONS.map(({ icon: Icon, title, body }) => (
+            <Card key={title} className="flex flex-col gap-4" padding="lg">
+              <span
+                aria-hidden="true"
+                className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-600"
+              >
+                <Icon className="h-6 w-6" />
+              </span>
+              <h3 className="type-h3">{title}</h3>
+              <p className="text-base leading-relaxed text-text-muted">{body}</p>
+            </Card>
+          ))}
         </div>
       </section>
 
       {/* Preview Teaser Section */}
-      <section className="max-w-container mx-auto px-4 w-full">
-        <div className="border border-border rounded-xl bg-surface p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex flex-col gap-2 max-w-xl">
-            <h3 className="text-lg md:text-xl font-bold text-text">
-              {copy.dashboard.title}
-            </h3>
-            <p className="text-sm text-text-muted">
+      <section className="w-full">
+        <Card
+          padding="lg"
+          className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center"
+        >
+          <div className="flex max-w-2xl flex-col gap-2">
+            <h3 className="type-h3">{copy.dashboard.title}</h3>
+            <p className="text-base leading-relaxed text-text-muted">
               {copy.dashboard.description}
             </p>
           </div>
-          <Link to="/dashboard">
-            <Button className="whitespace-nowrap flex items-center gap-2">
+          <Link to="/dashboard" className="w-full shrink-0 md:w-auto">
+            <Button className="flex w-full items-center justify-center gap-2 md:w-auto">
               {copy.home.ctaDashboard}
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Button>
           </Link>
-        </div>
+        </Card>
       </section>
 
       {/* Data Notice Section */}
-      <section className="max-w-container mx-auto px-4 w-full mb-4">
-        <div className="border-l-4 border-brand-600 bg-brand-50 p-4 rounded-r-md">
-          <h4 className="font-semibold text-brand-700 text-sm mb-1">
-            {copy.home.dataNoticeTitle}
-          </h4>
-          <p className="text-sm text-text-muted">
-            {isFixture
-              ? copy.home.dataNoticeBodyFixture
-              : copy.home.dataNoticeBodyOfficial}
-          </p>
+      <section className="w-full">
+        <div className="flex items-start gap-3 rounded-2xl border border-brand-200 bg-brand-50 p-5">
+          <Info
+            aria-hidden="true"
+            className="mt-0.5 h-5 w-5 shrink-0 text-brand-700"
+          />
+          <div className="flex flex-col gap-1">
+            <h2 className="text-base font-semibold text-brand-800">
+              {copy.home.dataNoticeTitle}
+            </h2>
+            <p className="prose-readable text-base leading-relaxed text-text-muted">
+              {isFixture
+                ? copy.home.dataNoticeBodyFixture
+                : copy.home.dataNoticeBodyOfficial}
+            </p>
+          </div>
         </div>
       </section>
 

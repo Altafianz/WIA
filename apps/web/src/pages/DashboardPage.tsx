@@ -167,10 +167,10 @@ export function DashboardPage() {
       <div className="flex flex-col gap-4 border-b border-border pb-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-text">
+            <h1 className="type-display">
               {copy.dashboard.title}
             </h1>
-            <p className="text-sm text-text-muted mt-1">
+            <p className="prose-readable mt-2 text-base text-text-muted">
               {copy.dashboard.description}
             </p>
           </div>

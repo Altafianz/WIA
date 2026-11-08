@@ -14,10 +14,10 @@ export function SectorDeltaList({ items }: SectorDeltaListProps) {
 
   return (
     <Card>
-      <h2 className="text-base font-semibold text-text">
+      <h2 className="type-h3">
         {copy.compare.sectorDeltaTitle}
       </h2>
-      <p className="mt-1 text-xs text-text-muted">
+      <p className="mt-1 text-sm text-text-muted">
         {copy.compare.sectorDeltaDescription}
       </p>
       <ul className="mt-4 divide-y divide-border">
@@ -29,7 +29,7 @@ export function SectorDeltaList({ items }: SectorDeltaListProps) {
                 {formatSignedValue(item.delta, "rupiah")}
               </span>
             </div>
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-text-muted">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-text-muted">
               <span>
                 {copy.compare.columnPaguA}: {formatRupiahCompact(item.aPagu)}
               </span>

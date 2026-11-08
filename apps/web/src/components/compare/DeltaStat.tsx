@@ -68,18 +68,18 @@ export function DeltaStat({
 
   return (
     <Card>
-      <p className="text-sm text-text-muted mb-1">{label}</p>
+      <p className="mb-1 text-sm text-text-muted">{label}</p>
       <div className="flex items-center gap-2">
         <Icon className={`h-5 w-5 ${config.className}`} aria-hidden="true" />
-        <span className={`text-2xl font-bold ${config.className}`}>
+        <span className={`text-2xl font-bold tabular-nums ${config.className}`}>
           {formatSignedValue(delta, format)}
         </span>
         <span className="sr-only">{config.label}</span>
       </div>
-      <p className="text-xs text-text-muted mt-1">
+      <p className="mt-1 text-sm tabular-nums text-text-muted">
         {formatSignedValue(deltaPercent, "percent")}
       </p>
-      <p className="text-xs text-text-muted mt-2">
+      <p className="mt-2 text-sm tabular-nums text-text-muted">
         {copy.compare.columnA}: {formatValue(aValue, format)} ·{" "}
         {copy.compare.columnB}: {formatValue(bValue, format)}
       </p>

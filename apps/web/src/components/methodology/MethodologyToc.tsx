@@ -32,7 +32,7 @@ function TocLinks({ items }: { items: TocItem[] }) {
         <li key={item.id}>
           <a
             href={`#${item.id}`}
-            className="block rounded-sm py-1 text-text-muted transition-colors hover:text-brand-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+            className="block rounded-lg px-3 py-2 text-text-muted transition-colors duration-150 hover:bg-brand-50 hover:text-brand-700"
           >
             {item.label}
           </a>
@@ -50,15 +50,15 @@ export function MethodologyToc({ rules }: MethodologyTocProps) {
       <aside className="hidden lg:block">
         <nav
           aria-label={c.tocLabel}
-          className="sticky top-20 rounded-lg border border-border bg-surface p-4"
+          className="sticky top-24 rounded-2xl border border-border bg-card p-4 shadow-sm"
         >
-          <h2 className="mb-2 text-sm font-semibold text-text">{c.tocLabel}</h2>
+          <h2 className="mb-2 px-3 text-sm font-semibold text-text">{c.tocLabel}</h2>
           <TocLinks items={items} />
         </nav>
       </aside>
 
       <nav aria-label={c.tocLabel} className="lg:hidden">
-        <details className="rounded-lg border border-border bg-surface p-3">
+        <details className="rounded-2xl border border-border bg-card p-3 shadow-sm">
           <summary className="cursor-pointer text-sm font-semibold text-text">
             {c.tocOpen}
           </summary>

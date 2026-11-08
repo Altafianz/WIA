@@ -16,7 +16,7 @@ interface RowProps {
 function Row({ label, value }: RowProps) {
   return (
     <div className="flex flex-col sm:flex-row sm:gap-4 py-2 border-b border-border last:border-0">
-      <dt className="text-sm font-medium text-text-muted w-40 shrink-0">{label}</dt>
+      <dt className="w-40 shrink-0 text-sm font-semibold text-text-muted">{label}</dt>
       <dd className="text-sm text-text">{value}</dd>
     </div>
   );
@@ -27,7 +27,7 @@ export function SourceInfoCard({ meta }: SourceInfoCardProps) {
 
   return (
     <Card>
-      <h3 className="text-base font-semibold text-text mb-3">
+      <h3 className="type-h3 mb-3">
         {copy.dashboard.sourceCardTitle}
       </h3>
       <dl>

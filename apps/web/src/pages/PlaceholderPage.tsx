@@ -15,8 +15,8 @@ export function PlaceholderPage({ pageName }: PlaceholderPageProps) {
         title={`${pageName} — ${copy.common.siteName}`}
         description={copy.placeholder.description}
       />
-      <h1 className="text-2xl font-bold text-text">{copy.placeholder.title}</h1>
-      <p className="text-text-muted max-w-md">{copy.placeholder.description}</p>
+      <h1 className="type-display">{copy.placeholder.title}</h1>
+      <p className="prose-readable text-base text-text-muted">{copy.placeholder.description}</p>
       <Link to="/dashboard" className="mt-4">
         <Button>{copy.placeholder.backToDashboard}</Button>
       </Link>

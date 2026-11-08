@@ -1,6 +1,7 @@
 import React from "react";
 import { copy } from "../../content/copy.id.js";
 import { Button } from "../ui/Button.js";
+import { Input } from "../ui/Input.js";
 
 const c = copy.glossary;
 
@@ -22,12 +23,12 @@ export function GlossarySearch({
   const resultText = c.resultCount.replace("{n}", String(resultCount));
 
   return (
-    <div className="sticky top-14 z-10 bg-bg py-3">
+    <div className="sticky top-16 z-10 -mx-1 bg-bg px-1 py-3 md:top-header">
       <div className="flex items-center gap-2">
         <label htmlFor="glossary-search" className="sr-only">
           {c.searchLabel}
         </label>
-        <input
+        <Input
           id="glossary-search"
           ref={inputRef}
           type="search"
@@ -35,7 +36,7 @@ export function GlossarySearch({
           onChange={(event) => onChange(event.target.value)}
           placeholder={c.searchPlaceholder}
           aria-label={c.searchLabel}
-          className="flex-1 rounded-md border border-border bg-surface px-3 py-2 text-sm text-text placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-focus"
+          className="flex-1"
         />
         {value && (
           <Button variant="secondary" size="sm" onClick={onClear}>

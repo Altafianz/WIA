@@ -131,10 +131,10 @@ export function ComparePage() {
 
       <div className="flex flex-col gap-4 border-b border-border pb-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-text md:text-3xl">
+          <h1 className="type-display">
             {copy.compare.title}
           </h1>
-          <p className="mt-1 text-sm text-text-muted">
+          <p className="prose-readable mt-2 text-base text-text-muted">
             {copy.compare.description}
           </p>
         </div>
@@ -192,10 +192,10 @@ export function ComparePage() {
         <div className="flex flex-col gap-6">
           <section aria-labelledby="compare-delta-heading">
             <div className="mb-3">
-              <h2 id="compare-delta-heading" className="text-lg font-semibold text-text">
+              <h2 id="compare-delta-heading" className="type-h2">
                 {copy.compare.deltaTitle}
               </h2>
-              <p className="text-sm text-text-muted">{copy.compare.deltaSubtitle}</p>
+              <p className="mt-1 text-base text-text-muted">{copy.compare.deltaSubtitle}</p>
             </div>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               {compareResp.data.rows.map((row) => (

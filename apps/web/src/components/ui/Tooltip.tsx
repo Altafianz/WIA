@@ -9,11 +9,11 @@ export function Tooltip({ children, text }: TooltipProps) {
   const tooltipId = useId();
 
   return (
-    <span className="relative group inline-flex items-center">
+    <span className="group relative inline-flex items-center">
       <span
         tabIndex={0}
         aria-describedby={tooltipId}
-        className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus rounded-sm inline-flex items-center"
+        className="inline-flex items-center rounded-sm"
       >
         {children}
       </span>
@@ -21,11 +21,11 @@ export function Tooltip({ children, text }: TooltipProps) {
         id={tooltipId}
         role="tooltip"
         className={[
-          "absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-30 pointer-events-none",
-          "w-56 rounded-md border border-border bg-surface px-3 py-2",
-          "text-xs font-normal text-text-muted shadow-md",
-          "invisible opacity-0 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100",
-          "transition-opacity duration-150",
+          "pointer-events-none absolute bottom-full left-1/2 z-30 mb-2 w-64 -translate-x-1/2",
+          "rounded-xl border border-border bg-card px-4 py-3",
+          "text-sm font-normal leading-relaxed text-text-muted shadow-lg",
+          "invisible opacity-0 transition-opacity duration-150",
+          "group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100",
         ].join(" ")}
       >
         {text}
@@ -44,7 +44,7 @@ export function TermTooltip({ term, definition, children }: TermTooltipProps) {
   return (
     <Tooltip text={definition}>
       {children ?? (
-        <span className="underline decoration-dotted cursor-help text-text hover:text-brand-600 transition-colors">
+        <span className="cursor-help text-text underline decoration-dotted underline-offset-4 transition-colors duration-150 hover:text-brand-600">
           {term}
         </span>
       )}

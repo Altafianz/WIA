@@ -219,6 +219,12 @@ export const copy = {
   footer: {
     description:
       "Platform keterbukaan data anggaran daerah yang menyajikan pagu dan realisasi belanja dalam bahasa yang mudah dipahami warga, lengkap dengan konteks dan batasan data.",
+    aboutTitle: "Tentang",
+    pagesTitle: "Halaman",
+    dataTitle: "Sumber Data",
+    dataDescription:
+      "Angka berasal dari snapshot berkala data anggaran publik, bukan laporan real-time, dan selalu disertai keterbatasan datanya.",
+    feedbackTitle: "Kirim Saran",
     navigationTitle: "Navigation",
     contactTitle: "Contact",
     contactEmail: "DanaTerbuka@gmail.com",

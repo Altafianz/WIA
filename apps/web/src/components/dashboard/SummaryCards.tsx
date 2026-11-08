@@ -24,20 +24,20 @@ interface MetricCardProps {
 
 function MetricCard({ label, value, testId, muted, subtext }: MetricCardProps) {
   return (
-    <Card data-testid={testId}>
-      <div className="text-sm text-text-muted mb-1 flex items-center min-h-[1.5rem]">
+    <Card data-testid={testId} className="flex flex-col">
+      <div className="mb-1.5 flex min-h-[1.5rem] items-center text-sm text-text-muted">
         {label}
       </div>
       <p
         className={[
-          "text-2xl font-bold truncate",
+          "truncate text-2xl font-bold tabular-nums tracking-tight",
           muted ? "text-text-muted" : "text-text",
         ].join(" ")}
       >
         {value ?? "—"}
       </p>
       {subtext && (
-        <p className="text-xs text-text-muted mt-2 leading-relaxed border-t border-border pt-2">
+        <p className="mt-3 border-t border-border pt-3 text-sm leading-relaxed text-text-muted">
           {subtext}
         </p>
       )}

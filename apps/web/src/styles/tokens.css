@@ -1,42 +1,82 @@
 :root {
+  /* Surfaces & text — green/white palette */
   --color-bg: #ffffff;
-  --color-surface: #f8fafc;
-  --color-border: #e2e8f0;
-  --color-text: #0f172a;
-  --color-text-muted: #475569;
+  --color-surface: #f4faf6;
+  --color-card: #ffffff;
+  --color-border: #d7e8de;
+  --color-border-strong: #b9d5c6;
+  --color-text: #0b3d2e;
+  --color-text-muted: #4a6357;
   --color-text-inverse: #ffffff;
-  --color-brand-600: #0f766e;
-  --color-brand-700: #115e59;
-  --color-brand-50: #f0fdfa;
-  --color-footer-bg: #115e59;
+
+  /* Brand ramp */
+  --color-brand-50: #e8f6ee;
+  --color-brand-100: #d3eedf;
+  --color-brand-200: #b7e0c9;
+  --color-brand-600: #0e7a4f;
+  --color-brand-700: #0b6040;
+  --color-brand-800: #0a4a33;
+  --color-brand-900: #0b3d2e;
+
+  /* Header & footer */
+  --color-header: rgb(255 255 255 / 0.82);
+  --color-footer-bg: #0b3d2e;
   --color-footer-text: #ffffff;
-  --color-footer-muted: #ccfbf1;
-  --color-footer-subtle: #5eead4;
-  --color-danger: #b91c1c;
-  --color-warning: #b45309;
-  --color-success: #15803d;
-  --color-info: #1d4ed8;
-  --color-focus: #0f766e;
-  --color-sector-1: #0f766e;
-  --color-sector-2: #1d4ed8;
-  --color-sector-3: #b45309;
-  --color-sector-4: #7e22ce;
-  --color-sector-5: #15803d;
-  --color-sector-6: #be123c;
-  --color-sector-7: #0369a1;
-  --color-sector-8: #a16207;
-  --color-sector-9: #4d7c0f;
-  --color-sector-10: #334155;
-  --font-sans: system-ui, "Segoe UI", Roboto, Arial, sans-serif;
-  --text-xs: 0.75rem;
-  --text-sm: 0.875rem;
-  --text-base: 1rem;
-  --text-lg: 1.125rem;
-  --text-xl: 1.25rem;
-  --text-2xl: 1.5rem;
-  --text-3xl: 2rem;
-  --leading-tight: 1.25;
-  --leading-normal: 1.5;
+  --color-footer-muted: #c7e3d3;
+  --color-footer-subtle: #8fcbae;
+  --color-footer-border: rgb(199 227 211 / 0.22);
+
+  /* Status — always paired with an icon or label */
+  --color-danger: #b42318;
+  --color-danger-50: #fef3f2;
+  --color-danger-200: #fecdca;
+  --color-danger-600: #d92d20;
+  --color-danger-700: #b42318;
+  --color-warning: #92400e;
+  --color-warning-50: #fffaeb;
+  --color-warning-200: #f5d9a8;
+  --color-success: #147a3b;
+  --color-success-50: #ecfdf3;
+  --color-success-200: #bbe5c9;
+  --color-info: #0c5e78;
+  --color-info-50: #eff8fb;
+  --color-info-200: #b5dcea;
+  --color-focus: #14a06b;
+
+  /* Chart palette — green scale plus teal/neutral for comparison series */
+  --color-sector-1: #0b3d2e;
+  --color-sector-2: #0e7a4f;
+  --color-sector-3: #17a06b;
+  --color-sector-4: #4fbf8b;
+  --color-sector-5: #8ed4ae;
+  --color-sector-6: #0e7490;
+  --color-sector-7: #2f6e7e;
+  --color-sector-8: #4b7f6a;
+  --color-sector-9: #7fae9a;
+  --color-sector-10: #94a9a0;
+  --color-chart-grid: #e4f0e9;
+
+  /* Typography — single family, 14 px floor */
+  --font-sans: "Inter Variable", "Inter", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, Arial, sans-serif;
+  --text-xs: 0.875rem;
+  --text-sm: 0.9375rem;
+  --text-base: 1.0625rem;
+  --text-lg: 1.1875rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.875rem;
+  --text-3xl: 2.25rem;
+  --text-4xl: 2.75rem;
+  --text-5xl: 3.5rem;
+  --text-display: clamp(2.25rem, 1.7rem + 2.4vw, 3.5rem);
+  --leading-tight: 1.15;
+  --leading-snug: 1.35;
+  --leading-normal: 1.6;
+  --leading-relaxed: 1.65;
+  --tracking-tight: -0.02em;
+  --tracking-tighter: -0.03em;
+
+  /* Spacing */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -45,19 +85,36 @@
   --space-8: 2rem;
   --space-12: 3rem;
   --space-16: 4rem;
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 12px;
+  --radius-2xl: 20px;
+  --radius-3xl: 24px;
   --radius-full: 9999px;
-  --shadow-sm: 0 1px 2px rgb(15 23 42 / 0.06);
-  --shadow-md: 0 4px 12px rgb(15 23 42 / 0.08);
-  --container-max: 72rem;
-  --content-max: 68ch;
+
+  /* Layered, soft shadows */
+  --shadow-sm: 0 1px 2px rgb(11 61 46 / 0.04), 0 1px 3px rgb(11 61 46 / 0.06);
+  --shadow-md: 0 2px 4px rgb(11 61 46 / 0.04), 0 8px 24px -8px rgb(11 61 46 / 0.1);
+  --shadow-lg: 0 4px 8px rgb(11 61 46 / 0.05), 0 16px 40px -12px rgb(11 61 46 / 0.14);
+  --shadow-header: 0 1px 0 rgb(11 61 46 / 0.04);
+  --shadow-focus: 0 0 0 3px rgb(20 160 107 / 0.35);
+
+  /* Motion */
+  --duration-fast: 150ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* Layout */
+  --header-height: 72px;
+  --content-max: 75ch;
 }
 
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
     animation: none !important;
+    scroll-behavior: auto !important;
   }
 }

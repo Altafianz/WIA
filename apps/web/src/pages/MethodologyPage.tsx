@@ -37,15 +37,15 @@ export function MethodologyPage() {
       />
 
       <div className="py-8">
-        <header className="max-w-content">
-          <h1 className="mb-2 text-2xl font-bold text-text">{c.title}</h1>
-          <p className="text-text-muted">{c.description}</p>
+        <header className="prose-readable">
+          <h1 className="type-display mb-3">{c.title}</h1>
+          <p className="text-base text-text-muted">{c.description}</p>
         </header>
 
         <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[16rem_minmax(0,1fr)]">
           <MethodologyToc rules={INSIGHT_RULE_META} />
 
-          <div className="min-w-0 max-w-content space-y-8">
+          <div className="prose-readable min-w-0 space-y-8">
             <MethodologySection
               id={c.anchorSummary}
               title={c.summaryHeading}
@@ -83,7 +83,7 @@ export function MethodologyPage() {
               title={c.globalDisclaimerHeading}
             >
               <p>{GLOBAL_DISCLAIMER}</p>
-              <h3 className="pt-2 text-base font-semibold text-text">
+              <h3 className="type-h3 pt-2">
                 {c.limitationsHeading}
               </h3>
               <LimitationList
@@ -95,7 +95,7 @@ export function MethodologyPage() {
               <p>
                 {c.updatedLabel} {lastUpdated}
               </p>
-              <h3 className="pt-2 text-base font-semibold text-text">
+              <h3 className="type-h3 pt-2">
                 {c.reportHeading}
               </h3>
               <p>{c.reportBody}</p>

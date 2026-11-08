@@ -22,11 +22,11 @@ export function MethodologySection({
     >
       <h2
         id={headingId}
-        className="mb-4 text-xl font-semibold text-text scroll-mt-24"
+        className="type-h2 mb-4 scroll-mt-24"
       >
         {title}
       </h2>
-      <div className="space-y-4 text-sm leading-normal text-text">{children}</div>
+      <div className="space-y-4 text-base leading-relaxed text-text">{children}</div>
     </section>
   );
 }
