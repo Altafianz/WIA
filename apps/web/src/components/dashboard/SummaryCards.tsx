@@ -40,7 +40,7 @@ function MetricCard({ label, value, testId, icon, muted, subtext }: MetricCardPr
       </div>
       <p
         className={[
-          "break-words text-2xl font-extrabold leading-tight tracking-tight lg:text-[1.7rem] xl:text-3xl",
+          "break-words text-2xl font-extrabold leading-tight tracking-tight xl:text-3xl",
           muted ? "text-text-muted" : "text-text",
         ].join(" ")}
       >

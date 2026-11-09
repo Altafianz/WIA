@@ -34,20 +34,27 @@ export function SubRegionSelect({
 }: SubRegionSelectProps) {
   const isSingle = subRegions.length <= 1;
   const descriptionId = `${id}-description`;
-  const effectiveDescribedBy = isSingle ? descriptionId : ariaDescribedBy;
+  const provinceHintId = `${id}-province-hint`;
+  const selectedSub = subRegions.find((sub) => sub.slug === value);
+  const showProvinceHint =
+    !isSingle &&
+    selectedSub !== undefined &&
+    subRegions[0]?.level === "province" &&
+    selectedSub.slug === subRegions[0]?.slug;
+  const describedBy = [
+    isSingle ? descriptionId : undefined,
+    showProvinceHint ? provinceHintId : undefined,
+    ariaDescribedBy,
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const effectiveDescribedBy = describedBy || undefined;
 
   const options = subRegions.map((sub, index) => {
-    const isFirstGov = index === 0 && sub.level === "province";
-    const base = isFirstGov
-      ? copy.dashboard.provinceGovOptionShort
-      : optionLabel(sub, index);
+    const label = optionLabel(sub, index);
     return (
-      <option
-        key={sub.slug}
-        value={sub.slug}
-        title={isFirstGov ? copy.dashboard.provinceGovOption : undefined}
-      >
-        {sub.hasData ? base : `${base} (${copy.states.emptyTitle})`}
+      <option key={sub.slug} value={sub.slug} title={label}>
+        {label}
       </option>
     );
   });
@@ -92,6 +99,14 @@ export function SubRegionSelect({
         >
           {options}
         </Select>
+      )}
+      {showProvinceHint && (
+        <p
+          id={provinceHintId}
+          className="mt-1.5 text-sm leading-relaxed text-text-muted lg:hidden"
+        >
+          {copy.dashboard.provinceGovOptionHint}
+        </p>
       )}
       {isSingle && (
         <p id={descriptionId} className="mt-1.5 text-sm text-text-muted">

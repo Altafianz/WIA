@@ -79,7 +79,7 @@ export function InsightPanel({ items, disclaimer, simple = false }: InsightPanel
                 </span>
                 <Link
                   to={`/metodologi#${item.ruleId}`}
-                  className="inline-flex min-h-[28px] items-center text-sm font-semibold text-brand-700 underline decoration-dotted underline-offset-4 transition-colors duration-150 hover:text-brand-800"
+                  className="inline-flex min-h-[44px] sm:min-h-[32px] items-center text-sm font-semibold text-brand-700 underline decoration-dotted underline-offset-4 transition-colors duration-150 hover:text-brand-800"
                   aria-label={`${copy.dashboard.insightMethodologyLink} ${item.ruleId}`}
                 >
                   {item.ruleId}

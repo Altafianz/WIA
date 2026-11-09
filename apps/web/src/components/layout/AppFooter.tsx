@@ -38,12 +38,12 @@ export function AppFooter() {
             <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-footer-subtle">
               {copy.footer.pagesTitle}
             </h2>
-            <ul className="space-y-2.5 text-sm text-footer-muted">
+            <ul className="space-y-1 text-sm sm:space-y-2.5 text-footer-muted">
               {PAGE_LINKS.map(({ to, label }) => (
                 <li key={to}>
                   <Link
                     to={to}
-                    className="inline-flex min-h-[32px] items-center rounded transition-colors duration-150 hover:text-footer-text"
+                    className="inline-flex min-h-[44px] sm:min-h-[32px] items-center rounded transition-colors duration-150 hover:text-footer-text"
                   >
                     {label}
                   </Link>
@@ -62,7 +62,7 @@ export function AppFooter() {
             </p>
             <Link
               to="/metodologi"
-              className="mt-3 inline-flex min-h-[32px] items-center text-sm font-semibold text-footer-subtle transition-colors duration-150 hover:text-footer-text"
+              className="mt-3 inline-flex min-h-[44px] sm:min-h-[32px] items-center text-sm font-semibold text-footer-subtle transition-colors duration-150 hover:text-footer-text"
             >
               {copy.nav.methodology}
             </Link>
@@ -73,11 +73,11 @@ export function AppFooter() {
             <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-footer-subtle">
               {copy.footer.contactSectionTitle}
             </h2>
-            <ul className="space-y-2.5 text-sm text-footer-muted">
+            <ul className="space-y-1 text-sm sm:space-y-2.5 text-footer-muted">
               <li>
                 <Link
                   to="/#saran"
-                  className="inline-flex min-h-[32px] items-center font-semibold text-footer-subtle transition-colors duration-150 hover:text-footer-text"
+                  className="inline-flex min-h-[44px] sm:min-h-[32px] items-center font-semibold text-footer-subtle transition-colors duration-150 hover:text-footer-text"
                 >
                   {copy.footer.feedbackLink}
                 </Link>
@@ -85,7 +85,7 @@ export function AppFooter() {
               <li>
                 <a
                   href={`mailto:${copy.footer.contactEmail}`}
-                  className="inline-flex min-h-[32px] items-center transition-colors duration-150 hover:text-footer-text"
+                  className="inline-flex min-h-[44px] sm:min-h-[32px] items-center transition-colors duration-150 hover:text-footer-text"
                 >
                   {copy.footer.contactEmail}
                 </a>
@@ -93,7 +93,7 @@ export function AppFooter() {
               <li>
                 <a
                   href={`tel:${copy.footer.contactPhone}`}
-                  className="inline-flex min-h-[32px] items-center transition-colors duration-150 hover:text-footer-text"
+                  className="inline-flex min-h-[44px] sm:min-h-[32px] items-center transition-colors duration-150 hover:text-footer-text"
                 >
                   {copy.footer.contactPhone}
                 </a>

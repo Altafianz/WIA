@@ -53,6 +53,8 @@ export const copy = {
     filterSubRegionLabel: "Pilih Sub-wilayah",
     provinceGovOption: "Pemerintah Provinsi (anggaran provinsi)",
     provinceGovOptionShort: "Pemerintah Provinsi",
+    provinceGovOptionHint:
+      "Opsi ini menampilkan anggaran pemerintah provinsi, bukan kabupaten/kota di wilayahnya.",
     singleSubRegionNotice: "Data DJPK untuk provinsi ini hanya mencakup pemerintah provinsi.",
     otherProvince: "Lainnya",
     regionStatusAnnouncement: "Menampilkan {subRegion}, {province}, {year}",

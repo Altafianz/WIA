@@ -44,7 +44,7 @@ export function ChartWrapper({
             aria-expanded={showTable}
             aria-controls={testId ? `${testId}-content` : undefined}
             onClick={() => setShowTable((v) => !v)}
-            className="inline-flex min-h-[40px] shrink-0 items-center gap-2 self-start rounded-full border border-border bg-card px-3.5 py-1.5 text-sm font-semibold text-text transition-colors duration-150 hover:border-border-strong hover:bg-surface"
+            className="inline-flex min-h-[44px] shrink-0 items-center gap-2 self-start rounded-full border border-border bg-card px-3.5 py-1.5 text-sm font-semibold text-text transition-colors duration-150 hover:border-border-strong hover:bg-surface"
           >
             {showTable ? (
               <BarChart3 className="h-4 w-4" aria-hidden="true" />

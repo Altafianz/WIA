@@ -81,6 +81,8 @@ export function DashboardPage() {
   const {
     data: insightsResp,
   } = useInsights(region, year);
+  const insightItems = insightsResp?.data.items;
+  const hasInsightColumn = insightItems === undefined || insightItems.length > 0;
 
   const isLoading = isMetaLoading || isSummaryLoading;
   const isError = isSummaryError;
@@ -248,8 +250,18 @@ export function DashboardPage() {
       {/* 4 Summary Cards */}
       <SummaryCards summary={summaryResp?.data} simple={isSimple} state={state} />
 
-      {/* Sector chart + insight panel: side by side on wide screens */}
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] xl:items-start">
+      {/* Sector chart + insight panel: side by side on wide screens.
+          When a region/year has no insights, the chart keeps the full row. */}
+      <div
+        className={[
+          "grid grid-cols-1 gap-6",
+          hasInsightColumn
+            ? "xl:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] xl:items-start"
+            : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
         <SectorChart
           slices={sectorsResp?.data.slices}
           totalPagu={summaryResp?.data.totalPagu}
@@ -257,15 +269,15 @@ export function DashboardPage() {
           state={isSectorsLoading ? "loading" : state}
           selectedSector={sector}
         />
-        <div className="min-w-0">
-          {insightsResp?.data && (
+        {insightItems && insightItems.length > 0 && (
+          <div className="min-w-0">
             <InsightPanel
-              items={insightsResp.data.items}
-              disclaimer={insightsResp.data.disclaimer}
+              items={insightItems}
+              disclaimer={insightsResp?.data.disclaimer ?? ""}
               simple={isSimple}
             />
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* Trend chart full width */}
