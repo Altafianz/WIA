@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Download } from "lucide-react";
 import { copy } from "../../content/copy.id.js";
 import { Button } from "../ui/Button.js";
 
@@ -21,11 +22,11 @@ export function ExportCsvButton({ onClick, disabled }: ExportCsvButtonProps) {
       <Button
         type="button"
         variant="secondary"
-        size="sm"
         onClick={handleClick}
         disabled={disabled}
-        className="min-h-11 min-w-11"
+        className="gap-2"
       >
+        <Download className="h-4 w-4" aria-hidden="true" />
         {copy.exportCsv.button}
       </Button>
       <span aria-live="polite" className="sr-only">

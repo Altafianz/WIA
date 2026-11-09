@@ -20,7 +20,7 @@ export function DataTable({ slices, caption, simple = false }: DataTableProps) {
 
   return (
     <div className="overflow-x-auto">
-      <table className="w-full text-sm text-left border-collapse">
+      <table className="w-full min-w-[620px] border-collapse text-left text-sm">
         <caption className="sr-only">{caption}</caption>
         <thead>
           <tr className="border-b border-border">
@@ -31,21 +31,21 @@ export function DataTable({ slices, caption, simple = false }: DataTableProps) {
                 <TermTooltip term={tableCopy.sectorHeader} definition={sectorDef} />
               )}
             </th>
-            <th scope="col" className="py-2 pr-4 font-semibold text-text-muted text-right">
+            <th scope="col" className="py-2 pr-4 text-right font-semibold text-text-muted">
               {simple ? (
                 tableCopy.paguHeader
               ) : (
                 <TermTooltip term={tableCopy.paguHeader} definition={paguDef} />
               )}
             </th>
-            <th scope="col" className="py-2 pr-4 font-semibold text-text-muted text-right">
+            <th scope="col" className="py-2 pr-4 text-right font-semibold text-text-muted">
               {simple ? (
                 tableCopy.realisasiHeader
               ) : (
                 <TermTooltip term={tableCopy.realisasiHeader} definition={realisasiDef} />
               )}
             </th>
-            <th scope="col" className="py-2 font-semibold text-text-muted text-right">
+            <th scope="col" className="py-2 text-right font-semibold text-text-muted">
               {simple ? (
                 tableCopy.rateHeader
               ) : (
@@ -58,24 +58,18 @@ export function DataTable({ slices, caption, simple = false }: DataTableProps) {
           {slices.map((slice) => (
             <tr
               key={slice.sectorId}
-              className="border-b border-border hover:bg-surface last:border-0"
+              className="border-b border-border last:border-0 hover:bg-surface"
             >
-              <td className="py-2 pr-4 text-text">
-                {slice.isAggregate ? (
-                  <em>{slice.name}</em>
-                ) : (
-                  slice.name
-                )}
+              <td className="py-2.5 pr-4 text-text">
+                {slice.isAggregate ? <em>{slice.name}</em> : slice.name}
               </td>
-              <td className="py-2 pr-4 text-right text-text tabular-nums">
+              <td className="py-2.5 pr-4 text-right text-text tabular-nums">
                 {formatRupiahCompact(slice.pagu)}
               </td>
-              <td className="py-2 pr-4 text-right text-text tabular-nums">
-                {slice.realisasi !== null
-                  ? formatRupiahCompact(slice.realisasi)
-                  : "—"}
+              <td className="py-2.5 pr-4 text-right text-text tabular-nums">
+                {slice.realisasi !== null ? formatRupiahCompact(slice.realisasi) : "—"}
               </td>
-              <td className="py-2 text-right text-text tabular-nums">
+              <td className="py-2.5 text-right text-text tabular-nums">
                 {slice.realizationRate !== null
                   ? formatPercent(slice.realizationRate)
                   : "—"}

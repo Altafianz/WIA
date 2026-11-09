@@ -8,7 +8,7 @@ interface LoadingSkeletonProps {
 function SkeletonBox({ className = "" }: { className?: string }) {
   return (
     <div
-      className={["animate-pulse rounded-md bg-border", className].filter(Boolean).join(" ")}
+      className={["animate-pulse rounded-lg bg-border", className].filter(Boolean).join(" ")}
       aria-hidden="true"
     />
   );
@@ -19,12 +19,12 @@ export function LoadingSkeleton({ rows = 4, className = "" }: LoadingSkeletonPro
     <div
       role="status"
       aria-label="Memuat data anggaran..."
-      className={["space-y-4", className].filter(Boolean).join(" ")}
+      className={["space-y-5", className].filter(Boolean).join(" ")}
     >
       {/* Summary cards skeleton */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="rounded-lg border border-border p-6 space-y-3">
+          <div key={i} className="space-y-3 rounded-2xl border border-border bg-card p-5">
             <SkeletonBox className="h-4 w-3/4" />
             <SkeletonBox className="h-8 w-full" />
             <SkeletonBox className="h-3 w-1/2" />
@@ -32,12 +32,12 @@ export function LoadingSkeleton({ rows = 4, className = "" }: LoadingSkeletonPro
         ))}
       </div>
       {/* Chart skeleton — fixed height to prevent CLS */}
-      <div className="rounded-lg border border-border p-6 space-y-3">
+      <div className="space-y-3 rounded-2xl border border-border bg-card p-6">
         <SkeletonBox className="h-5 w-1/3" />
         <SkeletonBox className="h-[300px] w-full" />
       </div>
       {Array.from({ length: Math.max(rows - 2, 1) }).map((_, i) => (
-        <div key={i} className="rounded-lg border border-border p-6 space-y-3">
+        <div key={i} className="space-y-3 rounded-2xl border border-border bg-card p-6">
           <SkeletonBox className="h-5 w-1/4" />
           <SkeletonBox className="h-[200px] w-full" />
         </div>
@@ -52,7 +52,7 @@ export function CardSkeleton() {
     <div
       role="status"
       aria-label="Memuat..."
-      className="rounded-lg border border-border p-6 animate-pulse space-y-3"
+      className="animate-pulse space-y-3 rounded-2xl border border-border bg-card p-5"
     >
       <SkeletonBox className="h-4 w-1/2" />
       <SkeletonBox className="h-8 w-full" />
@@ -66,9 +66,15 @@ export function ChartSkeleton() {
     <div
       role="status"
       aria-label="Memuat grafik..."
-      className="rounded-lg border border-border p-6 animate-pulse space-y-3"
+      className="animate-pulse space-y-4 rounded-2xl border border-border bg-card p-6"
     >
-      <SkeletonBox className="h-5 w-1/3" />
+      <div className="flex items-start justify-between gap-4">
+        <div className="w-1/2 space-y-2">
+          <SkeletonBox className="h-5 w-3/4" />
+          <SkeletonBox className="h-3 w-full" />
+        </div>
+        <SkeletonBox className="h-9 w-36 rounded-full" />
+      </div>
       <SkeletonBox className="h-[280px] w-full" />
       <span className="sr-only">Memuat grafik...</span>
     </div>

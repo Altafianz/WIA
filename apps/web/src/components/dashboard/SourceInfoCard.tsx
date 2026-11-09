@@ -1,4 +1,5 @@
 import React from "react";
+import { Database } from "lucide-react";
 import { SourceMeta } from "@danaterbuka/shared";
 import { copy } from "../../content/copy.id.js";
 import { Card } from "../ui/Card.js";
@@ -15,9 +16,9 @@ interface RowProps {
 
 function Row({ label, value }: RowProps) {
   return (
-    <div className="flex flex-col sm:flex-row sm:gap-4 py-2 border-b border-border last:border-0">
-      <dt className="text-sm font-medium text-text-muted w-40 shrink-0">{label}</dt>
-      <dd className="text-sm text-text">{value}</dd>
+    <div className="flex flex-col gap-1 border-b border-border py-3 last:border-0 sm:gap-1.5">
+      <dt className="text-sm font-semibold text-text-muted">{label}</dt>
+      <dd className="min-w-0 text-sm text-text">{value}</dd>
     </div>
   );
 }
@@ -27,10 +28,18 @@ export function SourceInfoCard({ meta }: SourceInfoCardProps) {
 
   return (
     <Card>
-      <h3 className="text-base font-semibold text-text mb-3">
-        {copy.dashboard.sourceCardTitle}
-      </h3>
-      <dl>
+      <div className="mb-4 flex items-center gap-3">
+        <span
+          aria-hidden="true"
+          className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-700"
+        >
+          <Database className="h-5 w-5" />
+        </span>
+        <h2 className="text-xl font-bold tracking-tight text-text">
+          {copy.dashboard.sourceCardTitle}
+        </h2>
+      </div>
+      <dl className="grid grid-cols-1 gap-x-10 sm:grid-cols-2 xl:grid-cols-3">
         <Row label={copy.dashboard.sourceFieldSource} value={meta.sourceName} />
         <Row
           label={copy.dashboard.sourceFieldCoverage}
@@ -44,7 +53,7 @@ export function SourceInfoCard({ meta }: SourceInfoCardProps) {
                 href={meta.sourceUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-brand-600 underline hover:text-brand-700 break-all"
+                className="break-all font-medium text-brand-700 underline decoration-dotted underline-offset-4 transition-colors duration-150 hover:text-brand-900"
               >
                 {meta.sourceUrl}
               </a>
@@ -65,12 +74,7 @@ export function SourceInfoCard({ meta }: SourceInfoCardProps) {
         <Row
           label={copy.dashboard.sourceFieldStatus}
           value={
-            <span
-              className={[
-                "inline-flex items-center gap-1 font-medium",
-                meta.isFixture ? "text-warning" : "text-success",
-              ].join(" ")}
-            >
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-200 bg-brand-50 px-2.5 py-0.5 text-sm font-semibold text-brand-800">
               {meta.isFixture
                 ? copy.dashboard.fixtureBadge
                 : copy.dashboard.sourceStatusOfficial}

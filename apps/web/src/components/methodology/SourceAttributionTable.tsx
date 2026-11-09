@@ -50,43 +50,43 @@ export function SourceAttributionTable({
 
   return (
     <div className="space-y-3">
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse text-left text-sm">
+      <div className="overflow-x-auto rounded-xl border border-border">
+        <table className="w-full min-w-[960px] border-collapse text-left text-sm">
           <caption className="sr-only">{c.sourceTableCaption}</caption>
           <thead>
-            <tr className="border-b border-border">
-              <th scope="col" className="py-2 pr-4 font-semibold text-text">
+            <tr className="border-b border-border bg-surface">
+              <th scope="col" className="px-4 py-3 font-semibold text-text">
                 {c.colSource}
               </th>
-              <th scope="col" className="py-2 pr-4 font-semibold text-text">
+              <th scope="col" className="px-4 py-3 font-semibold text-text">
                 {c.colUrl}
               </th>
-              <th scope="col" className="py-2 pr-4 font-semibold text-text">
+              <th scope="col" className="px-4 py-3 font-semibold text-text">
                 {c.colRetrieved}
               </th>
-              <th scope="col" className="py-2 pr-4 font-semibold text-text">
+              <th scope="col" className="px-4 py-3 font-semibold text-text">
                 {c.colUpdated}
               </th>
-              <th scope="col" className="py-2 pr-4 font-semibold text-text">
+              <th scope="col" className="px-4 py-3 font-semibold text-text">
                 {c.colLicense}
               </th>
-              <th scope="col" className="py-2 font-semibold text-text">
+              <th scope="col" className="px-4 py-3 font-semibold text-text">
                 {c.colStatus}
               </th>
             </tr>
           </thead>
           <tbody>
             <tr className="align-top">
-              <th scope="row" className="py-3 pr-4 font-medium text-text">
+              <th scope="row" className="px-4 py-3 font-medium text-text">
                 {source.sourceName}
               </th>
-              <td className="py-3 pr-4 text-text-muted">
+              <td className="px-4 py-3 text-text-muted">
                 {source.sourceUrl ? (
                   <a
                     href={source.sourceUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="break-all text-brand-600 underline hover:text-brand-700"
+                    className="break-all font-medium text-brand-700 underline decoration-dotted underline-offset-4 hover:text-brand-900"
                   >
                     {source.sourceUrl}
                   </a>
@@ -94,21 +94,21 @@ export function SourceAttributionTable({
                   c.notAvailable
                 )}
               </td>
-              <td className="py-3 pr-4 text-text-muted">
+              <td className="whitespace-nowrap px-4 py-3 text-text-muted">
                 {formatDateId(source.retrievedAt)}
               </td>
-              <td className="py-3 pr-4 text-text-muted">
+              <td className="whitespace-nowrap px-4 py-3 text-text-muted">
                 {source.sourceUpdatedAt
                   ? formatDateId(source.sourceUpdatedAt)
                   : c.notAvailable}
               </td>
-              <td className="py-3 pr-4 text-text-muted">
+              <td className="px-4 py-3 text-text-muted">
                 {source.licenseUrl ? (
                   <a
                     href={source.licenseUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-brand-600 underline hover:text-brand-700"
+                    className="font-medium text-brand-700 underline decoration-dotted underline-offset-4 hover:text-brand-900"
                   >
                     {source.license}
                   </a>
@@ -116,12 +116,16 @@ export function SourceAttributionTable({
                   source.license || c.notAvailable
                 )}
               </td>
-              <td className="py-3 text-text-muted">{statusLabel(source)}</td>
+              <td className="px-4 py-3">
+                <span className="inline-flex whitespace-nowrap rounded-full border border-border bg-card px-2.5 py-0.5 text-sm font-medium text-text">
+                  {statusLabel(source)}
+                </span>
+              </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <p className="text-sm text-text-muted">
+      <p className="max-w-content text-sm text-text-muted">
         {source.isFixture ? c.sourceFixtureNote : c.sourceOfficialNote}
       </p>
     </div>

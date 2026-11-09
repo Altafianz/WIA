@@ -31,6 +31,7 @@ import { SourceInfoCard } from "../components/dashboard/SourceInfoCard.js";
 import { EmptyState } from "../components/states/EmptyState.js";
 import { ErrorState } from "../components/states/ErrorState.js";
 import { Toast } from "../components/ui/Toast.js";
+import { Card } from "../components/ui/Card.js";
 import {
   buildCsvFilename,
   buildSectorCsv,
@@ -56,7 +57,8 @@ export function DashboardPage() {
   } = useFilters(
     years,
     validRegionSlugs,
-    metaResp?.data.latestFinalYear
+    metaResp?.data.latestFinalYear,
+    metaResp?.data.defaultRegionSlug
   );
 
   const {
@@ -155,7 +157,7 @@ export function DashboardPage() {
   };
 
   return (
-    <div className="flex flex-col gap-6 py-4">
+    <div className="page-gutter flex w-full flex-col gap-6 py-6 lg:gap-8 lg:py-8">
       <PageMeta
         title={`${copy.dashboard.title} — ${regionDisplayName}`}
         description={copy.dashboard.description}
@@ -163,112 +165,99 @@ export function DashboardPage() {
 
       <Toast message={correctionMessage} onDismiss={dismissCorrection} />
 
-      {/* Header & Filter Bar */}
-      <div className="flex flex-col gap-4 border-b border-border pb-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-text">
-              {copy.dashboard.title}
-            </h1>
-            <p className="text-sm text-text-muted mt-1">
-              {copy.dashboard.description}
-            </p>
-          </div>
+      {/* Page heading */}
+      <header className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+        <div className="max-w-prose">
+          <h1 className="type-h1 text-text">{copy.dashboard.title}</h1>
+          <p className="mt-2 text-base text-text-muted">
+            {copy.dashboard.description}
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <FixtureBadge
+            visible={summaryResp?.meta.isFixture ?? metaResp?.meta.isFixture ?? false}
+          />
+        </div>
+      </header>
 
-          <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-end gap-3 w-full sm:w-auto">
-            <div className="w-full sm:w-auto">
-              <ProvinceSelect
-                provinces={provinces}
-                value={currentProvinceSlug}
-                onChange={handleProvinceChange}
-                disabled={isLoading}
-                className="w-full sm:w-48"
-              />
-            </div>
-            <div className="w-full sm:w-auto">
-              <SubRegionSelect
-                subRegions={subRegions}
-                value={region}
-                onChange={handleSubRegionChange}
-                disabled={isLoading}
-                className="w-full sm:w-64"
-              />
-            </div>
-            <div className="w-full sm:w-auto">
-              <YearSelect
-                years={years}
-                value={year}
-                onChange={setYear}
-                disabled={isLoading}
-                className="w-full sm:w-28"
-              />
-            </div>
-            <div className="w-full sm:w-auto pt-2 sm:pt-0">
-              <CopyLinkButton />
-            </div>
+      {/* Filter area: selects plus link/export actions */}
+      <Card className="flex flex-col gap-4" padding="md">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)_10rem]">
+          <ProvinceSelect
+            provinces={provinces}
+            value={currentProvinceSlug}
+            onChange={handleProvinceChange}
+            disabled={isLoading}
+          />
+          <div>
+            <SubRegionSelect
+              subRegions={subRegions}
+              value={region}
+              onChange={handleSubRegionChange}
+              disabled={isLoading}
+            />
           </div>
+          <YearSelect
+            years={years}
+            value={year}
+            onChange={setYear}
+            disabled={isLoading}
+          />
         </div>
 
-        {regionAnnouncement && (
-          <p
-            aria-live="polite"
-            className="text-sm font-medium text-text-muted"
-            data-testid="region-announcement"
-          >
-            {regionAnnouncement}
-          </p>
-        )}
-      </div>
+        <div className="flex flex-col gap-3 border-t border-border pt-4 sm:flex-row sm:items-center sm:justify-between">
+          {regionAnnouncement ? (
+            <p
+              aria-live="polite"
+              className="text-sm font-medium text-text-muted"
+              data-testid="region-announcement"
+            >
+              {regionAnnouncement}
+            </p>
+          ) : (
+            <span />
+          )}
+          <div className="flex flex-wrap items-center gap-2">
+            <CopyLinkButton />
+            <ExportCsvButton onClick={handleExportCsv} disabled={exportDisabled} />
+          </div>
+        </div>
+      </Card>
 
-      {/* Status Badges & Period Notice */}
-      <div className="flex flex-wrap items-center gap-3">
-        <FixtureBadge visible={summaryResp?.meta.isFixture ?? metaResp?.meta.isFixture ?? false} />
-        {summaryResp?.data.periodStatus && (
+      {/* Period status */}
+      {summaryResp?.data.periodStatus && (
+        <div className="flex flex-wrap items-start gap-3">
           <PeriodNotice
             periodStatus={summaryResp.data.periodStatus}
             fiscalYear={summaryResp.data.fiscalYear}
             simple={isSimple}
           />
-        )}
-      </div>
+        </div>
+      )}
 
       {/* States Handling */}
       {state === "empty" && (
         <EmptyState onResetYear={() => setYear(metaResp?.data.latestFinalYear ?? 2024)} />
       )}
 
-      {state === "error" && (
-        <ErrorState onRetry={() => refetchSummary()} />
-      )}
+      {state === "error" && <ErrorState onRetry={() => refetchSummary()} />}
 
       {/* Cara Membaca Halaman Ini (Mode Sederhana) */}
       {isSimple && <SimpleModeHelp />}
 
       {/* 4 Summary Cards */}
-      <SummaryCards
-        summary={summaryResp?.data}
-        simple={isSimple}
-        state={state}
-      />
+      <SummaryCards summary={summaryResp?.data} simple={isSimple} state={state} />
 
-      {/* Sector Chart + Insight Panel Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div className="lg:col-span-7 flex flex-col gap-3">
-          <div className="flex justify-end">
-            <ExportCsvButton
-              onClick={handleExportCsv}
-              disabled={exportDisabled}
-            />
-          </div>
-          <SectorChart
-            slices={sectorsResp?.data.slices}
-            totalPagu={summaryResp?.data.totalPagu}
-            simple={isSimple}
-            state={isSectorsLoading ? "loading" : state}
-            selectedSector={sector}
-          />
-        </div>
-        <div className="lg:col-span-5">
+      {/* Sector chart + insight panel: side by side on wide screens */}
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)] xl:items-start">
+        <SectorChart
+          slices={sectorsResp?.data.slices}
+          totalPagu={summaryResp?.data.totalPagu}
+          simple={isSimple}
+          state={isSectorsLoading ? "loading" : state}
+          selectedSector={sector}
+        />
+        <div className="min-w-0">
           {insightsResp?.data && (
             <InsightPanel
               items={insightsResp.data.items}
@@ -279,14 +268,14 @@ export function DashboardPage() {
         </div>
       </div>
 
-      {/* Trend Chart Full Width */}
+      {/* Trend chart full width */}
       <TrendChart
         points={trendResp?.data.points}
         simple={isSimple}
         state={isTrendLoading ? "loading" : state}
       />
 
-      {/* Source Attribution Card */}
+      {/* Source attribution card */}
       {(summaryResp?.meta ?? metaResp?.meta) && (
         <SourceInfoCard meta={summaryResp?.meta ?? metaResp?.meta} />
       )}

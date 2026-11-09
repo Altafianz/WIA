@@ -38,7 +38,7 @@ export function CompareTable({ rows, aLabel, bLabel, simple }: CompareTableProps
   return (
     <div>
       <div className="hidden overflow-x-auto md:block">
-        <table className="w-full border-collapse text-left text-sm">
+        <table className="w-full min-w-[680px] border-collapse text-left text-sm">
           <caption className="sr-only">{copy.compare.tableCaption}</caption>
           <thead>
             <tr className="border-b border-border">
@@ -61,20 +61,20 @@ export function CompareTable({ rows, aLabel, bLabel, simple }: CompareTableProps
           </thead>
           <tbody>
             {rows.map((row) => (
-              <tr key={row.metric} className="border-b border-border last:border-0">
-                <th scope="row" className="py-2 pr-4 text-left font-medium text-text">
+              <tr key={row.metric} className="border-b border-border last:border-0 hover:bg-surface">
+                <th scope="row" className="py-2.5 pr-4 text-left font-medium text-text">
                   {getCompareMetricLabel(row, simple)}
                 </th>
-                <td className="py-2 pr-4 text-right tabular-nums text-text">
+                <td className="py-2.5 pr-4 text-right tabular-nums text-text">
                   {formatMetric(row.aValue, row)}
                 </td>
-                <td className="py-2 pr-4 text-right tabular-nums text-text">
+                <td className="py-2.5 pr-4 text-right tabular-nums text-text">
                   {formatMetric(row.bValue, row)}
                 </td>
-                <td className="py-2 pr-4 text-right tabular-nums text-text">
+                <td className="py-2.5 pr-4 text-right tabular-nums text-text">
                   {formatSignedValue(row.delta, deltaFormat(row))}
                 </td>
-                <td className="py-2 text-right tabular-nums text-text">
+                <td className="py-2.5 text-right tabular-nums text-text">
                   {formatSignedValue(row.deltaPercent, "percent")}
                 </td>
               </tr>

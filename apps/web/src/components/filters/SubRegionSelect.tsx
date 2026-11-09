@@ -15,6 +15,12 @@ export interface SubRegionSelectProps {
   "aria-describedby"?: string;
 }
 
+function optionLabel(sub: Region, index: number): string {
+  const isFirstGov = index === 0 && sub.level === "province";
+  const base = isFirstGov ? copy.dashboard.provinceGovOption : sub.name;
+  return sub.hasData ? base : `${base} (${copy.states.emptyTitle})`;
+}
+
 export function SubRegionSelect({
   subRegions,
   value,
@@ -30,36 +36,68 @@ export function SubRegionSelect({
   const descriptionId = `${id}-description`;
   const effectiveDescribedBy = isSingle ? descriptionId : ariaDescribedBy;
 
+  const options = subRegions.map((sub, index) => {
+    const isFirstGov = index === 0 && sub.level === "province";
+    const base = isFirstGov
+      ? copy.dashboard.provinceGovOptionShort
+      : optionLabel(sub, index);
+    return (
+      <option
+        key={sub.slug}
+        value={sub.slug}
+        title={isFirstGov ? copy.dashboard.provinceGovOption : undefined}
+      >
+        {sub.hasData ? base : `${base} (${copy.states.emptyTitle})`}
+      </option>
+    );
+  });
+
   return (
     <div className={`flex flex-col ${className ?? ""}`.trim()}>
-      <Select
-        id={id}
-        label={label}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        disabled={disabled || isSingle}
-        className={className}
-        data-testid={testId}
-        aria-describedby={effectiveDescribedBy}
-      >
-        {subRegions.map((sub, index) => {
-          const isFirstGov = index === 0 && sub.level === "province";
-          const labelText = isFirstGov
-            ? copy.dashboard.provinceGovOption
-            : sub.name;
-          return (
-            <option key={sub.slug} value={sub.slug}>
-              {labelText} {!sub.hasData ? `(${copy.states.emptyTitle})` : ""}
-            </option>
-          );
-        })}
-      </Select>
+      {isSingle ? (
+        // A one-option native select clips long labels on narrow screens.
+        // Show the full value as wrapping text and keep the disabled select
+        // for form semantics and screen readers.
+        <>
+          <span className="text-sm font-semibold text-text">{label}</span>
+          <div className="mt-1.5 flex min-h-12 items-center rounded-xl border border-border bg-surface px-3.5 py-3 text-sm text-text">
+            {subRegions[0]
+              ? optionLabel(subRegions[0], 0)
+              : copy.dashboard.singleSubRegionNotice}
+          </div>
+          <select
+            id={id}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            disabled
+            aria-hidden="true"
+            tabIndex={-1}
+            aria-describedby={effectiveDescribedBy}
+            data-testid={testId}
+            className="sr-only"
+          >
+            {options}
+          </select>
+        </>
+      ) : (
+        <Select
+          id={id}
+          label={label}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          disabled={disabled}
+          className={className}
+          data-testid={testId}
+          aria-describedby={effectiveDescribedBy}
+        >
+          {options}
+        </Select>
+      )}
       {isSingle && (
-        <p id={descriptionId} className="text-xs text-text-muted mt-1">
+        <p id={descriptionId} className="mt-1.5 text-sm text-text-muted">
           {copy.dashboard.singleSubRegionNotice}
         </p>
       )}
     </div>
   );
 }
-

@@ -7,9 +7,9 @@ import { SimpleModeProvider } from "./SimpleModeProvider.js";
 export function App() {
   return (
     <SimpleModeProvider>
-      <div className="min-h-screen flex flex-col bg-bg text-text">
+      <div className="flex min-h-screen flex-col bg-bg text-text">
         <AppHeader />
-        <main id="main-content" className="flex-1 mx-auto max-w-container px-4 w-full">
+        <main id="main-content" className="w-full flex-1">
           <Outlet />
         </main>
         <AppFooter />

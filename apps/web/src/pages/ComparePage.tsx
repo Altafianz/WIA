@@ -121,7 +121,7 @@ export function ComparePage() {
     );
 
   return (
-    <div className="flex flex-col gap-6 py-4">
+    <div className="page-gutter flex w-full flex-col gap-6 py-6 lg:gap-8 lg:py-8">
       <PageMeta
         title={`${copy.compare.title} — ${copy.common.siteName}`}
         description={copy.compare.description}
@@ -129,36 +129,38 @@ export function ComparePage() {
 
       <Toast message={notice} onDismiss={() => setNotice(null)} />
 
-      <div className="flex flex-col gap-4 border-b border-border pb-4 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-text md:text-3xl">
+      <header className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+        <div className="max-w-prose">
+          <h1 className="type-h1 text-text">
             {copy.compare.title}
           </h1>
-          <p className="mt-1 text-sm text-text-muted">
+          <p className="mt-2 text-base text-text-muted">
             {copy.compare.description}
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2">
           <FixtureBadge
             visible={compareResp?.meta.isFixture ?? metaResp?.meta.isFixture ?? false}
           />
           <CopyLinkButton />
         </div>
-      </div>
+      </header>
 
-      <CompareForm
-        values={formValues}
-        regions={regions}
-        years={years}
-        onChange={handleChange}
-        disabled={isLoading}
-      />
+      <Card padding="md">
+        <CompareForm
+          values={formValues}
+          regions={regions}
+          years={years}
+          onChange={handleChange}
+          disabled={isLoading}
+        />
+      </Card>
 
       {isDifferentLevel && (
         <div
           role="note"
           data-testid="level-difference-notice"
-          className="rounded-lg border border-border bg-surface p-4 text-sm text-text-muted"
+          className="max-w-prose rounded-xl border border-brand-200 bg-brand-50 p-4 text-sm leading-relaxed text-brand-900"
         >
           <p>
             {isSimple
@@ -169,7 +171,7 @@ export function ComparePage() {
       )}
 
       {isLoading && (
-        <div className="space-y-4">
+        <div className="space-y-5">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {Array.from({ length: 3 }).map((_, index) => (
               <CardSkeleton key={index} />
@@ -189,15 +191,17 @@ export function ComparePage() {
       {isErrorState && <ErrorState onRetry={() => refetch()} />}
 
       {!isLoading && !isEmpty && !isErrorState && compareResp && (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 lg:gap-8">
           <section aria-labelledby="compare-delta-heading">
-            <div className="mb-3">
-              <h2 id="compare-delta-heading" className="text-lg font-semibold text-text">
+            <div className="mb-4">
+              <h2 id="compare-delta-heading" className="type-h2 text-text">
                 {copy.compare.deltaTitle}
               </h2>
-              <p className="text-sm text-text-muted">{copy.compare.deltaSubtitle}</p>
+              <p className="mt-1 text-sm text-text-muted">
+                {copy.compare.deltaSubtitle}
+              </p>
             </div>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {compareResp.data.rows.map((row) => (
                 <DeltaStat
                   key={row.metric}
@@ -212,16 +216,18 @@ export function ComparePage() {
             </div>
           </section>
 
-          <Card>
-            <CompareTable
-              rows={compareResp.data.rows}
-              aLabel={compareResp.data.a.label}
-              bLabel={compareResp.data.b.label}
-              simple={isSimple}
-            />
-          </Card>
+          <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)] xl:items-start">
+            <Card>
+              <CompareTable
+                rows={compareResp.data.rows}
+                aLabel={compareResp.data.a.label}
+                bLabel={compareResp.data.b.label}
+                simple={isSimple}
+              />
+            </Card>
 
-          <SectorDeltaList items={compareResp.data.topSectorDeltas} />
+            <SectorDeltaList items={compareResp.data.topSectorDeltas} />
+          </div>
         </div>
       )}
     </div>

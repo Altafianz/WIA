@@ -1,10 +1,10 @@
 import React from "react";
 
-interface CardProps {
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  className?: string;
   shadow?: "sm" | "md";
   padding?: "sm" | "md" | "lg";
+  interactive?: boolean;
 }
 
 const shadowClass = {
@@ -14,8 +14,8 @@ const shadowClass = {
 
 const paddingClass = {
   sm: "p-4",
-  md: "p-6",
-  lg: "p-8",
+  md: "p-5 sm:p-6",
+  lg: "p-6 sm:p-8",
 };
 
 export function Card({
@@ -23,17 +23,23 @@ export function Card({
   className = "",
   shadow = "sm",
   padding = "md",
+  interactive = false,
+  ...props
 }: CardProps) {
   return (
     <div
       className={[
-        "bg-surface rounded-lg border border-border",
+        "rounded-2xl border border-border bg-card",
+        interactive
+          ? "transition-all duration-150 ease-out hover:-translate-y-0.5 hover:border-border-strong hover:shadow-md motion-reduce:hover:translate-y-0"
+          : "",
         shadowClass[shadow],
         paddingClass[padding],
         className,
       ]
         .filter(Boolean)
         .join(" ")}
+      {...props}
     >
       {children}
     </div>

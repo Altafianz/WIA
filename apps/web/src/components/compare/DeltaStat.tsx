@@ -39,12 +39,12 @@ export function formatValue(value: number | null, format: DeltaFormat): string {
 const directionConfig = {
   up: {
     label: copy.compare.deltaUp,
-    className: "text-success",
+    className: "text-brand-700",
     Icon: ArrowUpRight,
   },
   down: {
     label: copy.compare.deltaDown,
-    className: "text-danger",
+    className: "text-brand-900",
     Icon: ArrowDownRight,
   },
   flat: {
@@ -67,19 +67,29 @@ export function DeltaStat({
   const Icon = config.Icon;
 
   return (
-    <Card>
-      <p className="text-sm text-text-muted mb-1">{label}</p>
+    <Card className="flex flex-col gap-2">
+      <p className="text-sm font-semibold text-text-muted">{label}</p>
       <div className="flex items-center gap-2">
-        <Icon className={`h-5 w-5 ${config.className}`} aria-hidden="true" />
-        <span className={`text-2xl font-bold ${config.className}`}>
+        <span
+          aria-hidden="true"
+          className={[
+            "flex h-8 w-8 items-center justify-center rounded-full bg-surface",
+            config.className,
+          ].join(" ")}
+        >
+          <Icon className="h-4 w-4" />
+        </span>
+        <span
+          className={`break-words text-2xl font-extrabold tracking-tight ${config.className}`}
+        >
           {formatSignedValue(delta, format)}
         </span>
         <span className="sr-only">{config.label}</span>
       </div>
-      <p className="text-xs text-text-muted mt-1">
+      <p className="text-sm text-text-muted">
         {formatSignedValue(deltaPercent, "percent")}
       </p>
-      <p className="text-xs text-text-muted mt-2">
+      <p className="mt-1 border-t border-border pt-2 text-sm leading-relaxed text-text-muted">
         {copy.compare.columnA}: {formatValue(aValue, format)} ·{" "}
         {copy.compare.columnB}: {formatValue(bValue, format)}
       </p>

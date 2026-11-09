@@ -11,17 +11,16 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClass: Record<Variant, string> = {
   primary:
-    "bg-brand-600 text-text-inverse hover:bg-brand-700 focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2",
+    "bg-brand-600 text-text-inverse shadow-sm hover:bg-brand-700 active:bg-brand-800",
   secondary:
-    "bg-surface border border-border text-text hover:bg-brand-50 focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2",
-  ghost:
-    "bg-transparent text-brand-600 hover:bg-brand-50 focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2",
+    "border border-border bg-card text-text shadow-sm hover:border-border-strong hover:bg-surface",
+  ghost: "bg-transparent text-brand-700 hover:bg-brand-50",
 };
 
 const sizeClass: Record<Size, string> = {
-  sm: "px-3 py-1.5 text-sm rounded-sm",
-  md: "px-4 py-2 text-base rounded-md",
-  lg: "px-6 py-3 text-lg rounded-md",
+  sm: "min-h-[44px] px-4 py-1.5 text-sm rounded-full",
+  md: "min-h-[44px] px-5 py-2 text-sm rounded-full",
+  lg: "min-h-[48px] px-7 py-3 text-base rounded-full",
 };
 
 export function Button({
@@ -29,22 +28,23 @@ export function Button({
   size = "md",
   className = "",
   children,
-  disabled,
+  type = "button",
   ...props
 }: ButtonProps) {
   return (
     <button
-      {...props}
-      disabled={disabled}
+      type={type}
       className={[
-        "inline-flex items-center justify-center gap-2 font-medium transition-colors outline-none",
+        "inline-flex items-center justify-center gap-2 font-semibold",
+        "transition-colors duration-150 ease-out",
+        "disabled:cursor-not-allowed disabled:opacity-50",
         variantClass[variant],
         sizeClass[size],
-        disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
         className,
       ]
         .filter(Boolean)
         .join(" ")}
+      {...props}
     >
       {children}
     </button>

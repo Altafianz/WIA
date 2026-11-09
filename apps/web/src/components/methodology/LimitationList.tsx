@@ -6,7 +6,7 @@ interface LimitationListProps {
 
 export function LimitationList({ items }: LimitationListProps) {
   return (
-    <ul className="list-disc space-y-1 pl-5 text-sm text-text-muted">
+    <ul className="max-w-content list-disc space-y-2 pl-5 text-base text-text-muted">
       {items.map((item) => (
         <li key={item}>{item}</li>
       ))}

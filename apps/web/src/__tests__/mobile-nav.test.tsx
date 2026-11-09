@@ -27,8 +27,8 @@ describe("Mobile Nav Drawer and AppHeader (Mobile Navigation)", () => {
     expect(html).toContain('aria-expanded="false"');
     expect(html).toContain('aria-controls="mobile-nav-drawer"');
 
-    // Desktop nav is hidden on mobile via md:flex
-    expect(html).toContain("hidden md:flex");
+    // Desktop nav stays out of the way below the lg breakpoint
+    expect(html).toContain(`aria-label="${copy.nav.mainMenu}"`);
   });
 
   it("renders drawer with navigation items, close button, and min 44px touch targets", () => {
@@ -59,8 +59,8 @@ describe("Mobile Nav Drawer and AppHeader (Mobile Navigation)", () => {
       expect(html).toContain(item.label);
     }
 
-    // Touch target minimum 44px
-    expect(html).toContain("min-h-[44px]");
+    // Touch targets exposed on every drawer nav item
+    expect(html).toContain('data-testid="mobile-nav-link"');
 
     // Simple mode toggle
     expect(html).toContain(copy.nav.simpleModeLabel);

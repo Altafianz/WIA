@@ -15,33 +15,36 @@ export function SourceFileTable({ source }: SourceFileTableProps) {
 
   return (
     <div className="space-y-2">
-      <h3 className="text-base font-semibold text-text">{c.fileTableHeading}</h3>
-      <div className="overflow-x-auto">
-        <table className="w-full border-collapse text-left text-sm">
+      <h3 className="text-xl font-bold text-text">{c.fileTableHeading}</h3>
+      <div className="overflow-x-auto rounded-xl border border-border">
+        <table className="w-full min-w-[680px] border-collapse text-left text-sm">
           <caption className="sr-only">{c.fileTableCaption}</caption>
           <thead>
-            <tr className="border-b border-border">
-              <th scope="col" className="py-2 pr-4 font-semibold text-text">
+            <tr className="border-b border-border bg-surface">
+              <th scope="col" className="px-4 py-3 font-semibold text-text">
                 {c.colFile}
               </th>
-              <th scope="col" className="py-2 pr-4 font-semibold text-text">
+              <th scope="col" className="px-4 py-3 font-semibold text-text">
                 {c.colSheet}
               </th>
-              <th scope="col" className="py-2 pr-4 font-semibold text-text">
+              <th scope="col" className="px-4 py-3 font-semibold text-text">
                 {c.colPeriod}
               </th>
-              <th scope="col" className="py-2 font-semibold text-text">
+              <th scope="col" className="px-4 py-3 font-semibold text-text">
                 {c.colFileDate}
               </th>
             </tr>
           </thead>
           <tbody>
             {files.map((file) => (
-              <tr key={`${file.kind}-${file.period}`} className="align-top border-b border-border/60">
-                <td className="py-2 pr-4 text-text">{file.fileName}</td>
-                <td className="py-2 pr-4 text-text-muted">{file.sheetName}</td>
-                <td className="py-2 pr-4 text-text-muted">{file.period}</td>
-                <td className="py-2 text-text-muted">
+              <tr
+                key={`${file.kind}-${file.period}`}
+                className="border-b border-border align-top last:border-0 hover:bg-surface"
+              >
+                <td className="px-4 py-3 text-text">{file.fileName}</td>
+                <td className="px-4 py-3 text-text-muted">{file.sheetName}</td>
+                <td className="px-4 py-3 text-text-muted">{file.period}</td>
+                <td className="whitespace-nowrap px-4 py-3 text-text-muted">
                   {file.modifiedAt ? formatDateId(file.modifiedAt) : c.fileDateUnknown}
                 </td>
               </tr>

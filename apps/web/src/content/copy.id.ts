@@ -52,6 +52,7 @@ export const copy = {
     filterProvinceLabel: "Pilih Provinsi",
     filterSubRegionLabel: "Pilih Sub-wilayah",
     provinceGovOption: "Pemerintah Provinsi (anggaran provinsi)",
+    provinceGovOptionShort: "Pemerintah Provinsi",
     singleSubRegionNotice: "Data DJPK untuk provinsi ini hanya mencakup pemerintah provinsi.",
     otherProvince: "Lainnya",
     regionStatusAnnouncement: "Menampilkan {subRegion}, {province}, {year}",
@@ -80,6 +81,16 @@ export const copy = {
     trendChartTitleSimple: "Perkembangan Anggaran dari Tahun ke Tahun",
     trendChartDescription: "Perkembangan pagu dan realisasi belanja dari tahun ke tahun",
     trendChartDescriptionSimple: "Melihat bagaimana rencana anggaran dan uang yang terpakai berubah setiap tahunnya",
+    chartSeriesPagu: "Pagu (rencana anggaran)",
+    chartSeriesPaguSimple: "Rencana Anggaran",
+    chartSeriesRealisasi: "Realisasi (uang terpakai)",
+    chartSeriesRealisasiSimple: "Uang Terpakai",
+    trendAxisUnitNote:
+      "Angka sumbu vertikal dalam rupiah ringkas: T = triliun, M = miliar, jt = juta.",
+    realizationStopsNote:
+      "Realisasi hanya tersedia sampai {lastYear}; {years} baru berupa pagu.",
+    realizationStopsNoteSimple:
+      "Angka uang yang terpakai baru tersedia sampai {lastYear}. Tahun {years} masih berisi rencana anggaran saja.",
     insightPanelTitle: "Temuan & Catatan Data",
     insightPanelTitleSimple: "Penjelasan & Temuan Penting",
     insightPanelDisclaimer: "Temuan dihasilkan otomatis oleh aturan data tanpa menjustifikasi kualitas belanja.",
@@ -219,8 +230,14 @@ export const copy = {
   footer: {
     description:
       "Platform keterbukaan data anggaran daerah yang menyajikan pagu dan realisasi belanja dalam bahasa yang mudah dipahami warga, lengkap dengan konteks dan batasan data.",
+    aboutTitle: "Tentang DanaTerbuka",
+    pagesTitle: "Halaman",
+    dataTitle: "Sumber Data",
+    dataDescription:
+      "Angka diolah dari berkas publik DJPK Kementerian Keuangan RI dan disajikan sebagai snapshot berkala, bukan laporan real-time.",
     navigationTitle: "Navigation",
     contactTitle: "Contact",
+    contactSectionTitle: "Kontak & Masukan",
     contactEmail: "DanaTerbuka@gmail.com",
     contactPhone: "085175461408",
     contactLocation: "Jakarta, Indonesia",

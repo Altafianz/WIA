@@ -1,4 +1,5 @@
 import React from "react";
+import { ChevronDown } from "lucide-react";
 
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label: string;
@@ -7,24 +8,31 @@ interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
 
 export function Select({ label, id, className = "", children, ...props }: SelectProps) {
   return (
-    <div className="flex flex-col gap-1">
-      <label htmlFor={id} className="text-sm font-medium text-text-muted">
+    <div className="flex w-full flex-col gap-1.5">
+      <label htmlFor={id} className="text-sm font-semibold text-text">
         {label}
       </label>
-      <select
-        id={id}
-        aria-label={label}
-        className={[
-          "rounded-md border border-border bg-surface px-3 py-2 text-sm text-text",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-1",
-          className,
-        ]
-          .filter(Boolean)
-          .join(" ")}
-        {...props}
-      >
-        {children}
-      </select>
+      <div className="relative">
+        <select
+          id={id}
+          aria-label={label}
+          className={[
+            "h-12 w-full appearance-none rounded-xl border border-border bg-card pl-3.5 pr-10 text-sm text-text shadow-sm",
+            "transition-colors duration-150 ease-out hover:border-border-strong",
+            "disabled:cursor-not-allowed disabled:bg-surface disabled:text-text-muted",
+            className,
+          ]
+            .filter(Boolean)
+            .join(" ")}
+          {...props}
+        >
+          {children}
+        </select>
+        <ChevronDown
+          aria-hidden="true"
+          className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted"
+        />
+      </div>
     </div>
   );
 }

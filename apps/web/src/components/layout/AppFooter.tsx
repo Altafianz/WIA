@@ -2,40 +2,31 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { copy } from "../../content/copy.id.js";
 import { useMeta } from "../../hooks/useMeta.js";
+import { BrandMark } from "./BrandMark.js";
+
+const PAGE_LINKS = [
+  { to: "/", label: copy.nav.home },
+  { to: "/dashboard", label: copy.nav.dashboard },
+  { to: "/bandingkan", label: copy.nav.compare },
+  { to: "/glosarium", label: copy.nav.glossary },
+  { to: "/metodologi", label: copy.nav.methodology },
+];
 
 export function AppFooter() {
   const { data } = useMeta();
   const isFixture = data?.meta.isFixture ?? false;
 
   return (
-    <footer className="bg-footer-bg text-footer-text mt-auto">
-      <div className="mx-auto max-w-container px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <footer className="mt-auto bg-footer-bg text-footer-text">
+      <div className="page-gutter py-12 lg:py-14">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1.15fr_1.15fr]">
           {/* Brand info */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <svg
-                className="w-7 h-7 text-footer-subtle shrink-0"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <circle cx="12" cy="12" r="3" />
-                <path d="M12 2v4m0 12v4M2 12h4m12 0h4" />
-                <path d="m4.93 4.93 2.83 2.83m8.48 8.48 2.83 2.83M4.93 19.07l2.83-2.83m8.48-8.48 2.83-2.83" />
-              </svg>
-              <span className="font-bold text-lg tracking-wider uppercase text-footer-text">
-                {copy.common.siteName}
-              </span>
-            </div>
-            <p className="text-sm text-footer-muted leading-relaxed">
+            <BrandMark inverse />
+            <p className="max-w-sm text-sm leading-relaxed text-footer-muted">
               {copy.footer.description}
             </p>
-            <p className="text-xs text-footer-subtle leading-relaxed">
+            <p className="max-w-sm text-xs leading-relaxed text-footer-subtle">
               {isFixture
                 ? copy.common.sourceAttributionFixture
                 : copy.common.sourceAttributionOfficial}
@@ -43,54 +34,58 @@ export function AppFooter() {
           </div>
 
           {/* Navigation */}
-          <div>
-            <h2 className="font-semibold text-footer-text text-base mb-4">
-              {copy.footer.navigationTitle}
+          <nav aria-label={copy.footer.pagesTitle}>
+            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-footer-subtle">
+              {copy.footer.pagesTitle}
             </h2>
-            <ul className="space-y-2 text-sm text-footer-muted">
-              <li>
-                <Link to="/" className="hover:text-footer-text transition-colors">
-                  {copy.nav.home}
-                </Link>
-              </li>
-              <li>
-                <Link to="/dashboard" className="hover:text-footer-text transition-colors">
-                  {copy.nav.dashboard}
-                </Link>
-              </li>
-              <li>
-                <Link to="/bandingkan" className="hover:text-footer-text transition-colors">
-                  {copy.nav.compare}
-                </Link>
-              </li>
-              <li>
-                <Link to="/glosarium" className="hover:text-footer-text transition-colors">
-                  {copy.nav.glossary}
-                </Link>
-              </li>
-              <li>
-                <Link to="/metodologi" className="hover:text-footer-text transition-colors">
-                  {copy.nav.methodology}
-                </Link>
-              </li>
-              <li>
-                <Link to="/#saran" className="hover:text-footer-text transition-colors">
-                  {copy.footer.feedbackLink}
-                </Link>
-              </li>
+            <ul className="space-y-2.5 text-sm text-footer-muted">
+              {PAGE_LINKS.map(({ to, label }) => (
+                <li key={to}>
+                  <Link
+                    to={to}
+                    className="inline-flex min-h-[32px] items-center rounded transition-colors duration-150 hover:text-footer-text"
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
             </ul>
+          </nav>
+
+          {/* Data source */}
+          <div>
+            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-footer-subtle">
+              {copy.footer.dataTitle}
+            </h2>
+            <p className="text-sm leading-relaxed text-footer-muted">
+              {copy.footer.dataDescription}
+            </p>
+            <Link
+              to="/metodologi"
+              className="mt-3 inline-flex min-h-[32px] items-center text-sm font-semibold text-footer-subtle transition-colors duration-150 hover:text-footer-text"
+            >
+              {copy.nav.methodology}
+            </Link>
           </div>
 
           {/* Contact */}
           <div>
-            <h2 className="font-semibold text-footer-text text-base mb-4">
-              {copy.footer.contactTitle}
+            <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-footer-subtle">
+              {copy.footer.contactSectionTitle}
             </h2>
-            <ul className="space-y-2 text-sm text-footer-muted">
+            <ul className="space-y-2.5 text-sm text-footer-muted">
+              <li>
+                <Link
+                  to="/#saran"
+                  className="inline-flex min-h-[32px] items-center font-semibold text-footer-subtle transition-colors duration-150 hover:text-footer-text"
+                >
+                  {copy.footer.feedbackLink}
+                </Link>
+              </li>
               <li>
                 <a
                   href={`mailto:${copy.footer.contactEmail}`}
-                  className="hover:text-footer-text transition-colors"
+                  className="inline-flex min-h-[32px] items-center transition-colors duration-150 hover:text-footer-text"
                 >
                   {copy.footer.contactEmail}
                 </a>
@@ -98,21 +93,18 @@ export function AppFooter() {
               <li>
                 <a
                   href={`tel:${copy.footer.contactPhone}`}
-                  className="hover:text-footer-text transition-colors"
+                  className="inline-flex min-h-[32px] items-center transition-colors duration-150 hover:text-footer-text"
                 >
                   {copy.footer.contactPhone}
                 </a>
               </li>
-              <li>
-                <span>{copy.footer.contactLocation}</span>
-              </li>
+              <li>{copy.footer.contactLocation}</li>
             </ul>
           </div>
-
         </div>
 
         {/* Bottom copyright */}
-        <div className="mt-12 pt-6 border-t border-footer-text/10 text-center text-xs text-footer-muted">
+        <div className="mt-12 border-t border-footer-border pt-6 text-sm text-footer-muted">
           <p>{copy.footer.copyright}</p>
         </div>
       </div>

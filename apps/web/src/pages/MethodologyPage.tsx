@@ -29,27 +29,33 @@ export function MethodologyPage() {
   const lastUpdated = updatedAt ? formatDateId(updatedAt) : c.notAvailable;
 
   return (
-    <>
+    <div className="relative w-full">
       <PageMeta
         title={c.metaTitle}
         description={c.description}
         path="/metodologi"
       />
 
-      <div className="py-8">
-        <header className="max-w-content">
-          <h1 className="mb-2 text-2xl font-bold text-text">{c.title}</h1>
-          <p className="text-text-muted">{c.description}</p>
-        </header>
+      {/* Full-height tinted rail behind the sticky sidebar */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-0 left-0 hidden w-[21rem] border-r border-border bg-surface lg:block xl:w-[23rem]"
+      />
 
-        <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[16rem_minmax(0,1fr)]">
+      <div className="lg:flex lg:items-start">
+        {/* Left rail: title, description and table of contents */}
+        <aside className="w-full border-b border-border bg-surface px-4 py-8 sm:px-6 lg:sticky lg:top-header lg:h-[calc(100vh_-_var(--header-height))] lg:w-[21rem] lg:shrink-0 lg:overflow-y-auto lg:border-b-0 lg:px-6 lg:py-10 xl:w-[23rem]">
+          <h1 className="type-h1 text-text">{c.title}</h1>
+          <p className="mt-3 max-w-content text-base text-text-muted">
+            {c.description}
+          </p>
           <MethodologyToc rules={INSIGHT_RULE_META} />
+        </aside>
 
-          <div className="min-w-0 max-w-content space-y-8">
-            <MethodologySection
-              id={c.anchorSummary}
-              title={c.summaryHeading}
-            >
+        {/* Content fills the remaining width, starting at the top */}
+        <div className="min-w-0 flex-1 px-4 py-8 sm:px-6 lg:px-10 lg:py-10 2xl:px-12">
+          <div className="space-y-10">
+            <MethodologySection id={c.anchorSummary} title={c.summaryHeading}>
               <p>{isFixture ? c.summaryBody : c.summaryBodyOfficial}</p>
             </MethodologySection>
 
@@ -62,18 +68,12 @@ export function MethodologyPage() {
               <SourceFileTable source={source} />
             </MethodologySection>
 
-            <MethodologySection
-              id={c.anchorMetrics}
-              title={c.metricsHeading}
-            >
+            <MethodologySection id={c.anchorMetrics} title={c.metricsHeading}>
               <p>{c.metricsDescription}</p>
               <MetricFormulaTable metrics={METRIC_DEFINITIONS} />
             </MethodologySection>
 
-            <MethodologySection
-              id={c.anchorInsights}
-              title={c.insightsHeading}
-            >
+            <MethodologySection id={c.anchorInsights} title={c.insightsHeading}>
               <p>{c.insightsDescription}</p>
               <InsightRuleList rules={INSIGHT_RULE_META} />
             </MethodologySection>
@@ -83,7 +83,7 @@ export function MethodologyPage() {
               title={c.globalDisclaimerHeading}
             >
               <p>{GLOBAL_DISCLAIMER}</p>
-              <h3 className="pt-2 text-base font-semibold text-text">
+              <h3 className="pt-2 text-xl font-bold text-text">
                 {c.limitationsHeading}
               </h3>
               <LimitationList
@@ -95,13 +95,13 @@ export function MethodologyPage() {
               <p>
                 {c.updatedLabel} {lastUpdated}
               </p>
-              <h3 className="pt-2 text-base font-semibold text-text">
+              <h3 className="pt-2 text-xl font-bold text-text">
                 {c.reportHeading}
               </h3>
               <p>{c.reportBody}</p>
               <a
                 href={`mailto:${copy.footer.contactEmail}`}
-                className="text-brand-600 underline hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus"
+                className="break-all font-semibold text-brand-700 underline decoration-dotted underline-offset-4 transition-colors duration-150 hover:text-brand-900"
               >
                 {c.reportLinkLabel.replace("{email}", copy.footer.contactEmail)}
               </a>
@@ -109,6 +109,6 @@ export function MethodologyPage() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

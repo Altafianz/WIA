@@ -7,7 +7,8 @@ import { copy } from "../content/copy.id.js";
 export function useFilters(
   validYears?: number[],
   validRegionSlugs?: string[],
-  defaultYear: number = DEFAULT_FISCAL_YEAR
+  defaultYear: number = DEFAULT_FISCAL_YEAR,
+  defaultRegion?: string
 ) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [correctionMessage, setCorrectionMessage] = useState<string | null>(null);
@@ -18,7 +19,7 @@ export function useFilters(
 
   const { region, year, sector, regionCorrected, yearCorrected } = resolveFilters(
     { region: rawRegion, year: rawYear, sector: rawSector },
-    { validYears, validRegionSlugs, defaultYear }
+    { validYears, validRegionSlugs, defaultYear, defaultRegion }
   );
 
   useEffect(() => {
