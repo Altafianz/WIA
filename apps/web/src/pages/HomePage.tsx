@@ -38,10 +38,10 @@ export function HomePage() {
       />
 
       {/* Hero Section */}
-      <section className="mx-auto flex max-w-3xl flex-col items-center gap-5 text-center">
+      <section className="mx-auto flex flex-col items-center gap-5 text-center">
         <FixtureBadge visible={isFixture} />
         <h1 className="type-display text-text">{copy.home.heroHeadline}</h1>
-        <p className="max-w-2xl text-base leading-relaxed text-text-muted sm:text-lg">
+        <p className="max-w-4xl text-base leading-relaxed text-text-muted sm:text-lg">
           {copy.home.heroSubheadline}
         </p>
         <div className="mt-2 flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row">
@@ -148,7 +148,7 @@ export function HomePage() {
             <h4 className="mb-1 text-base font-bold text-brand-900">
               {copy.home.dataNoticeTitle}
             </h4>
-            <p className="max-w-content text-sm leading-relaxed text-brand-900">
+            <p className="text-sm leading-relaxed text-brand-900">
               {isFixture
                 ? copy.home.dataNoticeBodyFixture
                 : copy.home.dataNoticeBodyOfficial}

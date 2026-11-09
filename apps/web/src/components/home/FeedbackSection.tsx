@@ -39,7 +39,7 @@ export function FeedbackSection({
       className="w-full scroll-mt-20"
       aria-labelledby="saran-heading"
     >
-      <div className="rounded-3xl border border-border bg-surface p-5 sm:p-8 lg:p-10">
+      <div className="mx-auto max-w-2xl rounded-3xl border border-border bg-surface p-5 sm:p-8 lg:p-10">
         <div className="mx-auto max-w-2xl text-center">
           <h2
             id="saran-heading"
@@ -53,12 +53,12 @@ export function FeedbackSection({
           </p>
         </div>
 
-        <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-8">
+        <div className="mt-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-8">
           {/* Privacy Notice */}
-          <div className="flex h-fit items-start gap-3 rounded-2xl border border-brand-200 bg-brand-50 p-5 lg:sticky lg:top-24">
+          <div className="mb-8 flex h-fit items-center gap-3 rounded-2xl border border-brand-200 bg-brand-50 p-3 lg:top-24">
             <span
               aria-hidden="true"
-              className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-card text-brand-700"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-card text-brand-700"
             >
               <ShieldCheck className="h-4 w-4" />
             </span>
