@@ -23,6 +23,19 @@ export interface CompareOptions {
   defaultYear?: number;
 }
 
+export function isDifferentRegionLevel(
+  mode: CompareMode,
+  regionA: { level: string } | null | undefined,
+  regionB: { level: string } | null | undefined
+): boolean {
+  if (mode !== "region" || !regionA || !regionB) return false;
+
+  return (
+    (regionA.level === "province" && regionB.level !== "province") ||
+    (regionA.level !== "province" && regionB.level === "province")
+  );
+}
+
 export interface ResolvedCompareParams {
   mode: CompareMode;
   a: string;

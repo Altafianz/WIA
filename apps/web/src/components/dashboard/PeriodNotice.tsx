@@ -6,9 +6,11 @@ import {
   getLegacyDataNoticeCopy,
   getPeriodNoticeCopy,
 } from "../../lib/simple-text.js";
+import { useDismissibleNotice } from "../../hooks/useDismissibleNotice.js";
+import { NoticePopup } from "../common/NoticePopup.js";
 
 interface PeriodNoticeProps {
-  periodStatus: "approved" | "partial" | "final";
+  periodStatus?: "approved" | "partial" | "final";
   fiscalYear?: number;
   simple?: boolean;
 }
@@ -38,22 +40,32 @@ export function PeriodNotice({
   simple = false,
 }: PeriodNoticeProps) {
   const isLegacyYear = fiscalYear !== undefined && fiscalYear < 2023;
-  if (periodStatus === "final" && !isLegacyYear) return null;
+  const notice =
+    periodStatus === undefined || (periodStatus === "final" && !isLegacyYear)
+      ? null
+      : isLegacyYear
+        ? getLegacyDataNoticeCopy(simple)
+        : getPeriodNoticeCopy(simple, periodStatus);
+  const triggerKey = notice
+    ? `period:${fiscalYear ?? periodStatus}`
+    : null;
+  const { isOpen, dismiss, popupRef } = useDismissibleNotice(triggerKey);
 
-  const message = isLegacyYear
-    ? getLegacyDataNoticeCopy(simple)
-    : getPeriodNoticeCopy(simple, periodStatus);
+  if (!notice) return null;
+
   const isInfo = periodStatus === "approved" || isLegacyYear;
 
   return (
-    <div
-      role="note"
-      className="flex max-w-prose items-start gap-3 rounded-xl border border-brand-200 bg-brand-50 px-4 py-3 text-sm leading-relaxed text-brand-900"
+    <NoticePopup
+      open={isOpen}
+      onDismiss={dismiss}
+      popupRef={popupRef}
+      testId="period-notice"
+      icon={
+        isInfo ? <Info className="h-4 w-4" /> : <TriangleAlert className="h-4 w-4" />
+      }
     >
-      <span aria-hidden="true" className="mt-0.5 shrink-0 text-brand-700">
-        {isInfo ? <Info className="h-4 w-4" /> : <TriangleAlert className="h-4 w-4" />}
-      </span>
-      <span>{renderMessage(message)}</span>
-    </div>
+      {renderMessage(notice)}
+    </NoticePopup>
   );
 }

@@ -55,14 +55,14 @@ export function FeedbackSection({
 
         <div className="mt-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-8">
           {/* Privacy Notice */}
-          <div className="mb-8 flex h-fit items-center gap-3 rounded-2xl border border-brand-200 bg-brand-50 p-3 lg:top-24">
+          <div className="mb-8 flex h-fit items-center gap-3 rounded-2xl bg-footer-bg p-3 lg:top-24">
             <span
               aria-hidden="true"
               className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-card text-brand-700"
             >
               <ShieldCheck className="h-4 w-4" />
             </span>
-            <p className="text-sm leading-relaxed text-brand-900">
+            <p className="text-sm leading-relaxed text-footer-text">
               {simple
                 ? copy.feedback.privacyNoticeSimple
                 : copy.feedback.privacyNotice}

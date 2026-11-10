@@ -291,6 +291,7 @@ export const copy = {
   a11y: {
     sectorChartLabel: "Grafik batang alokasi pagu belanja per sektor",
     trendChartLabel: "Grafik garis tren pagu dan realisasi anggaran tahunan",
+    closeNotice: "Tutup pemberitahuan",
   },
   glossary: {
     title: "Glosarium Istilah Anggaran",

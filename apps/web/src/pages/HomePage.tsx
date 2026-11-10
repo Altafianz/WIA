@@ -137,7 +137,7 @@ export function HomePage() {
 
       {/* Data Notice Section */}
       <section className="w-full">
-        <div className="flex items-start gap-3 rounded-2xl border border-brand-200 bg-brand-50 p-5">
+        <div className="flex items-start gap-3 rounded-2xl bg-footer-bg p-5">
           <span
             aria-hidden="true"
             className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-card text-brand-700"
@@ -145,10 +145,10 @@ export function HomePage() {
             <Info className="h-4 w-4" />
           </span>
           <div>
-            <h4 className="mb-1 text-base font-bold text-brand-900">
+            <h4 className="mb-1 text-base font-bold text-footer-text">
               {copy.home.dataNoticeTitle}
             </h4>
-            <p className="text-sm leading-relaxed text-brand-900">
+            <p className="text-sm leading-relaxed text-footer-muted">
               {isFixture
                 ? copy.home.dataNoticeBodyFixture
                 : copy.home.dataNoticeBodyOfficial}

@@ -227,15 +227,11 @@ export function DashboardPage() {
       </Card>
 
       {/* Period status */}
-      {summaryResp?.data.periodStatus && (
-        <div className="flex flex-wrap items-start gap-3">
-          <PeriodNotice
-            periodStatus={summaryResp.data.periodStatus}
-            fiscalYear={summaryResp.data.fiscalYear}
-            simple={isSimple}
-          />
-        </div>
-      )}
+      <PeriodNotice
+        periodStatus={summaryResp?.data.periodStatus}
+        fiscalYear={summaryResp?.data.fiscalYear ?? year}
+        simple={isSimple}
+      />
 
       {/* States Handling */}
       {state === "empty" && (

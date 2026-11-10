@@ -11,6 +11,7 @@ import { useSimpleMode } from "../hooks/useSimpleMode.js";
 import { useCompare } from "../hooks/useCompare.js";
 import {
   buildCompareSearchParams,
+  isDifferentRegionLevel,
   resolveCompareParams,
 } from "../lib/compare-params.js";
 import { ApiClientError } from "../lib/api-client.js";
@@ -28,6 +29,8 @@ import { ErrorState } from "../components/states/ErrorState.js";
 import { CardSkeleton, ChartSkeleton } from "../components/states/LoadingSkeleton.js";
 import { Toast } from "../components/ui/Toast.js";
 import { Card } from "../components/ui/Card.js";
+import { NoticePopup } from "../components/common/NoticePopup.js";
+import { useDismissibleNotice } from "../hooks/useDismissibleNotice.js";
 
 export function ComparePage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -111,14 +114,19 @@ export function ComparePage() {
 
   const regionA = regions.find((r) => r.slug === resolved.a);
   const regionB = regions.find((r) => r.slug === resolved.b);
-  const isDifferentLevel =
-    resolved.mode === "region" &&
-    Boolean(
-      regionA &&
-      regionB &&
-      ((regionA.level === "province" && regionB.level !== "province") ||
-        (regionA.level !== "province" && regionB.level === "province"))
-    );
+  const isDifferentLevel = isDifferentRegionLevel(
+    resolved.mode,
+    regionA,
+    regionB
+  );
+  const levelNoticeKey = isDifferentLevel
+    ? `compare:${resolved.a}:${resolved.b}`
+    : null;
+  const {
+    isOpen: isLevelNoticeOpen,
+    dismiss: dismissLevelNotice,
+    popupRef: levelNoticeRef,
+  } = useDismissibleNotice(levelNoticeKey);
 
   return (
     <div className="page-gutter flex w-full flex-col gap-6 py-6 lg:gap-8 lg:py-8">
@@ -157,17 +165,18 @@ export function ComparePage() {
       </Card>
 
       {isDifferentLevel && (
-        <div
-          role="note"
-          data-testid="level-difference-notice"
-          className="max-w-prose rounded-xl border border-brand-200 bg-brand-50 p-4 text-sm leading-relaxed text-brand-900"
+        <NoticePopup
+          open={isLevelNoticeOpen}
+          onDismiss={dismissLevelNotice}
+          popupRef={levelNoticeRef}
+          testId="level-difference-notice"
         >
           <p>
             {isSimple
               ? copy.compare.levelDifferenceNoticeSimple
               : copy.compare.levelDifferenceNotice}
           </p>
-        </div>
+        </NoticePopup>
       )}
 
       {isLoading && (

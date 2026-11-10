@@ -290,7 +290,7 @@ export function TrendChart({ points = [], state, simple = false }: TrendChartPro
       </p>
 
       {realizationNote && (
-        <p className="mt-3 rounded-xl border border-brand-200 bg-brand-50 px-4 py-3 text-sm text-brand-900">
+        <p className="mt-3 rounded-xl bg-footer-bg px-4 py-3 text-sm text-footer-text">
           {realizationNote}
         </p>
       )}
