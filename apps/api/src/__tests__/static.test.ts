@@ -5,11 +5,19 @@ import os from "node:os";
 import path from "node:path";
 import { createApp, isSpaFallbackPath } from "../app.js";
 
+const HASHED_ASSET = "assets/index-abc12345.js";
+
 function createTempDist(withSeoFiles: boolean): string {
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), "danaterbuka-static-"));
   fs.writeFileSync(
     path.join(directory, "index.html"),
     "<!doctype html><html><body><div id=\"root\">SPA-INDEX</div></body></html>",
+  );
+
+  fs.mkdirSync(path.join(directory, "assets"), { recursive: true });
+  fs.writeFileSync(
+    path.join(directory, HASHED_ASSET),
+    "console.log('asset');\n",
   );
 
   if (withSeoFiles) {
@@ -70,6 +78,52 @@ describe("Static SEO routing (NFR-015)", () => {
     expect(res.status).toBe(200);
     expect(res.headers["content-type"]).toContain("text/html");
     expect(res.text).toContain("SPA-INDEX");
+  });
+
+  it("returns index.html for SPA routes on reload", async () => {
+    for (const pathname of ["/dashboard", "/bandingkan", "/metodologi", "/glosarium"]) {
+      const res = await request(appWithSeo).get(pathname);
+
+      expect(res.status).toBe(200);
+      expect(res.headers["content-type"]).toContain("text/html");
+      expect(res.text).toContain("SPA-INDEX");
+      expect(res.headers["cache-control"]).toBe("no-cache");
+    }
+  });
+
+  it("keeps the API healthy and returns JSON 404 for unknown API routes", async () => {
+    const health = await request(appWithSeo).get("/api/health");
+    expect(health.status).toBe(200);
+    expect(health.body.status).toBe("ok");
+
+    const missing = await request(appWithSeo).get("/api/tidak-ada");
+    expect(missing.status).toBe(404);
+    expect(missing.headers["content-type"]).toContain("application/json");
+    expect(missing.body.error.code).toBe("NOT_FOUND");
+    expect(missing.text).not.toContain("SPA-INDEX");
+  });
+
+  it("serves hashed assets with a long immutable cache and no-cache HTML", async () => {
+    const asset = await request(appWithSeo).get(`/${HASHED_ASSET}`);
+    expect(asset.status).toBe(200);
+    expect(asset.headers["cache-control"]).toContain("max-age=31536000");
+    expect(asset.headers["cache-control"]).toContain("immutable");
+
+    const index = await request(appWithSeo).get("/");
+    expect(index.status).toBe(200);
+    expect(index.headers["cache-control"]).toBe("no-cache");
+  });
+
+  it("allows the built app under the production CSP", async () => {
+    const res = await request(appWithSeo).get("/");
+
+    const csp = res.headers["content-security-policy"] ?? "";
+    expect(csp).toContain("script-src 'self'");
+    expect(csp).toContain("style-src 'self' 'unsafe-inline'");
+    expect(csp).toContain("font-src 'self'");
+    expect(csp).toContain("connect-src 'self'");
+    expect(csp).toContain("img-src 'self' data:");
+    expect(csp).not.toContain("upgrade-insecure-requests");
   });
 
   it("never replaces missing SEO files with the SPA shell", async () => {

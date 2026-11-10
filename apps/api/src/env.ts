@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { z } from "zod";
+import { REPO_ROOT } from "./config/constants.js";
 
 export const EnvSchema = z.object({
   PORT: z.coerce.number().default(3001),
@@ -43,6 +44,8 @@ export function loadEnv(customPath?: string): void {
 
   const candidates = [
     path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", ".env"),
+    path.resolve(REPO_ROOT, "apps", "api", ".env"),
+    path.resolve(REPO_ROOT, ".env"),
     path.resolve(process.cwd(), "apps", "api", ".env"),
     path.resolve(process.cwd(), ".env"),
   ];

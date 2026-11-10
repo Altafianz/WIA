@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: danaterbuka
+    runtime: node
+    plan: free
+    buildCommand: pnpm install --frozen-lockfile --prod=false && pnpm build
+    startCommand: pnpm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NODE_ENV
+        value: production
+      - key: DATA_ADAPTER
+        value: snapshot
+      - key: DEFAULT_REGION_SLUG
+        value: provinsi-jawa-barat
+      - key: TRUST_PROXY
+        value: "1"
+      - key: FEEDBACK_WEBHOOK_URL
+        sync: false

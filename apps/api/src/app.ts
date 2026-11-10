@@ -9,6 +9,7 @@ import { apiRateLimiter } from "./middleware/rate-limit.js";
 import { errorHandler, notFoundHandler } from "./middleware/error-handler.js";
 import { apiRouter } from "./routes/index.js";
 import { env } from "./env.js";
+import { WEB_DIST_DIR } from "./config/constants.js";
 
 export interface CreateAppOptions {
   webDist?: string;
@@ -26,19 +27,30 @@ export function isSpaFallbackPath(pathname: string): boolean {
   return !SEO_ROOT_FILES.has(cleanPath);
 }
 
+// Vite emits content-hashed filenames (e.g. index-aajSc1Xs.js, inter-latin-....woff2).
+const HASHED_ASSET_PATTERN = /-[A-Za-z0-9_-]{8,}\.[A-Za-z0-9]+$/;
+
+function isHashedAsset(relativePath: string): boolean {
+  const normalized = relativePath.split(path.sep).join("/");
+  return normalized.startsWith("assets/") && HASHED_ASSET_PATTERN.test(normalized);
+}
+
+function resolveTrustProxy(rawValue: string | undefined): boolean | number | string {
+  if (!rawValue) return false;
+
+  const value = rawValue.trim();
+  if (value === "" || value === "false" || value === "0") return false;
+  if (value === "true") return true;
+  // "1" means exactly one proxy hop in front of the app.
+  if (/^\d+$/.test(value)) return Number(value);
+  return value;
+}
+
 export function createApp(options: CreateAppOptions = {}): Express {
   const app = express();
 
-  const trustProxyEnv = process.env.TRUST_PROXY || env.TRUST_PROXY;
-  if (trustProxyEnv) {
-    if (trustProxyEnv === "true" || trustProxyEnv === "1") {
-      app.set("trust proxy", true);
-    } else if (trustProxyEnv === "false" || trustProxyEnv === "0") {
-      app.set("trust proxy", false);
-    } else {
-      app.set("trust proxy", trustProxyEnv);
-    }
-  }
+  const trustProxyEnv = process.env.TRUST_PROXY ?? env.TRUST_PROXY;
+  app.set("trust proxy", resolveTrustProxy(trustProxyEnv));
 
   app.use(requestIdMiddleware);
 
@@ -55,6 +67,10 @@ export function createApp(options: CreateAppOptions = {}): Express {
           objectSrc: ["'none'"],
           frameAncestors: ["'none'"],
           baseUri: ["'self'"],
+          formAction: ["'self'"],
+          // The app is served over HTTPS in production; upgrading is unnecessary
+          // and breaks plain-HTTP local/preview runs.
+          upgradeInsecureRequests: null,
         },
       },
       referrerPolicy: { policy: "strict-origin-when-cross-origin" },
@@ -69,17 +85,21 @@ export function createApp(options: CreateAppOptions = {}): Express {
   // Mount API router
   app.use("/api", apiRateLimiter, apiRouter);
 
-  // Serve static assets in production if apps/web/dist exists
-  const webDist =
-    options.webDist ?? path.resolve(process.cwd(), "apps/web/dist");
+  // Serve the web build (apps/web/dist) from the same Express service.
+  const webDist = options.webDist ?? WEB_DIST_DIR;
   if (fs.existsSync(webDist)) {
     app.use(
       express.static(webDist, {
-        maxAge: "1y",
-        immutable: true,
         setHeaders: (res, filePath) => {
-          if (SEO_ROOT_FILES.has(`/${path.basename(filePath)}`)) {
-            res.setHeader("Cache-Control", "public, max-age=0, must-revalidate");
+          const relativePath = path.relative(webDist, filePath);
+          if (isHashedAsset(relativePath)) {
+            res.setHeader(
+              "Cache-Control",
+              "public, max-age=31536000, immutable"
+            );
+          } else {
+            // index.html and root metadata must revalidate so deploys appear.
+            res.setHeader("Cache-Control", "no-cache");
           }
         },
       })
@@ -90,6 +110,7 @@ export function createApp(options: CreateAppOptions = {}): Express {
         next();
         return;
       }
+      res.setHeader("Cache-Control", "no-cache");
       res.sendFile(path.join(webDist, "index.html"));
     });
   }
