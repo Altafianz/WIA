@@ -4,13 +4,13 @@
 
 DanaTerbuka adalah aplikasi web yang mengubah data anggaran daerah (APBD) menjadi jawaban sederhana: berapa yang direncanakan dan terealisasi, sektor mana yang terbesar, dan apa yang tidak bisa disimpulkan dari angka tersebut. Dilengkapi insight otomatis, perbandingan antarwilayah, ekspor CSV, dan mode penjelasan dalam bahasa sehari-hari.
 
-Dibuat untuk lomba **WIA MIA 2026**, tema *Designing Digital Futures – Powering Public Transparency*, subtema *Open Government Data*.
+Dibuat untuk lomba **WIA MIA 2026**, tema _Designing Digital Futures – Powering Public Transparency_, subtema _Open Government Data_.
 
 > **Catatan data:** angka yang tampil berasal dari data resmi **DJPK Kementerian Keuangan** (Belanja Daerah menurut Fungsi) untuk lima provinsi. Data diproses menjadi snapshot yang disertakan di repositori, sehingga aplikasi berjalan tanpa mengunduh apa pun. Detail sumber, cakupan, dan keterbatasan ada di halaman **Metodologi** di dalam aplikasi.
 
 ## Data
 
-- **Sumber:** DJPK Kemenkeu, *Belanja Daerah menurut Fungsi* (https://djpk.kemenkeu.go.id/?p=5412). Hak cipta data ada pada DJPK Kemenkeu; DanaTerbuka hanya mengolah dan menampilkannya dengan mencantumkan sumber.
+- **Sumber:** DJPK Kemenkeu, _Belanja Daerah menurut Fungsi_ (https://djpk.kemenkeu.go.id/?p=5412). Hak cipta data ada pada DJPK Kemenkeu; DanaTerbuka hanya mengolah dan menampilkannya dengan mencantumkan sumber.
 - **Cakupan:** 5 provinsi (DKI Jakarta, Jawa Barat, Jawa Tengah, Jawa Timur, Banten), memuat pemerintah provinsi dan kabupaten/kota di dalamnya: 113 wilayah. Untuk DKI Jakarta, berkas DJPK hanya memuat pemerintah provinsi.
 - **Periode:** 2021 sampai 2026. Pagu tersedia untuk semua tahun; realisasi tersedia untuk 2021 sampai 2024.
 - **Sektor:** 9 fungsi yang tersedia di data DJPK (Pelayanan Umum, Ketertiban dan Keamanan, Ekonomi, Perlindungan Lingkungan Hidup, Perumahan dan Fasilitas Umum, Kesehatan, Pariwisata, Pendidikan, Perlindungan Sosial).
@@ -29,12 +29,12 @@ pnpm data:check   # validasi snapshot terhadap skema
 
 ## Tech Stack
 
-| Bagian | Teknologi |
-|---|---|
-| Frontend (`apps/web`) | React 18, TypeScript, Vite, Tailwind CSS, React Router, TanStack Query, Recharts |
-| Backend (`apps/api`) | Node.js, Express, TypeScript, Zod, Helmet |
-| Kode bersama (`packages/shared`) | Skema Zod, rumus metrik, mesin insight, glosarium (fungsi murni) |
-| Tooling | pnpm workspace (monorepo), Vitest, Supertest, ESLint |
+| Bagian                           | Teknologi                                                                        |
+| -------------------------------- | -------------------------------------------------------------------------------- |
+| Frontend (`apps/web`)            | React 18, TypeScript, Vite, Tailwind CSS, React Router, TanStack Query, Recharts |
+| Backend (`apps/api`)             | Node.js, Express, TypeScript, Zod, Helmet                                        |
+| Kode bersama (`packages/shared`) | Skema Zod, rumus metrik, mesin insight, glosarium (fungsi murni)                 |
+| Tooling                          | pnpm workspace (monorepo), Vitest, Supertest, ESLint                             |
 
 Frontend dan backend dipisah: web berjalan di `localhost:5173` dan memanggil API di `localhost:3001` lewat proxy `/api`. API membaca snapshot lewat adapter (`DATA_ADAPTER=snapshot`, bawaan); adapter fixture tersedia sebagai cadangan.
 
@@ -107,7 +107,7 @@ docs/             PRD, DATA_SPEC, ARCHITECTURE, UI_SPEC, TASKS
 - [x] Ekspor CSV, metadata SEO
 - [x] Data resmi DJPK (snapshot) menggantikan data contoh
 - [x] Cakupan 5 provinsi dengan filter Provinsi dan Sub-wilayah terpisah
-- [ ] Deploy (satu layanan Express yang melayani web dan API)
+- [x] Deploy (satu layanan Express yang melayani web dan API)
 
 ## Lisensi Data
 
