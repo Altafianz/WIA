@@ -10,9 +10,15 @@ import { errorHandler, notFoundHandler } from "./middleware/error-handler.js";
 import { apiRouter } from "./routes/index.js";
 import { env } from "./env.js";
 import { WEB_DIST_DIR } from "./config/constants.js";
+import { toApiUrl } from "./vercel.js";
 
 export interface CreateAppOptions {
   webDist?: string;
+  /**
+   * Vercel may rewrite `/api/*` to the function with a catch-all `path` query
+   * parameter; this middleware restores the original URL before routing.
+   */
+  normalizeVercelUrl?: boolean;
 }
 
 const SEO_ROOT_FILES = new Set([
@@ -51,6 +57,15 @@ export function createApp(options: CreateAppOptions = {}): Express {
 
   const trustProxyEnv = process.env.TRUST_PROXY ?? env.TRUST_PROXY;
   app.set("trust proxy", resolveTrustProxy(trustProxyEnv));
+
+  if (options.normalizeVercelUrl) {
+    app.use((req, _res, next) => {
+      const pathParam = (req as { query?: { path?: string | string[] } }).query
+        ?.path;
+      req.url = toApiUrl(req.url, pathParam);
+      next();
+    });
+  }
 
   app.use(requestIdMiddleware);
 

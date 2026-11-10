@@ -10,21 +10,46 @@ import { fileURLToPath } from "node:url";
 const moduleDir = path.dirname(fileURLToPath(import.meta.url));
 const MAX_PARENT_LOOKUPS = 8;
 
-function findRepoRoot(startDir: string): string {
-  let current = startDir;
+function isRepoRoot(dir: string): boolean {
+  // Workspace markers exist in a normal checkout and in Vercel's build image.
+  if (
+    fs.existsSync(path.join(dir, "pnpm-workspace.yaml")) ||
+    fs.existsSync(path.join(dir, "pnpm-lock.yaml"))
+  ) {
+    return true;
+  }
+
+  // Vercel function bundles only include the data files we list in
+  // vercel.json; the workspace markers are not part of that bundle. The
+  // snapshot therefore doubles as a reliable root marker there.
+  return fs.existsSync(
+    path.join(dir, "data", "processed", "snapshot.v1.json")
+  );
+}
+
+function walkUpForRepoRoot(startDir: string): string | null {
+  let current = path.resolve(startDir);
 
   for (let depth = 0; depth < MAX_PARENT_LOOKUPS; depth += 1) {
-    if (
-      fs.existsSync(path.join(current, "pnpm-workspace.yaml")) ||
-      fs.existsSync(path.join(current, "pnpm-lock.yaml"))
-    ) {
-      return current;
-    }
+    if (isRepoRoot(current)) return current;
 
     const parent = path.dirname(current);
     if (parent === current) break;
     current = parent;
   }
+
+  return null;
+}
+
+function findRepoRoot(startDir: string): string {
+  // Prefer the module location (works when the bundle preserves directory
+  // structure), then fall back to the process working directory (/var/task on
+  // Vercel, repository root in tests/scripts).
+  const fromModule = walkUpForRepoRoot(startDir);
+  if (fromModule) return fromModule;
+
+  const fromCwd = walkUpForRepoRoot(process.cwd());
+  if (fromCwd) return fromCwd;
 
   // Fallback: apps/api/{src,dist}/config -> repository root.
   return path.resolve(startDir, "..", "..", "..", "..");

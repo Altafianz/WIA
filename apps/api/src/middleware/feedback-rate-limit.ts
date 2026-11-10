@@ -30,12 +30,31 @@ export function resetFeedbackRateLimits(): void {
   rateLimitMap.clear();
 }
 
+function getClientIp(req: Request): string {
+  // Only trust proxy headers when Express was configured to do so. On Vercel
+  // the function sits behind a proxy; TRUST_PROXY=1 makes x-forwarded-for the
+  // client address. Never read these headers for direct/self-hosted traffic.
+  if (req.app.get("trust proxy")) {
+    const forwarded = req.headers["x-forwarded-for"];
+    const forwardedValue = Array.isArray(forwarded) ? forwarded[0] : forwarded;
+    const firstForwarded = forwardedValue?.split(",")[0]?.trim();
+    if (firstForwarded) return firstForwarded;
+
+    const realIp = req.headers["x-real-ip"];
+    if (typeof realIp === "string" && realIp.trim().length > 0) {
+      return realIp.trim();
+    }
+  }
+
+  return req.ip || req.socket.remoteAddress || "127.0.0.1";
+}
+
 export function feedbackRateLimiter(
   req: Request,
   res: Response,
   next: NextFunction
 ): void {
-  const ip = req.ip || req.socket.remoteAddress || "127.0.0.1";
+  const ip = getClientIp(req);
   const now = Date.now();
 
   let entry = rateLimitMap.get(ip);

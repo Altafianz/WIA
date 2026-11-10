@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import request from "supertest";
 import fs from "node:fs";
 import path from "node:path";
@@ -21,6 +21,9 @@ describe("Feedback API (POST /api/feedback)", () => {
   });
 
   afterEach(() => {
+    delete process.env.VERCEL;
+    delete process.env.FEEDBACK_WEBHOOK_URL;
+    vi.unstubAllGlobals();
     try {
       if (fs.existsSync(tempFilePath)) {
         fs.unlinkSync(tempFilePath);
@@ -150,6 +153,105 @@ describe("Feedback API (POST /api/feedback)", () => {
 
     // File is saved
     expect(fs.existsSync(tempFilePath)).toBe(true);
+  });
+
+  it("skips file storage on Vercel and succeeds when the webhook is delivered", async () => {
+    process.env.VERCEL = "1";
+    process.env.FEEDBACK_WEBHOOK_URL = "https://example.test/webhook";
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(new Response("", { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    const res = await request(app).post("/api/feedback").send({
+      category: "fitur",
+      message: "Saran dari lingkungan serverless yang tidak bisa menulis berkas.",
+    });
+
+    expect(res.status).toBe(201);
+    expect(res.body).toEqual({ ok: true });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fs.existsSync(tempFilePath)).toBe(false);
+  });
+
+  it("returns 503 with a generic message when Vercel has no webhook", async () => {
+    process.env.VERCEL = "1";
+    delete process.env.FEEDBACK_WEBHOOK_URL;
+
+    const res = await request(app).post("/api/feedback").send({
+      category: "data",
+      message: "Saran tanpa webhook di lingkungan yang tidak dapat menulis.",
+    });
+
+    expect(res.status).toBe(503);
+    expect(res.body.error.code).toBe("DATA_UNAVAILABLE");
+    expect(res.body.error.message).not.toContain(tempFilePath);
+  });
+
+  it("succeeds through the webhook when the feedback file cannot be written", async () => {
+    // Put a regular file where the repository expects a directory so mkdir fails.
+    fs.writeFileSync(tempFilePath, "blocker");
+    process.env.FEEDBACK_FILE = path.join(tempFilePath, "feedback.jsonl");
+    process.env.FEEDBACK_WEBHOOK_URL = "https://example.test/webhook";
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValue(new Response("", { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    const res = await request(app).post("/api/feedback").send({
+      category: "lainnya",
+      message: "Saran tetap terkirim walau penyimpanan berkas gagal.",
+    });
+
+    expect(res.status).toBe(201);
+    expect(res.body).toEqual({ ok: true });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it("uses x-forwarded-for for rate limiting only when TRUST_PROXY=1", async () => {
+    const originalTrustProxy = process.env.TRUST_PROXY;
+    const payload = {
+      category: "fitur",
+      message: "Saran berulang untuk menguji header proxy tepercaya.",
+    };
+
+    try {
+      process.env.TRUST_PROXY = "1";
+      resetFeedbackRateLimits();
+      const trustedApp = createApp();
+
+      for (let i = 0; i < 6; i += 1) {
+        const res = await request(trustedApp)
+          .post("/api/feedback")
+          .set("x-forwarded-for", `203.0.113.${i + 1}`)
+          .send(payload);
+        expect(res.status).toBe(201);
+      }
+
+      process.env.TRUST_PROXY = "0";
+      resetFeedbackRateLimits();
+      const untrustedApp = createApp();
+
+      for (let i = 0; i < 5; i += 1) {
+        await request(untrustedApp)
+          .post("/api/feedback")
+          .set("x-forwarded-for", `198.51.100.${i + 1}`)
+          .send(payload);
+      }
+
+      const blocked = await request(untrustedApp)
+        .post("/api/feedback")
+        .set("x-forwarded-for", "198.51.100.99")
+        .send(payload);
+      expect(blocked.status).toBe(429);
+    } finally {
+      if (originalTrustProxy === undefined) {
+        delete process.env.TRUST_PROXY;
+      } else {
+        process.env.TRUST_PROXY = originalTrustProxy;
+      }
+      resetFeedbackRateLimits();
+    }
   });
 });
 

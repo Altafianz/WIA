@@ -44,29 +44,44 @@ export class FeedbackService {
         : null,
     };
 
-    // 4. Save to repository (file)
-    try {
-      await this.repository.save(record);
-    } catch (saveError) {
-      logger.error({ err: saveError }, "Gagal menulis saran ke file");
-      throw new AppError(
-        500,
-        "INTERNAL_ERROR",
-        "Gagal menyimpan saran. Silakan coba beberapa saat lagi."
-      );
+    // 4. Save to repository (file). Vercel Functions have a read-only bundle
+    // filesystem, so storage is optional there; surviving on the webhook alone
+    // is expected. A failed local write is handled the same way elsewhere.
+    const webhookUrl =
+      process.env.FEEDBACK_WEBHOOK_URL || env.FEEDBACK_WEBHOOK_URL;
+    const hasWebhook = Boolean(webhookUrl && webhookUrl.trim().length > 0);
+    const canWriteFiles = !process.env.VERCEL;
+
+    let stored = false;
+    if (canWriteFiles) {
+      try {
+        await this.repository.save(record);
+        stored = true;
+      } catch (saveError) {
+        logger.error({ err: saveError }, "Gagal menulis saran ke file");
+      }
     }
 
     // Safe info log without message or contact
     logger.info(
-      { category: record.category, timestamp: record.timestamp },
-      "Saran baru berhasil disimpan"
+      { category: record.category, timestamp: record.timestamp, stored },
+      stored ? "Saran baru berhasil disimpan" : "Saran baru diterima"
     );
 
-    // 5. Send Webhook notification if configured (timeout 5s, failure does not fail request)
-    const webhookUrl =
-      process.env.FEEDBACK_WEBHOOK_URL || env.FEEDBACK_WEBHOOK_URL;
-    if (webhookUrl && webhookUrl.trim().length > 0) {
-      this.sendWebhook(webhookUrl, record);
+    // 5. Send Webhook notification if configured. The request must be awaited
+    // before responding because serverless runtimes can freeze work that runs
+    // after the response (timeout 5s, failure does not fail the request).
+    let webhookDelivered = false;
+    if (hasWebhook) {
+      webhookDelivered = await this.sendWebhook(webhookUrl as string, record);
+    }
+
+    if (!stored && !webhookDelivered) {
+      throw new AppError(
+        503,
+        "DATA_UNAVAILABLE",
+        "Layanan saran sedang tidak tersedia. Silakan coba beberapa saat lagi."
+      );
     }
 
     return { ok: true, isHoneypot: false };
@@ -75,23 +90,28 @@ export class FeedbackService {
   private async sendWebhook(
     url: string,
     record: FeedbackRecord
-  ): Promise<void> {
+  ): Promise<boolean> {
     try {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000);
 
       const content = `**[DanaTerbuka] Saran Baru (${record.category})**\nWaktu: ${record.timestamp}\nKontak: ${record.contact || "-"}\nPesan:\n${record.message}`;
 
-      await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content }),
-        signal: controller.signal,
-      });
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content }),
+          signal: controller.signal,
+        });
 
-      clearTimeout(timeoutId);
+        return response.ok;
+      } finally {
+        clearTimeout(timeoutId);
+      }
     } catch (webhookError) {
       logger.warn({ err: webhookError }, "Gagal mengirim webhook saran");
+      return false;
     }
   }
 }
